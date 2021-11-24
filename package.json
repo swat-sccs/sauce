@@ -1,0 +1,14 @@
+{
+    "name": "sauce",
+    "version": "0.1.0",
+    "author": "Swarthmore College Computer Society",
+    "license": "MIT",
+    "scripts": {
+        "install-dependencies": "npm install && cd api && npm install && cd ../client && npm install",
+        "build": "cd api && npm run build && cd ../client && npm run build",
+        "start": "concurrently \"cd api && npm run start\" \"cd client && npm run start\""
+    },
+    "devDependencies": {
+        "concurrently": "^6.4.0"
+    }
+}
