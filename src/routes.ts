@@ -12,7 +12,12 @@ export const attachRoutes = (app: any): void => {
     app.get("/login", (req: any, res) => {
         res.render('login')
     })
-    
-    app.post("/login", 
-    passport.authenticate('ldapauth', { successRedirect: '/', failureRedirect: '/login',}))
+
+    app.post("/login",
+        passport.authenticate('ldapauth', { successRedirect: '/', failureRedirect: '/login', }))
+
+    app.get("/logout", (req: any, res) => {
+        req.logout()
+        res.redirect('/')
+    })
 }
