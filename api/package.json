@@ -8,17 +8,25 @@
     "build": "cd src && tsc"
   },
   "dependencies": {
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^8.6.0",
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
+    "express-session": "^1.17.2",
     "nanoid": "^3.1.30",
+    "passport": "^0.5.0",
+    "passport-ldapauth": "^3.0.1",
+    "pug": "^3.0.2",
     "tslog": "^3.2.2"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.2",
+    "@types/express-session": "^1.17.4",
     "@types/node": "^12.12.11",
+    "@types/passport": "^1.0.7",
     "cross-env": "^6.0.3",
     "nodemon": "^2.0.0",
     "ts-node": "^8.5.2",

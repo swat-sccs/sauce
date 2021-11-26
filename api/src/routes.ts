@@ -1,9 +1,18 @@
-import { Response } from "express"
 import { logger } from './logging'
 
+import passport from 'passport'
+import { isLoggedIn } from "./auth"
+
 export const attachRoutes = (app: any): void => {
-    app.get("/", async (req: Request, res: Response) => {
-        res.send("I'm an API!")
-        logger.info("I got a request!")
+    logger.info("Attaching routes")
+    app.get("/", isLoggedIn, (req: any, res) => {
+        res.render('index', { username: req.user?.uid })
     })
+
+    app.get("/login", (req: any, res) => {
+        res.render('login')
+    })
+    
+    app.post("/login", 
+    passport.authenticate('ldapauth', { successRedirect: '/', failureRedirect: '/login',}))
 }

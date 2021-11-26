@@ -20,3 +20,8 @@ export const doRequestId: RequestHandler = async (_req, res, next) => {
         return next();
     });
 }
+
+export const logRequest: RequestHandler = async (req, res, next) => {
+    logger.debug(`${req.method} ${req.path}`)
+    next()
+}
