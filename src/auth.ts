@@ -25,7 +25,7 @@ export const configureAuth = (app: any): void => {
         server: LDAP_CONFIG
     }))
     app.use(session({
-        secret: 'beans',
+        secret: process.env.SESSION_SECRET,
         saveUninitialized: true,
         cookie: {
             httpOnly: true,
