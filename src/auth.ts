@@ -4,7 +4,7 @@ import LdapStrategy from 'passport-ldapauth'
 import session from 'express-session'
 
 import { logger } from './logging'
-import { LDAP_CONFIG, ldapClient } from './ldap'
+import { LDAP_CONFIG, ldapClient, searchAsyncUid } from './ldap'
 import { Handler } from 'express'
 
 export const isLoggedIn: Handler = (req, res, next) => {
@@ -43,29 +43,7 @@ export const configureAuth = (app: any): void => {
     passport.deserializeUser(async (uid: string, done) => {
         logger.debug(`Deserializing user ${uid}`)
         try {
-            const user = await new Promise((resolve, reject) => {
-                ldapClient.search(process.env.LDAP_SEARCH_BASE, { filter: `(uid=${uid})`, scope: 'sub' },
-                    (err, res) => {
-                        let found = false
-                        if (err) {
-                            logger.error(`LDAP search error in deserialization: ${err}`)
-                            reject(err)
-                        }
-                        res.on('error', (err) => {
-                            logger.error(`LDAP search error in deserialization: ${err}`)
-                            reject(err)
-                        });
-                        res.on('searchEntry', (entry) => {
-                            found = true
-                            resolve(entry.object)
-                        });
-                        res.on('end', (result) => {
-                            if (!found) {
-                                resolve(null)
-                            }
-                        });
-                    })
-            })
+            const user = searchAsyncUid(ldapClient, uid)
             if (user) {
                 logger.debug(`Found LDAP entry for ${uid}`)
                 done(null, user)

@@ -1,4 +1,5 @@
 require('dotenv').config()
+import 'reflect-metadata'; // needed for joiful to work
 import express from 'express';
 import cors from 'cors';
 

@@ -14,6 +14,8 @@
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
     "express-session": "^1.17.2",
+    "joi": "^17.4.2",
+    "joiful": "^3.0.2",
     "ldapjs": "^2.3.1",
     "nanoid": "^3.1.30",
     "passport": "^0.5.0",

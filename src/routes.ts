@@ -3,6 +3,8 @@ import { logger } from './logging'
 import passport from 'passport'
 import { isLoggedIn } from "./auth"
 
+import { attachAccountRoutes } from './routes/account'
+
 export const attachRoutes = (app: any): void => {
     logger.info("Attaching routes")
     app.get("/", isLoggedIn, (req: any, res) => {
@@ -20,4 +22,6 @@ export const attachRoutes = (app: any): void => {
         req.logout()
         res.redirect('/')
     })
+
+    attachAccountRoutes(app)
 }
