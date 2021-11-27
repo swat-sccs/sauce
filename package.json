@@ -18,12 +18,14 @@
     "joi": "^17.4.2",
     "joiful": "^3.0.2",
     "ldapjs": "^2.3.1",
-    "mongo": "^0.1.0",
+    "mongodb": "4.1.4",
+    "mongoose": "^6.0.13",
     "nanoid": "^3.1.30",
     "passport": "^0.5.0",
     "passport-ldapauth": "^3.0.1",
     "pug": "^3.0.2",
-    "tslog": "^3.2.2"
+    "tslog": "^3.2.2",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",

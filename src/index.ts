@@ -7,6 +7,8 @@ import { logger, doRequestId, logRequest } from './logging'
 
 import { attachRoutes } from './routes'
 import { configureAuth } from './auth';
+import { createMongo } from './mongo'
+import { Mongoose } from 'mongoose';
 
 const initExpress = (): void => {
   const port = process.env.PORT || 3000
@@ -19,6 +21,8 @@ const initExpress = (): void => {
   app.use(doRequestId)
   app.use(logRequest)
 
+  app.locals.mongo = createMongo(process.env.MONGO_URI)
+  
   configureAuth(app)
   attachRoutes(app)
   

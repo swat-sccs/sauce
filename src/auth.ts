@@ -7,7 +7,6 @@ import { logger } from './logging'
 import { LDAP_CONFIG, ldapClient, searchAsyncUid } from './ldap'
 import { Handler } from 'express'
 import MongoStore from 'connect-mongo'
-import { createMongo } from './mongo'
 
 export const isLoggedIn: Handler = (req, res, next) => {
 
@@ -26,8 +25,6 @@ export const configureAuth = (app: any): void => {
     passport.use(new LdapStrategy({
         server: LDAP_CONFIG
     }))
-
-    app.locals.mongo = createMongo(process.env.MONGO_URI)
     
     app.use(session({
         secret: process.env.SESSION_SECRET,
