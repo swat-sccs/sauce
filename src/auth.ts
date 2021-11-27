@@ -6,6 +6,8 @@ import session from 'express-session'
 import { logger } from './logging'
 import { LDAP_CONFIG, ldapClient, searchAsyncUid } from './ldap'
 import { Handler } from 'express'
+import MongoStore from 'connect-mongo'
+import { mongoClient } from './mongo'
 
 export const isLoggedIn: Handler = (req, res, next) => {
 
@@ -26,7 +28,8 @@ export const configureAuth = (app: any): void => {
     }))
     app.use(session({
         secret: process.env.SESSION_SECRET,
-        saveUninitialized: true,
+        saveUninitialized: false,
+        store: MongoStore.create({ clientPromise: mongoClient.connect() }),
         cookie: {
             httpOnly: true,
             maxAge: 60 * 60 * 1000
@@ -43,7 +46,7 @@ export const configureAuth = (app: any): void => {
     passport.deserializeUser(async (uid: string, done) => {
         logger.debug(`Deserializing user ${uid}`)
         try {
-            const user = searchAsyncUid(ldapClient, uid)
+            const user = await searchAsyncUid(ldapClient, uid)
             if (user) {
                 logger.debug(`Found LDAP entry for ${uid}`)
                 done(null, user)

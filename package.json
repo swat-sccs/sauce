@@ -8,6 +8,7 @@
     "build": "cd src && tsc"
   },
   "dependencies": {
+    "connect-mongo": "^4.6.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^8.6.0",
@@ -17,6 +18,7 @@
     "joi": "^17.4.2",
     "joiful": "^3.0.2",
     "ldapjs": "^2.3.1",
+    "mongo": "^0.1.0",
     "nanoid": "^3.1.30",
     "passport": "^0.5.0",
     "passport-ldapauth": "^3.0.1",
