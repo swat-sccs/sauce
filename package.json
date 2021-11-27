@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon --exec ts-node --files src/index.ts",
-    "build": "cd src && tsc"
+    "build": "cd src && tsc",
+    "pre-commit": "lint-staged"
   },
   "dependencies": {
     "connect-mongo": "^4.6.0",
@@ -35,13 +36,34 @@
     "@types/ldapjs": "^2.2.2",
     "@types/node": "^12.12.11",
     "@types/passport": "^1.0.7",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
     "cross-env": "^6.0.3",
+    "eslint": "^8.3.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.1.2",
     "nodemon": "^2.0.0",
+    "prettier": "^2.5.0",
     "ts-node": "^8.5.2",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.7.2"
   },
   "_moduleDirectories": [
     "src"
-  ]
+  ],
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run pre-commit"
+    }
+  }
 }
