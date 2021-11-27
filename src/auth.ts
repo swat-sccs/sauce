@@ -7,7 +7,7 @@ import { logger } from './logging'
 import { LDAP_CONFIG, ldapClient, searchAsyncUid } from './ldap'
 import { Handler } from 'express'
 import MongoStore from 'connect-mongo'
-import { mongoClient } from './mongo'
+import { createMongo } from './mongo'
 
 export const isLoggedIn: Handler = (req, res, next) => {
 
@@ -26,10 +26,13 @@ export const configureAuth = (app: any): void => {
     passport.use(new LdapStrategy({
         server: LDAP_CONFIG
     }))
+
+    app.locals.mongo = createMongo(process.env.MONGO_URI)
+    
     app.use(session({
         secret: process.env.SESSION_SECRET,
         saveUninitialized: false,
-        store: MongoStore.create({ clientPromise: mongoClient.connect() }),
+        store: MongoStore.create({ clientPromise: app.locals.mongo }),
         cookie: {
             httpOnly: true,
             maxAge: 60 * 60 * 1000
