@@ -26,4 +26,9 @@ export const attachRoutes = (app: any): void => {
   });
 
   attachAccountRoutes(app);
+
+  // 404
+  app.use((req: any, res, next) => {
+    res.status(404).render('404', { path: req.path });
+  });
 };
