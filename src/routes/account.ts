@@ -14,14 +14,14 @@ class CreateAccountReq {
   // Heron accounts
   @jf
     .string()
-    .regex(/^[a-z][-a-z0-9]*$/, 'posixUsername')
+    .regex(/^[a-z][-a-z0-9]*$/, 'POSIX username')
     .required()
   username: string;
 
   @jf
     .string()
     .email()
-    .regex(/.+@swarthmore\.edu/)
+    .regex(/.+@swarthmore\.edu/, "Swarthmore email address")
     .required()
   email: string;
 
