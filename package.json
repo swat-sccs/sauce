@@ -61,7 +61,7 @@
       "eslint --fix",
       "prettier --write"
     ],
-    ".pug": [
+    "*.pug": [
       "prettier --write"
     ]
   }
