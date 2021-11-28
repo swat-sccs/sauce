@@ -44,7 +44,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-prettier": "^4.0.0",
-    "husky": "^7.0.4",
+    "husky": "^4.3.8",
     "lint-staged": "^12.1.2",
     "nodemon": "^2.0.0",
     "prettier": "^2.5.0",
@@ -58,8 +58,10 @@
   "lint-staged": {
     "*.ts": [
       "eslint --fix",
-      "prettier --write",
-      "git add"
+      "prettier --write"
+    ],
+    ".pug": [
+      "prettier --write"
     ]
   },
   "husky": {
