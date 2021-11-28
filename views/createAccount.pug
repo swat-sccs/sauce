@@ -2,131 +2,149 @@ doctype
 html(lang='en')
   head
     meta(charset='utf-8')
-    meta(name="viewport" content="width=device-width, initial-scale=1")
+    meta(name='viewport', content='width=device-width, initial-scale=1')
     title Create your SCCS account
 
-    link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous")
+    link(
+      rel='stylesheet',
+      href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css',
+      integrity='sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3',
+      crossorigin='anonymous'
+    )
   body
-    .container-fluid.p-4(style="max-width: 768px")
+    .container-fluid.p-4(style='max-width: 768px')
       .row
         .col-md-8
           h1.mb-4 Get your SCCS account
           p
             | Your SCCS account lets you manage your mailing lists, create RSD
             | events, sign into computers in the Media Lounge, and much more.
-            | SCCS accounts are available to all Swarthmore students, faculty, 
-            | and staff&mdash;and you'll still be able to access it after 
+            | SCCS accounts are available to all Swarthmore students, faculty,
+            | and staff&mdash;and you'll still be able to access it after
             | graduation.
-          form.form-signin.needs-validation#createForm(action="/account/create" method="post" novalidate)
+          form#createForm.form-signin.needs-validation(
+            action='/account/create',
+            method='post',
+            novalidate
+          )
             .form-group.mb-3
               .form-floating
-                script(type="text/javascript").
+                script(type='text/javascript').
                   function validateUsername() {
-                    console.log(this)
+                    console.log(this);
                   }
-                input.form-control#usernameInput(
-                  type='text' 
-                  pattern="^[a-z][-a-z0-9]*$"
-                  name='username' 
-                  placeholder="Username"
-                  aria-describedby="usernameHelp"
-                  onchange="validateUsername"
-                  required)
-                label(for="usernameInput") Username
+                input#usernameInput.form-control(
+                  type='text',
+                  pattern='^[a-z][-a-z0-9]*$',
+                  name='username',
+                  placeholder='Username',
+                  aria-describedby='usernameHelp',
+                  onchange='validateUsername',
+                  required
+                )
+                label(for='usernameInput') Username
                 .valid-feedback Username is available
-                .invalid-feedback#usernameFeedback 
-                small.text-muted#usernameHelp This should be at least vaguely 
-                  | related to your real name, and contain only lowercase 
+                #usernameFeedback.invalid-feedback 
+                small#usernameHelp.text-muted This should be at least vaguely
+                  | related to your real name, and contain only lowercase
                   | letters, numbers, and hyphens.
             .form-group.mb-3
               .form-floating
-                input.form-control#emailInput(
-                  type='email' 
-                  pattern=".+@swarthmore\.edu"
-                  name='email' 
-                  placeholder="Email"
-                  required)
-                label(for="emailInput") Swarthmore email
+                input#emailInput.form-control(
+                  type='email',
+                  pattern='.+@swarthmore\.edu',
+                  name='email',
+                  placeholder='Email',
+                  required
+                )
+                label(for='emailInput') Swarthmore email
                 .invalid-feedback Please provide a valid @swarthmore.edu email
             .form-group.mb-3
               .form-floating
-                input.form-control#emailInput(
-                  type='text' 
-                  name='name' 
-                  placeholder="Name"
-                  required)
-                label(for="nameInput") Full name
+                input#emailInput.form-control(
+                  type='text',
+                  name='name',
+                  placeholder='Name',
+                  required
+                )
+                label(for='nameInput') Full name
                 .invalid-feedback Please provide a valid name
             .form-group.mb-3 
               each val in classes
                 .form-check.form-check-inline
                   input.form-check-input(
-                    type='radio'
-                    name='classYear'
-                    id=('classYear1' + val)
-                    value= val
+                    type='radio',
+                    name='classYear',
+                    id='classYear1' + val,
+                    value=val,
                     required
                   )
                   label.form-check-label(
-                    for=('classYear1' + val) 
-                    style="text-transform: capitalize"
-                  )= (/^\d+$/.test(val)) ? "\u2019" + val : val
-            button.btn.btn-large.btn-primary.mb-3#submitButton(type='submit') Request Your Account
-          script(type="text/javascript").
+                    for='classYear1' + val,
+                    style='text-transform: capitalize'
+                  )= /^\d+$/.test(val) ? '\u2019' + val : val
+            button#submitButton.btn.btn-large.btn-primary.mb-3(type='submit') Request Your Account
+          script(type='text/javascript').
             // form validation
             (function () {
-
-              'use strict'
+              'use strict';
 
               async function fetchUsernameResult(username) {
-                return await fetch('/account/username-ok/' + username)
-                  .then(async function (res) {
-                    return await res.text() == "true"
-                  })
+                return await fetch('/account/username-ok/' + username).then(async function (res) {
+                  return (await res.text()) == 'true';
+                });
               }
-              var usernameInput = document.getElementById("usernameInput");
-              var usernameFeedback = document.getElementById("usernameFeedback");
+              var usernameInput = document.getElementById('usernameInput');
+              var usernameFeedback = document.getElementById('usernameFeedback');
 
               async function checkUsername() {
                 if (usernameInput.checkValidity()) {
                   if (await fetchUsernameResult(usernameInput.value)) {
-                    usernameInput.classList.add("is-valid");
-                    usernameInput.classList.remove("is-invalid");
-                    usernameInput.setCustomValidity("")
+                    usernameInput.classList.add('is-valid');
+                    usernameInput.classList.remove('is-invalid');
+                    usernameInput.setCustomValidity('');
                     return true;
                   } else {
-                    usernameFeedback.innerHTML = "Username is already taken"
+                    usernameFeedback.innerHTML = 'Username is already taken';
                   }
                 } else {
                   if (usernameInput.value) {
-                    usernameFeedback.innerHTML = "Username contains an invalid character"
+                    usernameFeedback.innerHTML = 'Username contains an invalid character';
                   } else {
-                    usernameFeedback.innerHTML = ""
+                    usernameFeedback.innerHTML = '';
                   }
                 }
-                usernameInput.classList.add("is-invalid");
-                usernameInput.classList.remove("is-valid");
-                usernameInput.setCustomValidity("invalid")
+                usernameInput.classList.add('is-invalid');
+                usernameInput.classList.remove('is-valid');
+                usernameInput.setCustomValidity('invalid');
                 return false;
               }
 
-              var form = document.getElementById("createForm");
-              form.addEventListener('submit', async function (event) {
-                event.preventDefault();
+              var form = document.getElementById('createForm');
+              form.addEventListener(
+                'submit',
+                async function (event) {
+                  event.preventDefault();
 
-                if (!form.checkValidity() || (await checkUsername()) === false) {
-                  event.stopPropagation();
-                } else {
-                  form.submit();
-                }
+                  if (!form.checkValidity() || (await checkUsername()) === false) {
+                    event.stopPropagation();
+                  } else {
+                    form.submit();
+                  }
 
-                form.classList.add('was-validated');
-              }, false)
+                  form.classList.add('was-validated');
+                },
+                false
+              );
 
-              usernameInput.addEventListener('change', function(event) {
-                usernameInput.setCustomValidity("")
-                checkUsername();
-              }, false);
+              usernameInput.addEventListener(
+                'change',
+                function (event) {
+                  usernameInput.setCustomValidity('');
+                  checkUsername();
+                },
+                false
+              );
 
               // lil thing so we don't check usernames on every keypress
               // FIXME probably would be good to check invalid characters on
@@ -134,16 +152,20 @@ html(lang='en')
               var typingTimer;
               var doneTypingInterval = 500;
               function doneTyping() {
-                usernameInput.setCustomValidity("")
+                usernameInput.setCustomValidity('');
                 checkUsername();
-              }  
+              }
 
-              usernameInput.addEventListener('input', function(event) {
+              usernameInput.addEventListener('input', function (event) {
                 clearTimeout(typingTimer);
                 typingTimer = setTimeout(doneTyping, doneTypingInterval);
-              })
+              });
 
-              var submitButton = document.getElementById("submitButton")
-            })()
+              var submitButton = document.getElementById('submitButton');
+            })();
         .col
-    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous")
+    script(
+      src='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js',
+      integrity='sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p',
+      crossorigin='anonymous'
+    )
