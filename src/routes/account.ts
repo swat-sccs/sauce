@@ -21,7 +21,7 @@ class CreateAccountReq {
   @jf
     .string()
     .email()
-    .regex(/.+@swarthmore\.edu/, "Swarthmore email address")
+    .regex(/.+@swarthmore\.edu/, 'Swarthmore email address')
     .required()
   email: string;
 
