@@ -41,7 +41,10 @@ const isAdmin: Handler = async (req: any, res, next) => {
 /**
  */
 class AdminPageReq {
-  @jf.number().positive().default(0)
+  @jf
+    .number()
+    .not((joi) => joi.negative())
+    .default(0)
   page: number;
 
   @jf.number().positive().max(100).default(10)
@@ -73,12 +76,14 @@ export const attachAdminRoutes = (app: any) => {
         .limit(value.perPage)
         .sort('-createdTimestamp')
         .exec();
-
-      logger.debug(`Found ${results.length} results`);
+      const numResults = await PendingOperationModel.count().in('status', value.status).exec();
+      const numPages = Math.floor(numResults / value.perPage) + 1;
+      logger.debug(`Returning ${results.length} of ${numResults} results`);
       res.render('admin', {
         username: req.user?.uid,
         results: results,
         request: value,
+        numPages: numPages,
         timeAgo: timeAgo,
       });
     } catch (err) {
