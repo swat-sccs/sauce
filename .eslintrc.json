@@ -35,5 +35,11 @@
         "moduleDirectory": ["node_modules", "src/"]
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "files": "views/**/*.js",
+      "env": { "node": false, "browser": true }
+    }
+  ]
 }

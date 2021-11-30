@@ -37,7 +37,8 @@ html(lang='en')
                 label(for='usernameInput') Username
                 .valid-feedback Username is available
                 #usernameFeedback.invalid-feedback 
-                small#usernameHelp.text-muted This should be at least vaguely
+                small#usernameHelp.text-muted 
+                  | This should be at least vaguely
                   | related to your real name, and contain only lowercase
                   | letters, numbers, and hyphens.
             .form-group.mb-3
@@ -76,84 +77,7 @@ html(lang='en')
                     style='text-transform: capitalize'
                   )= /^\d+$/.test(val) ? '\u2019' + val : val
             button#submitButton.btn.btn-large.btn-primary.mb-3(type='submit') Request Your Account
-          script(type='text/javascript').
-            // form validation
-            (function () {
-              'use strict';
-
-              async function fetchUsernameResult(username) {
-                return await fetch('/account/username-ok/' + username).then(async function (res) {
-                  return (await res.text()) == 'true';
-                });
-              }
-              var usernameInput = document.getElementById('usernameInput');
-              var usernameFeedback = document.getElementById('usernameFeedback');
-
-              async function checkUsername() {
-                if (usernameInput.checkValidity()) {
-                  if (await fetchUsernameResult(usernameInput.value)) {
-                    usernameInput.classList.add('is-valid');
-                    usernameInput.classList.remove('is-invalid');
-                    usernameInput.setCustomValidity('');
-                    return true;
-                  } else {
-                    usernameFeedback.innerHTML = 'Username is already taken';
-                  }
-                } else {
-                  if (usernameInput.value) {
-                    usernameFeedback.innerHTML = 'Username contains an invalid character';
-                  } else {
-                    usernameFeedback.innerHTML = '';
-                  }
-                }
-                usernameInput.classList.add('is-invalid');
-                usernameInput.classList.remove('is-valid');
-                usernameInput.setCustomValidity('invalid');
-                return false;
-              }
-
-              var form = document.getElementById('createForm');
-              form.addEventListener(
-                'submit',
-                async function (event) {
-                  event.preventDefault();
-
-                  if (!form.checkValidity() || (await checkUsername()) === false) {
-                    event.stopPropagation();
-                  } else {
-                    form.submit();
-                  }
-
-                  form.classList.add('was-validated');
-                },
-                false
-              );
-
-              usernameInput.addEventListener(
-                'change',
-                function (event) {
-                  usernameInput.setCustomValidity('');
-                  checkUsername();
-                },
-                false
-              );
-
-              // lil thing so we don't check usernames on every keypress
-              // FIXME probably would be good to check invalid characters on
-              // every keypress, though
-              var typingTimer;
-              var doneTypingInterval = 500;
-              function doneTyping() {
-                usernameInput.setCustomValidity('');
-                checkUsername();
-              }
-
-              usernameInput.addEventListener('input', function (event) {
-                clearTimeout(typingTimer);
-                typingTimer = setTimeout(doneTyping, doneTypingInterval);
-              });
-
-              var submitButton = document.getElementById('submitButton');
-            })();
+          script(type='text/javascript')
+            include js/createAccount.js
         .col
     include includes/body-scripts.pug
