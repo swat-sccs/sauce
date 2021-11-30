@@ -77,12 +77,17 @@ export const attachAdminRoutes = (app: any) => {
         .sort('-createdTimestamp')
         .exec();
       const numResults = await PendingOperationModel.count().in('status', value.status).exec();
-      const numPages = Math.floor(numResults / value.perPage) + 1;
+      const numPages = Math.ceil(numResults / value.perPage);
       logger.debug(`Returning ${results.length} of ${numResults} results`);
       res.render('admin', {
         username: req.user?.uid,
         results: results,
         request: value,
+        // This would probably work fine if we provided the value instead, but
+        // providing the query lets us not supply params in links on the
+        // page (e.g. pagination) when they didn't need to be supplied (because
+        // they were default values).
+        query: req.query,
         numPages: numPages,
         timeAgo: timeAgo,
       });

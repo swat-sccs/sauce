@@ -57,12 +57,25 @@ html(lang='en')
                   //- td
                   //-   code= JSON.stringify(task.data)
           nav(aria-label='Results page navigation') 
+            -
+              function constructQuery(page) {
+                const params = new URLSearchParams();
+                for (const [key, value] of Object.entries(query)) {
+                  if (Array.isArray(value)) {
+                    for (item of value) params.append(key, item);
+                  } else {
+                    params.append(key, value);
+                  }
+                }
+                params.set('page', page)
+                return '?' + params.toString();
+              }
             ul.pagination
               - var i = 0;
               - const prevDisabled = request.page === 0;
               li.page-item(class={ disabled: prevDisabled })
                 a.page-link(
-                  href=`?page=${request.page - 1}`,
+                  href=constructQuery(request.page - 1),
                   aria-disabled=prevDisabled,
                   tabindex=prevDisabled ? '-1' : ''
                 ) Previous
@@ -72,11 +85,11 @@ html(lang='en')
                   class={ active: i === request.page + 1 },
                   aria-current=i === request.page + 1 ? 'page' : 'false'
                 )
-                  a.page-link(href=`?page=${i - 1}`)= i
+                  a.page-link(href=constructQuery(i - 1))= i
               - const nextDisabled = request.page + 1 >= numPages;
               li.page-item(class={ disabled: nextDisabled })
                 a.page-link(
-                  href=`?page=${request.page + 1}`,
+                  href=constructQuery(request.page + 1),
                   aria-disabled=nextDisabled,
                   tabindex=nextDisabled ? '-1' : ''
                 ) Next
