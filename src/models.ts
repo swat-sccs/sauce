@@ -22,6 +22,7 @@ const pendingOperationSchema = new mongoose.Schema<PendingOperation>({
   createdTimestamp: {
     type: Date,
     required: true,
+    index: true,
   },
   actionTimestamp: {
     type: Date,
