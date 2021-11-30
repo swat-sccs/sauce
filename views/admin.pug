@@ -1,0 +1,13 @@
+doctype
+html(lang='en')
+  head
+    include includes/head.pug
+    title SAUCE
+  body
+    .container.p-4
+      h1 SAUCE Admin
+      p.text-muted SCCS Account and User Control Engine
+      p Hello, #{ username }!
+      p
+        a(href='/logout') Log out
+    include includes/body-scripts.pug
