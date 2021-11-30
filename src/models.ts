@@ -4,8 +4,8 @@ interface PendingOperation {
   _id: string;
   operation: 'createAccount';
   createdTimestamp: Date;
-  executedTimestamp?: Date;
-  executed: boolean;
+  actionTimestamp?: Date;
+  status: 'pending' | 'executed' | 'rejected' | 'failed';
   data: any;
 }
 
@@ -23,14 +23,15 @@ const pendingOperationSchema = new mongoose.Schema<PendingOperation>({
     type: Date,
     required: true,
   },
-  executedTimestamp: {
+  actionTimestamp: {
     type: Date,
     default: null,
   },
-  executed: {
-    type: Boolean,
+  status: {
+    type: String,
+    enum: ['pending', 'executed', 'rejected', 'failed'],
     required: true,
-    default: false,
+    default: 'pending',
   },
   data: {
     // json stringified request

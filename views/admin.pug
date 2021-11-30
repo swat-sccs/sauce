@@ -15,45 +15,75 @@ html(lang='en')
                 th.w-10(scope='col') ID
                 th.w-10(scope='col') Operation
                 th.w-25(scope='col') Created
-                th.w-25(scope='col') Executed
+                th.w-25(scope='col') Status
+                th.w-10(scope='col')
                 //- th(scope='col') Data
             tbody 
               each task in results
-                tr(class={ 'table-primary': task.executed, 'table-danger': !task.executed }) 
-                  th(
-                    scope='row',
-                    data-bs-toggle='tooltip',
-                    data-bs-placement='left',
-                    title=task._id
-                  )
-                    code= task._id.substring(0, 6) + '...'
+                tr(
+                  class={
+                    'table-success': task.status === 'executed',
+                    'table-danger': task.status === 'rejected',
+                    'table-warning': task.status === 'failed',
+                    'table-info': task.status === 'pending',
+                  }
+                ) 
+                  th(scope='row')
+                    code(data-bs-toggle='tooltip', data-bs-placement='left', title=task._id)= task._id.substring(0, 6) + '...'
                   td= task.operation
                   td
-                    div(
+                    //- TODO add timezones to these
+                    span(
                       data-bs-toggle='tooltip',
-                      data-bs-placement='left',
+                      data-bs-placement='top',
                       title=task.createdTimestamp.toLocaleString()
                     )= timeAgo(task.createdTimestamp)
                   td
-                    if task.executed
-                      div(
+                    if task.actionTimestamp
+                      span(
                         data-bs-toggle='tooltip',
-                        data-bs-placement='left',
-                        title=task.createdTimestamp.toLocaleString()
-                      )= timeAgo(task.executedTimestamp)
+                        data-bs-placement='top',
+                        title=task.actionTimestamp.toLocaleString()
+                      )= `${task.status} ${timeAgo(task.actionTimestamp)}`
                     else
-                      | never
+                      span= task.status
+                  td
+                    button.btn.btn-primary.btn-sm(
+                      type='button',
+                      data-bs-toggle='modal',
+                      data-bs-target='#editAccountModal',
+                      data-bs-task-json=JSON.stringify(task)
+                    ) Review
                   //- td
                   //-   code= JSON.stringify(task.data)
           p
             a(href='/logout') Log out
         .col
+    //- modal
+    #editAccountModal.modal.fade(
+      tabindex='-1',
+      aria-labelledby='editAccountModalTitle',
+      aria-hidden='true'
+    )
+      .modal-dialog 
+        .modal-content 
+          .modal-header
+            h5#editAccountModal.modal-title Modal Title
+            button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+          .modal-body 
+            p Operation: #[code#editModalOperation]
+            h5 Data
+            table.table
+              thead
+                tr 
+                  th(scope='col') Key
+                  th(scope='col') Value
+              tbody#editModalData
+          .modal-footer
+            button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Close
+            button#taskRejectButton.btn.btn-danger(type='button') Reject
+            button#taskApproveButton.btn.btn-success(type='button') Approve
     include includes/body-scripts.pug
     //- Bootstrap tooltips, see https://getbootstrap.com/docs/5.0/components/tooltips/#example-enable-tooltips-everywhere 
-    script(type='text/javascript').
-      (function () {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-          return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-      })();
+    script(type='text/javascript')
+      include js/admin.js

@@ -47,11 +47,12 @@ class AdminPageReq {
   @jf.number().positive().max(100).default(10)
   perPage: number;
 
-  @jf.boolean().default(false)
-  showExecuted: boolean;
-
-  @jf.boolean().default(true)
-  showNotExecuted: boolean;
+  @jf
+    .array({ elementClass: String })
+    .single()
+    .items((joi) => joi.valid('pending', 'executed', 'rejected', 'failed'))
+    .default('pending')
+  status: string[];
 }
 
 export const attachAdminRoutes = (app: any) => {
@@ -66,21 +67,12 @@ export const attachAdminRoutes = (app: any) => {
       }
 
       logger.debug(`Admin search query: ${JSON.stringify(req.query)}`);
-      // If we're showing neither executed nor non-executed, don't show
-      // anything; if we're showing (executed XOR non-executed) then set the
-      // filter parameter; if we're showing both then don't set anything
-      const filter: any = {};
-      if (value.showExecuted != value.showNotExecuted) {
-        filter.executed = value.showExecuted;
-      }
-      const results =
-        value.showExecuted || value.showNotExecuted
-          ? await PendingOperationModel.find(filter)
-              .skip(value.perPage * value.page)
-              .limit(value.perPage)
-              .sort('-createdTimestamp')
-              .exec()
-          : []; // we know we're not showing anything, don't bother with a query
+      const results = await PendingOperationModel.find()
+        .in('status', value.status)
+        .skip(value.perPage * value.page)
+        .limit(value.perPage)
+        .sort('-createdTimestamp')
+        .exec();
 
       logger.debug(`Found ${results.length} results`);
       res.render('admin', {
