@@ -1,0 +1,16 @@
+doctype
+html(lang='en')
+  head
+    include includes/head.pug
+    title 500 Internal Server Error
+  body
+    .container-fluid.p-4(style='max-width: 768px')
+      .row
+        .col-md-10
+          h1.mb-4 500 Internal Server Error
+          p 
+            | Something weird just happened on our end. We've been notified
+            | about the problem. If you have any questions, send an email to us
+            | at #[a(href='mailto:staff@sccs.swarthmore.edu') staff@sccs.swarthmore.edu].
+        .col
+        //- don't need the bootstrap script here

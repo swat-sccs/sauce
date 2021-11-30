@@ -37,45 +37,57 @@ class CreateAccountReq {
 export const attachAccountRoutes = (app: any) => {
   const router = Router(); // eslint-disable-line new-cap
 
-  router.get('/create', (req, res) => {
+  router.get('/create', (req, res, next) => {
     // TODO how do we handle someone going to create an account if they're
     //  already logged in?
-    res.render('createAccount', { classes: VALID_CLASSES });
+    try {
+      res.render('createAccount', { classes: VALID_CLASSES });
+    } catch (err) {
+      next(err);
+    }
   });
 
-  router.post('/create', async (req: any, res) => {
-    const { error, value } = jf.validateAsClass(req.body, CreateAccountReq);
+  router.post('/create', async (req: any, res, next) => {
+    try {
+      const { error, value } = jf.validateAsClass(req.body, CreateAccountReq);
 
-    if (error) {
-      logger.warn(`CreateAccountReq validation error: ${error.message}`);
-      return res.status(400).send(`Invalid request: ${error.message}`);
+      if (error) {
+        logger.warn(`CreateAccountReq validation error: ${error.message}`);
+        return res.status(400).send(`Invalid request: ${error.message}`);
+      }
+
+      // TODO also search and see if that user ID is in the creation queue
+      if (await searchAsyncUid(ldapClient, req.params.username)) {
+        return res.status(400).send(`Username ${req.params.username} already exists`);
+      }
+      // TODO check that an account doesn't already exist with the given email
+
+      logger.info(`Submitting CreateAccountReq ${JSON.stringify(value)}`);
+      const operation = new PendingOperationModel({
+        _id: uuidv4(),
+        operation: 'createAccount',
+        createdTimestamp: Date.now(),
+        data: value,
+      });
+      await operation.save();
+      res.render('createAccountSuccess', { email: value.email });
+    } catch (err) {
+      next(err);
     }
-
-    // TODO also search and see if that user ID is in the creation queue
-    if (await searchAsyncUid(ldapClient, req.params.username)) {
-      return res.status(400).send(`Username ${req.params.username} already exists`);
-    }
-    // TODO check that an account doesn't already exist with the given email
-
-    logger.info(`Submitting CreateAccountReq ${JSON.stringify(value)}`);
-    const operation = new PendingOperationModel({
-      _id: uuidv4(),
-      operation: 'createAccount',
-      createdTimestamp: Date.now(),
-      data: value,
-    });
-    await operation.save();
-    res.render('createAccountSuccess', { email: value.email });
   });
 
-  router.get('/username-ok/:username', async (req: any, res) => {
-    // TODO also search and see if that user ID is in the creation queue
-    if (await searchAsyncUid(ldapClient, req.params.username)) {
-      logger.debug(`${req.params.username} already exists`);
-      res.send(false);
-    } else {
-      res.send(true);
-      logger.debug(`${req.params.username} does not already exist`);
+  router.get('/username-ok/:username', async (req: any, res, next) => {
+    try {
+      // TODO also search and see if that user ID is in the creation queue
+      if (await searchAsyncUid(ldapClient, req.params.username)) {
+        logger.debug(`${req.params.username} already exists`);
+        res.send(false);
+      } else {
+        res.send(true);
+        logger.debug(`${req.params.username} does not already exist`);
+      }
+    } catch (err) {
+      next(err);
     }
   });
 

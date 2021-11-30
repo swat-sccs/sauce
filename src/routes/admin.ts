@@ -38,8 +38,12 @@ const isAdmin: Handler = async (req: any, res, next) => {
 export const attachAdminRoutes = (app: any) => {
   const router = Router(); // eslint-disable-line new-cap
 
-  router.get('/', isAdmin, (req: any, res) => {
-    res.render('admin', { username: req.user?.uid });
+  router.get('/', isAdmin, async (req: any, res, next) => {
+    try {
+      res.render('admin', { username: req.user?.uid });
+    } catch (err) {
+      next(err);
+    }
   });
 
   app.use('/admin', router);

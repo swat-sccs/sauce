@@ -26,6 +26,16 @@ const initExpress = (): void => {
   configureAuth(app);
   attachRoutes(app);
 
+  // error handler
+  app.use((err, req, res: any, next) => {
+    logger.error(err);
+    if (!res.headersSent) {
+      return res.status(500).render('error');
+    } else {
+      next(err);
+    }
+  });
+
   app.set('view engine', 'pug');
 
   app.listen(process.env.port || 3000);
