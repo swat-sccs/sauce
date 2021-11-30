@@ -5,9 +5,55 @@ html(lang='en')
     title SAUCE
   body
     .container.p-4
-      h1 SAUCE Admin
-      p.text-muted SCCS Account and User Control Engine
-      p Hello, #{ username }!
-      p
-        a(href='/logout') Log out
+      .row
+        .col-md-8
+          h1 SAUCE Admin
+          p.text-muted SCCS Account and User Control Engine
+          table.table 
+            thead
+              tr 
+                th.w-10(scope='col') ID
+                th.w-10(scope='col') Operation
+                th.w-25(scope='col') Created
+                th.w-25(scope='col') Executed
+                //- th(scope='col') Data
+            tbody 
+              each task in results
+                tr(class={ 'table-primary': task.executed, 'table-danger': !task.executed }) 
+                  th(
+                    scope='row',
+                    data-bs-toggle='tooltip',
+                    data-bs-placement='left',
+                    title=task._id
+                  )
+                    code= task._id.substring(0, 6) + '...'
+                  td= task.operation
+                  td
+                    div(
+                      data-bs-toggle='tooltip',
+                      data-bs-placement='left',
+                      title=task.createdTimestamp.toLocaleString()
+                    )= timeAgo(task.createdTimestamp)
+                  td
+                    if task.executed
+                      div(
+                        data-bs-toggle='tooltip',
+                        data-bs-placement='left',
+                        title=task.createdTimestamp.toLocaleString()
+                      )= timeAgo(task.executedTimestamp)
+                    else
+                      | never
+                  //- td
+                  //-   code= JSON.stringify(task.data)
+          p
+            a(href='/logout') Log out
+        .col
     include includes/body-scripts.pug
+    //- Bootstrap tooltips, see https://getbootstrap.com/docs/5.0/components/tooltips/#example-enable-tooltips-everywhere 
+    script(type='text/javascript').
+      (function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+      })();
