@@ -9,6 +9,24 @@ html(lang='en')
         .col-md-8
           h1 SAUCE Admin
           p.text-muted SCCS Account and User Control Engine
+          //- display alert for completed task
+          if request.opTask && request.opStatus
+            .alert.alert-dismissible.fade.show(
+              class={
+                'alert-success': request.opStatus === 'executed',
+                'alert-danger': request.opStatus === 'rejected',
+                'alert-warning': request.opStatus === 'failed',
+              },
+              role='alert'
+            )
+              - const taskTruncated = request.opTask.substring(0, 6) + '...';
+              if request.opStatus === 'executed'
+                div Task #[code= taskTruncated] executed.
+              else if request.opStatus === 'rejected'
+                div Task #[code= taskTruncated] rejected.
+              else if request.opStatus === 'failed'
+                div Task #[code= taskTruncated] failed! Check the task data and server logs for error details.
+              button.btn-close(type='button', data-bs-dismiss='alert', aria-label='Close')
           table.table 
             thead
               tr 
@@ -93,7 +111,8 @@ html(lang='en')
                   aria-disabled=nextDisabled,
                   tabindex=nextDisabled ? '-1' : ''
                 ) Next
-
+          //- TODO display timezone somewhere
+          p.text-muted Last updated: #{ new Date().toLocaleString() }
           p
             a(href='/logout') Log out
         .col
@@ -117,10 +136,25 @@ html(lang='en')
                   th(scope='col') Key
                   th(scope='col') Value
               tbody#editModalData
-          .modal-footer
-            button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Close
-            button#taskRejectButton.btn.btn-danger(type='button') Reject
-            button#taskApproveButton.btn.btn-success(type='button') Approve
+          form(action='/admin/modifyTask', method='post')
+            .modal-footer
+              button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Close
+              -
+                function constructSubmitQuery() {
+                  const params = new URLSearchParams();
+                  for (const [key, value] of Object.entries(query)) {
+                    if (Array.isArray(value)) {
+                      for (item of value) params.append(key, item);
+                    } else {
+                      params.append(key, value);
+                    }
+                  }
+                  return '?' + params.toString();
+                }
+              input#editModalId(type='hidden', name='id')
+              input(type='hidden', name='query', value=constructSubmitQuery())
+              button#taskRejectButton.btn.btn-danger(type='submit', name='reject', value='true') Reject
+              button#taskApproveButton.btn.btn-success(type='submit', name='reject', value='false') Approve
     include includes/body-scripts.pug
     //- Bootstrap tooltips, see https://getbootstrap.com/docs/5.0/components/tooltips/#example-enable-tooltips-everywhere 
     script(type='text/javascript')

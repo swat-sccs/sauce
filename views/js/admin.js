@@ -20,6 +20,9 @@
     const operation = document.getElementById('editModalOperation');
     operation.textContent = taskData.operation;
 
+    const editModalIdField = document.getElementById('editModalId');
+    editModalIdField.value = taskData._id;
+
     const modalData = document.getElementById('editModalData');
 
     const dataPairs = [];
