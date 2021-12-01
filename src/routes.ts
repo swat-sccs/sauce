@@ -13,12 +13,27 @@ export const attachRoutes = (app: any): void => {
   });
 
   app.get('/login', (req: any, res) => {
-    res.render('login');
+    res.render('login', { nextUrl: req.query.next || '/' });
   });
 
   app.post(
     '/login',
-    passport.authenticate('ldapauth', { successRedirect: '/', failureRedirect: '/login' }),
+    passport.authenticate('ldapauth', { failWithError: true }),
+    (req, res, next) => {
+      // auth success
+      logger.info(`Login success for user ${req.body.username || '<error getting user>'}`);
+      res.redirect(req.body.next || '/');
+    },
+    async (err, req, res, next) => {
+      try {
+        // auth failure, send the login page again
+        logger.warn(`Login failure for user ${req.body.username || '<error getting user>'}`);
+
+        res.render('login', { nextUrl: req.body.next || '/', failedAlready: true });
+      } catch (error) {
+        next(error);
+      }
+    },
   );
 
   app.get('/logout', (req: any, res) => {

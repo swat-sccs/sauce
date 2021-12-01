@@ -16,7 +16,7 @@ export const isLoggedIn: Handler = (req, res, next) => {
   }
   logger.debug(`Request not authenticated; redirecting to login`);
 
-  res.redirect('/login');
+  res.redirect(`/login?next=${encodeURIComponent(req.originalUrl)}`);
 };
 
 export const configureAuth = (app: any): void => {
