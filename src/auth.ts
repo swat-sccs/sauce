@@ -35,6 +35,7 @@ export const configureAuth = (app: any): void => {
         httpOnly: true,
         maxAge: 60 * 60 * 1000,
       },
+      resave: false,
     }),
   );
   app.use(passport.initialize());
