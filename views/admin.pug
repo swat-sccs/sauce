@@ -29,6 +29,22 @@ html(lang='en')
               else if request.opStatus === 'failed'
                 div Task #[code= taskTruncated] failed! Check the task data and server logs for error details.
               button.btn-close(type='button', data-bs-dismiss='alert', aria-label='Close')
+          form#filterForm(aria-label='Task status filter')
+            each status in ['pending', 'executed', 'rejected', 'failed']
+              .form-check.form-check-inline
+                input.form-check-input(
+                  id=`#${status}Check`,
+                  type='checkbox',
+                  name='status',
+                  value=status,
+                  checked=request.status.includes(status)
+                )
+                label.form-check-label(for=`${status}Check`)= status.charAt(0).toUpperCase() + status.slice(1)
+            if query.page
+              input(type='hidden', name='page', value=query.page)
+            if query.perPage
+              input(type='hidden', name='perPage', value=query.perPage)
+            button.btn.btn-sm.btn-primary(type='submit') Apply
           table.table 
             thead
               tr 
@@ -38,7 +54,11 @@ html(lang='en')
                 th.w-25(scope='col') Status
                 th.w-10(scope='col')
                 //- th(scope='col') Data
-            tbody 
+            tbody
+              if results.length == 0
+                tr
+                  td(colspan=5)
+                    p.mb-0.text-center.fst-italic No tasks for this query
               each task in results
                 tr(
                   class={
