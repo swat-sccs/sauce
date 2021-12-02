@@ -1,12 +1,14 @@
+include includes/sauce-common
+
 doctype
 html(lang='en')
   head
     include includes/head.pug
     title SAUCE
   body
-    .container.p-4
+    +sauce-container('admin', user)
       .row
-        .col-md-8
+        .col-lg-10
           h1 SAUCE Admin
           p.text-muted SCCS Account and User Control Engine
           //- display alert for completed task

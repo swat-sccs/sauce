@@ -93,7 +93,7 @@ export const attachAdminRoutes = (app: any) => {
       const numPages = Math.ceil(numResults / value.perPage);
       logger.debug(`Returning ${results.length} of ${numResults} results`);
       res.render('admin', {
-        username: req.user?.uid,
+        user: req.user,
         results: results,
         request: value,
         // This would probably work fine if we provided the value instead, but

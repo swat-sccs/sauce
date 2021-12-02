@@ -1,11 +1,13 @@
+include includes/sauce-common
+
 doctype
 html(lang='en')
   head
     include includes/head.pug
     title 500 Internal Server Error
   body
-    .container-fluid.p-4(style='max-width: 768px')
-      .row
+    +sauce-container('', null, false, false)
+      .row(style='max-width: 768px')
         .col-md-10
           h1.mb-4 500 Internal Server Error
           p 

@@ -9,7 +9,7 @@ import { attachAdminRoutes } from './routes/admin';
 export const attachRoutes = (app: any): void => {
   logger.info('Attaching routes');
   app.get('/', isLoggedIn, (req: any, res) => {
-    res.render('index', { username: req.user?.uid });
+    res.render('index', { user: req.user });
   });
 
   app.get('/login', (req: any, res) => {

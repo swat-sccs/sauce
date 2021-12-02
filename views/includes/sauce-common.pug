@@ -1,0 +1,65 @@
+mixin sauce-container(pageId = '', user = null, showNavbar = true, showFooter = true)
+  .d-flex.flex-column.min-vh-100
+    header
+      if showNavbar
+        nav.navbar.navbar-expand-sm.navbar-light.fixed-top.bg-light
+          -
+            const PAGES = [
+              {
+                id: 'index',
+                title: 'Home',
+                href: '/',
+                needsAdmin: false
+              },
+              {
+                id: 'admin',
+                title: 'Admin',
+                href: '/admin',
+                needsAdmin: true
+              }
+            ]
+          .container-fluid 
+            span.navbar-brand.mb-0.h1 SAUCE
+            button.navbar-toggler(
+              type='button',
+              data-bs-toggle='collapse',
+              data-bs-target='#navbarNavAltMarkup',
+              aria-controls='navbarNavAltMarkup',
+              aria-expanded='false',
+              aria-label='Toggle navigation'
+            )
+              span.navbar-toggler-icon
+            #navbarNavAltMarkup.collapse.navbar-collapse
+              .navbar-nav
+                each page in PAGES
+                  if ((user && user.admin) || !page.needsAdmin)
+                    a.nav-link(
+                      class={ active: page.id === pageId },
+                      aria-current=page.id === pageId ? 'page' : 'false',
+                      href=page.href
+                    )= page.title
+                if user
+                  li.nav-item.dropdown
+                    a#userDropdown.nav-link.dropdown-toggle(
+                      href='#',
+                      role='button',
+                      data-bs-toggle='dropdown',
+                      aria-expanded='false'
+                    ) #{ user.uid }
+                    ul.dropdown-menu(aria-labelledby='userDropdown')
+                      li
+                        a.dropdown-item(href='/logout') Log out
+
+    main.flex-fill
+      .container(style='padding-top: 75px')
+        if block
+          block
+        else
+          p No content
+
+    footer.footer.mt-auto.py-3(class={ 'bg-light': showFooter })
+      if showFooter
+        .container
+          span.small.text-muted
+            | &copy; #{ new Date().getFullYear() } Swarthmore College Computer Society
+            | | Problems with this website? Email&nbsp;#[a(href='mailto:staff@sccs.swarthmore.edu') staff@sccs.swarthmore.edu].

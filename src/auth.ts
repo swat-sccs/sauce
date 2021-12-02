@@ -67,9 +67,9 @@ export const configureAuth = (app: any): void => {
           }),
       ]);
       if (user) {
-        logger.debug(`Found LDAP entry for ${uid}`);
-
         user.admin = admins.includes(user.uid);
+
+        logger.debug(`Found LDAP entry for ${uid} ${user.admin ? '(admin)' : ''}`);
 
         done(null, user);
       } else {

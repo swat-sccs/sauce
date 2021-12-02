@@ -1,11 +1,13 @@
+include includes/sauce-common
+
 doctype
 html(lang='en')
   head
     include includes/head.pug
     title Your request has been submitted!
   body
-    .container-fluid.p-4(style='max-width: 768px')
-      .row
+    +sauce-container('', null, false)
+      .row(style='max-width: 768px')
         .col-md-8
           h1.mb-4 Your request has been submitted!
           p.
