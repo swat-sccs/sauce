@@ -1,6 +1,6 @@
 import e, { Router } from 'express';
 import { logger } from '../logging';
-import { ldapClient, searchAsyncUid } from '../ldap';
+import { ldapClient, searchAsync, searchAsyncUid } from '../ldap';
 import * as jf from 'joiful';
 import { PendingOperationModel } from '../models';
 import { v4 as uuidv4 } from 'uuid';
@@ -78,13 +78,38 @@ export const attachAccountRoutes = (app: any) => {
 
   router.get('/username-ok/:username', async (req: any, res, next) => {
     try {
+      const [inDatabase, inPending] = await Promise.all([
+        searchAsyncUid(ldapClient, req.params.username),
+        PendingOperationModel.exists({ 'data.username': req.params.username, status: 'pending' }),
+      ]);
+
       // TODO also search and see if that user ID is in the creation queue
-      if (await searchAsyncUid(ldapClient, req.params.username)) {
+      if (inDatabase || inPending) {
         logger.debug(`${req.params.username} already exists`);
         res.send(false);
       } else {
         res.send(true);
         logger.debug(`${req.params.username} does not already exist`);
+      }
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get('/email-ok/:email', async (req: any, res, next) => {
+    try {
+      // TODO also search and see if that user ID is in the creation queue
+      const [inDatabase, inPending] = await Promise.all([
+        searchAsync(ldapClient, `(swatmail=${req.params.email})`),
+        PendingOperationModel.exists({ 'data.email': req.params.email, status: 'pending' }),
+      ]);
+
+      if (inDatabase || inPending) {
+        logger.debug(`${req.params.email} already exists`);
+        res.send(false);
+      } else {
+        res.send(true);
+        logger.debug(`${req.params.email} does not already exist`);
       }
     } catch (err) {
       next(err);
