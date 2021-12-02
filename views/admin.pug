@@ -87,6 +87,10 @@ html(lang='en')
                     params.append(key, value);
                   }
                 }
+                // remove any lingering task-status alert
+                params.delete('opTask')
+                params.delete('opStatus')
+
                 params.set('page', page)
                 return '?' + params.toString();
               }
