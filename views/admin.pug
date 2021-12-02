@@ -1,9 +1,9 @@
-include includes/sauce-common
+include include/sauce-common
 
 doctype
 html(lang='en')
   head
-    include includes/head.pug
+    include include/head.pug
     title SAUCE
   body
     +sauce-container('admin', user)
@@ -183,7 +183,7 @@ html(lang='en')
               button#taskRejectButton.btn.btn-danger(type='submit', name='reject', value='true') Reject
               button#taskApproveButton.btn.btn-success(type='submit', name='reject', value='false') Approve
               button#taskRetryButton.btn.btn-success(type='submit', name='reject', value='false') Retry
-    include includes/body-scripts.pug
+    include include/body-scripts.pug
     //- Bootstrap tooltips, see https://getbootstrap.com/docs/5.0/components/tooltips/#example-enable-tooltips-everywhere 
     script(type='text/javascript')
       include js/admin.js

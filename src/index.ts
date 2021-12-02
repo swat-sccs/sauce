@@ -1,14 +1,18 @@
 import 'dotenv/config';
 import 'reflect-metadata'; // needed for joiful to work
-import express from 'express';
+import MongoStore from 'connect-mongo';
 import cors from 'cors';
-
-import { logger, doRequestId, logRequest } from './logging';
-
-import { attachRoutes } from './routes';
-import { configureAuth } from './auth';
-import { createMongo } from './mongo';
-import { Mongoose } from 'mongoose';
+import express from 'express';
+import session from 'express-session';
+import passport from 'passport';
+import LdapStrategy from 'passport-ldapauth';
+import { LDAP_CONFIG } from './integration/ldap';
+import { doRequestId, logger, logRequest } from './util/logging';
+import { initMongo } from './integration/mongo';
+import { accountRouter } from './routes/account';
+import { adminRouter } from './routes/admin';
+import { loginRouter } from './routes/login';
+import { getUserInfo } from './util/authUtils';
 
 const initExpress = (): void => {
   const port = process.env.PORT || 3000;
@@ -21,10 +25,54 @@ const initExpress = (): void => {
   app.use(doRequestId);
   app.use(logRequest);
 
-  app.locals.mongo = createMongo(process.env.MONGO_URI);
+  // DB CONFIG
+  const mongoPromise = initMongo(process.env.MONGO_URI);
 
-  configureAuth(app);
-  attachRoutes(app);
+  // AUTH CONFIG
+  passport.use(
+    new LdapStrategy({
+      server: LDAP_CONFIG,
+    }),
+  );
+
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      saveUninitialized: false,
+      store: MongoStore.create({ clientPromise: mongoPromise }),
+      cookie: {
+        httpOnly: true,
+        maxAge: 60 * 60 * 1000,
+      },
+      resave: false,
+    }),
+  );
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  passport.serializeUser((user: any, done) => {
+    logger.debug(`Serializing user ${user['uid']}`);
+    done(null, user.uid);
+  });
+
+  passport.deserializeUser(async (uid: string, done) => {
+    logger.debug(`Deserializing user ${uid}`);
+    try {
+      done(null, await getUserInfo(uid));
+    } catch (err) {
+      logger.error('Error deserializing user', err);
+      done(err);
+    }
+  });
+
+  // ROUTER CONFIG
+  app.use('/', loginRouter);
+  app.use('/account', accountRouter);
+  app.use('/admin', adminRouter);
+
+  app.use((req: any, res, next) => {
+    res.status(404).render('404', { path: req.path });
+  });
 
   // error handler
   app.use((err, req, res: any, next) => {

@@ -1,9 +1,9 @@
-include includes/sauce-common
+include include/sauce-common
 
 doctype
 html(lang='en')
   head
-    include includes/head.pug
+    include include/head.pug
     title Create your SCCS account
   body
     +sauce-container('', null, false)
@@ -83,4 +83,4 @@ html(lang='en')
           script(type='text/javascript')
             include js/createAccount.js
         .col
-    include includes/body-scripts.pug
+    include include/body-scripts.pug

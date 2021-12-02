@@ -1,9 +1,9 @@
-include includes/sauce-common
+include include/sauce-common
 
 doctype
 html(lang='en')
   head
-    include includes/head.pug
+    include include/head.pug
     title SAUCE
   body
     +sauce-container('index', user)
@@ -12,4 +12,4 @@ html(lang='en')
       p Hello, #{ user.uid }!
       p
         a(href='/logout') Log out
-    include includes/body-scripts.pug
+    include include/body-scripts.pug
