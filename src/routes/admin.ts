@@ -139,6 +139,11 @@ export const attachAdminRoutes = (app: any) => {
         return res.status(404).send(`Task ${value.id} not found`);
       }
 
+      if (task.status === 'executed' || task.status === 'rejected') {
+        logger.warn(`Task ${value.id} is ${task.status} and cannot be modified`);
+        return res.status(400).send(`Task ${value.id} is ${task.status} and cannot be modified`);
+      }
+
       const params = new URLSearchParams(value.query);
       params.set('opTask', value.id);
 
