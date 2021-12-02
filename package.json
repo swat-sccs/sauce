@@ -65,6 +65,9 @@
     ],
     "*.pug": [
       "prettier --write"
+    ],
+    "*.md": [
+      "prettier --write"
     ]
   }
 }
