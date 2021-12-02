@@ -130,12 +130,13 @@ html(lang='en')
           .modal-body 
             p Operation: #[code#editModalOperation]
             h5 Data
-            table.table
-              thead
-                tr 
-                  th(scope='col') Key
-                  th(scope='col') Value
-              tbody#editModalData
+            .table-responsive 
+              table.table
+                thead
+                  tr 
+                    th(scope='col') Key
+                    th(scope='col') Value
+                tbody#editModalData
           form(action='/admin/modifyTask', method='post')
             .modal-footer
               button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Close
@@ -155,6 +156,7 @@ html(lang='en')
               input(type='hidden', name='query', value=constructSubmitQuery())
               button#taskRejectButton.btn.btn-danger(type='submit', name='reject', value='true') Reject
               button#taskApproveButton.btn.btn-success(type='submit', name='reject', value='false') Approve
+              button#taskRetryButton.btn.btn-success(type='submit', name='reject', value='false') Retry
     include includes/body-scripts.pug
     //- Bootstrap tooltips, see https://getbootstrap.com/docs/5.0/components/tooltips/#example-enable-tooltips-everywhere 
     script(type='text/javascript')

@@ -38,6 +38,7 @@
       const valElement = document.createElement('td');
       const valInner = document.createElement('code');
       valInner.innerText = value;
+      valInner.style = 'white-space: nowrap;';
       valElement.appendChild(valInner);
 
       row.appendChild(valElement);
@@ -45,10 +46,13 @@
       modalData.appendChild(row);
     }
 
-    const showApproveReject = taskData.status === 'pending' || taskData.status === 'failed';
+    const pending = taskData.status === 'pending';
+    const failed = taskData.status === 'failed';
     const reject = document.getElementById('taskRejectButton');
-    reject.style.display = showApproveReject ? '' : 'none';
+    reject.style.display = pending || failed ? '' : 'none';
     const approve = document.getElementById('taskApproveButton');
-    approve.style.display = showApproveReject ? '' : 'none';
+    approve.style.display = pending ? '' : 'none';
+    const retry = document.getElementById('taskRetryButton');
+    retry.style.display = failed ? '' : 'none';
   });
 })();
