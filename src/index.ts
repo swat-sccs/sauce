@@ -30,7 +30,7 @@ const initExpress = (): void => {
   app.use((err, req, res: any, next) => {
     logger.error(err);
     if (!res.headersSent) {
-      return res.status(500).render('error');
+      return res.status(500).render('500');
     } else {
       next(err);
     }

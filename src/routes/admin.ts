@@ -8,23 +8,24 @@ import timeAgo from 'node-time-ago';
 import { functions } from '../functions/taskFunctionMap';
 
 const isAdmin: Handler = async (req: any, res, next) => {
-  // that is, check if logged in and if so we'll run the inner bit
-  isLoggedIn(req, res, async () => {
-    if (req.user) {
-      if (req.user.admin) {
-        logger.debug(`${req.user.uid} is an admin`);
-        next();
+  try {
+    // that is, check if logged in and if so we'll run the inner bit
+    isLoggedIn(req, res, () => {
+      if (req.user) {
+        if (req.user.admin) {
+          logger.debug(`${req.user.uid} is an admin`);
+          next();
+        } else {
+          logger.warn(`${req.user.uid} is not an admin and is unauthorized`);
+          res.status(403).render('403');
+        }
       } else {
-        logger.warn(`${req.user.uid} is not an admin and is unauthorized`);
-        // TODO nicer 403 page
-        res.status(403).send('You must be an administrator to access this page!');
+        throw Error("req.user didn't exist on an authenticated request");
       }
-    } else {
-      logger.error("req.user didn't exist on an authenticated request");
-      // TODO make a nicer error page
-      res.status(500).send();
-    }
-  });
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 /**

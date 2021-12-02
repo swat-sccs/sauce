@@ -1,24 +1,14 @@
-include includes/sauce-common
+include includes/error-template
 
-doctype
-html(lang='en')
-  head
-    include includes/head.pug
-    title 404 Not Found
-  body
-    +sauce-container('', null, false, false)
-      .row(style='max-width: 768px')
-        .col-md-10
-          h1.mb-4 404 Not Found
-          if path
-            - var loc = `at <code>${path}</code>`;
-          else
-            - var loc = 'here';
-          p
-            //- the !{ loc } inserts the variable unescaped, which is necessary 
-            //- for the <code> tags to work.
-            | There's no page !{ loc }. If you got here from clicking a link on an
-            | SCCS website, please let us know at #[a(href='mailto:staff@sccs.swarthmore.edu') staff@sccs.swarthmore.edu].
-          p #[a(href='/') Back to homepage]
-        .col
-        //- don't need the bootstrap script here
+if path
+  - var loc = `at <code>${path}</code>`;
+else
+  - var loc = 'here';
++sauce-error('404 Not Found')
+  //- the !{ loc } inserts the variable unescaped, which is necessary 
+  //- for the <code> tags to work.
+  p
+    | There's no page !{ loc }. If you got here from clicking a link on an
+    | SCCS website, please let us know at
+    |        #[a(href='mailto:staff@sccs.swarthmore.edu') staff@sccs.swarthmore.edu].
+  p #[a(href='/') Back to homepage]
