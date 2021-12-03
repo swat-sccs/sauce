@@ -37,11 +37,7 @@ html(lang='en')
             button.btn.btn-large.btn-primary.mb-3(type='submit') Sign in
             if failedAlready
               p.text-danger That username and password combination doesn't match any SCCS account on file.
-            p
-              small#usernameHelp.text-muted
-                a(href='/find-username') Forgot username?
-            p
-              small#passwordHelp.text-muted
-                a(href='/reset-password') Forgot password?
+            p#userPasswordHelp.small
+              a(href='/account/forgot') Forgot username or password?
         .col
     include include/body-scripts.pug

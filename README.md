@@ -19,6 +19,9 @@ The repo is set up to run Prettier and ESLint before each commit.
 
 ### Folder Structure
 
+- `/emailTemplates`: Basic plaintext templates for emails. Email templating uses
+  [this one-liner](https://stackoverflow.com/a/41077811), so variable incorporation is just
+  `${templateVariable}`.
 - `/views`: Pug templates for the web interface
   - `/views/include`: Common code for all templates (e.g. `sauce-container` to add headers and
     footers)
