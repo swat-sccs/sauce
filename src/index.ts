@@ -70,6 +70,8 @@ const initExpress = (): void => {
   app.use('/account', accountRouter);
   app.use('/admin', adminRouter);
 
+  app.use('/static', express.static('public/'));
+
   app.use((req: any, res, next) => {
     res.status(404).render('404', { path: req.path });
   });
