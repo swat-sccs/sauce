@@ -4,7 +4,7 @@
   "author": "Swarthmore College Computer Society",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon --exec ts-node --files src/index.ts",
+    "start": "nodemon --exec npx ts-node --files src/index.ts",
     "build": "cd src && tsc",
     "pre-commit": "lint-staged",
     "prepare": "husky install"
