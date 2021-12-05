@@ -1,0 +1,50 @@
+
+$primary: #F46523;
+
+h1 {
+    /* Headings (Raleway SemiBold 400pt) */
+    position: absolute;
+    width: 6870px;
+    height: 470px;
+    /* SCCS Headings */
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 400px;
+    line-height: 470px;
+    /* identical to box height */
+    color: #000000;
+}
+/*
+h2 {
+    /* Subheadings (Raleway SemiBold 250pt)
+    position: absolute;
+    width: 5170px;
+    height: 294px;
+    /* SCCS Subheadings
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 250px;
+    line-height: 293px;
+    /* identical to box height 
+    display: flex;
+    align-items: center;
+    color: #000000;
+}*/
+
+body {
+    /* Text Guidelines */
+    position: absolute;
+    width: 6870px;
+    height: 989px;
+}
+
+.container {
+    /* Container Guidelines */
+    position: absolute;
+    width: 1315px;
+    height: 1315px;
+}
+
+@import "../node_modules/bootstrap/scss/bootstrap";
