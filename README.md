@@ -15,7 +15,7 @@ npm install
 Requires a MongoDB instance and LDAP server; these can be configured in a `.env` file. An example
 `.env` is provided in `.env.example`.
 
-The repo is set up to run Prettier and ESLint before each commit.
+To install git hooks to run Prettier and ESLint before each commit, run `npm run installHooks`.
 
 ### Folder Structure
 

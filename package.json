@@ -7,7 +7,7 @@
     "start": "nodemon --exec npx ts-node --files src/index.ts",
     "build": "cd src && tsc",
     "pre-commit": "lint-staged",
-    "prepare": "husky install"
+    "installHooks": "npx husky install"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
