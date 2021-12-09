@@ -88,7 +88,7 @@ const initExpress = (): void => {
 
   app.set('view engine', 'pug');
 
-  app.listen(process.env.port || 3000);
+  app.listen(+port || 3000, '0.0.0.0', null);
   logger.info(`Listening on port ${port}`);
 };
 
