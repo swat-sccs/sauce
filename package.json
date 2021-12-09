@@ -5,9 +5,10 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon --exec npx ts-node --files src/index.ts",
-    "build": "cd src && tsc",
+    "build": "cd src && npx tsc",
     "pre-commit": "lint-staged",
-    "installHooks": "npx husky install"
+    "installHooks": "npx husky install",
+    "buildDocker": "npm run build && docker build -t sauce-img ."
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
