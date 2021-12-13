@@ -1,6 +1,9 @@
 import bcrypt from 'bcrypt';
+
 import { Router } from 'express';
 import * as jf from 'joiful';
+import { Change } from 'ldapjs';
+import argon2 from 'argon2';
 import { nanoid } from 'nanoid';
 import nodemailer from 'nodemailer';
 import { v4 as uuidv4 } from 'uuid';
@@ -8,8 +11,9 @@ import { mailTransporter } from '../integration/email';
 import { ldapClient } from '../integration/ldap';
 import { PasswordResetRequestModel, PendingOperationModel } from '../integration/models';
 import { generateEmail } from '../util/emailTemplates';
-import { searchAsync, searchAsyncUid } from '../util/ldapUtils';
+import { modifyLdap, searchAsync, searchAsyncUid } from '../util/ldapUtils';
 import { logger } from '../util/logging';
+import { testPassword } from '../util/passwordStrength';
 
 const VALID_CLASSES = ['22', '23', '24', '25', 'faculty', 'staff'];
 // TODO: do we have accounts in the system that don't match this username pattern?
@@ -17,6 +21,7 @@ const USERNAME_OR_EMAIL_REGEX =
   /^[a-z][-a-z0-9]*$|^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/;
 
 const USERNAME_REGEX = /^[a-z][-a-z0-9]*$/;
+
 /**
  */
 class CreateAccountReq {
@@ -240,8 +245,74 @@ router.get('/reset', async (req, res, next) => {
   }
 });
 
-router.post('/reset', (req, res, next) => {
-  next('not yet implemented');
+/**
+ *
+ */
+class ResetPasswordReq {
+  @jf.string().required()
+  id: string;
+  @jf.string().required()
+  key: string;
+
+  // we'll properly validate it later
+  @jf.string().required()
+  password: string;
+}
+
+router.post('/reset', async (req, res, next) => {
+  try {
+    const { error, value } = jf.validateAsClass(req.body, ResetPasswordReq);
+    if (error) {
+      logger.warn(`ResetPassword validation error: ${error.message}`);
+      return res.status(400).send(`Invalid request: ${error.message}`);
+    }
+
+    const invalidProps = {
+      msg: 'The password reset request you used is invalid or expired. Your password has not been changed, but you\'ll need to <a href="/account/forgot">request a new password reset link</a>.',
+    };
+
+    const resetRequest = await PasswordResetRequestModel.findById(value.id);
+    if (!resetRequest) {
+      logger.warn(`Password reset ID ${value.id} did not match any request`);
+      return res.render('400', invalidProps);
+    }
+
+    if (await bcrypt.compare(value.key as string, resetRequest.key)) {
+      // now we check the password
+      const testResult = await testPassword(value.password);
+      if (testResult.score < 2) {
+        // this really shouldn't happen if they submitted something via the web form
+        logger.warn(`Provided password was too weak`);
+        return res.render('400', invalidProps);
+      }
+
+      const ldapEntry = await searchAsyncUid(ldapClient, resetRequest.user);
+
+      logger.debug(`Resetting password for ${resetRequest.user}`);
+
+      const hash = await argon2.hash(value.password, { raw: false });
+
+      await modifyLdap(
+        ldapClient,
+        ldapEntry.dn,
+        new Change({
+          operation: 'replace',
+          modification: {
+            userPassword: `{ARGON2}${hash}`,
+          },
+        }),
+      );
+
+      await resetRequest.delete();
+      logger.info(`Password reset successful for ${resetRequest.user}`);
+      return res.render('resetPasswordSuccess');
+    } else {
+      logger.warn(`Password reset key did not match database`);
+      return res.render('400', invalidProps);
+    }
+  } catch (err) {
+    next(err);
+  }
 });
 
 export const accountRouter = router;

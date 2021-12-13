@@ -33,3 +33,29 @@ export const searchAsync = async (
     });
   });
 };
+
+export const modifyLdap = async (
+  ldapClient: ldap.Client,
+  name: string,
+  change: ldap.Change,
+  bindDn: string = process.env.LDAP_BIND_DN,
+  bindSecret: string = process.env.LDAP_BIND_SECRET,
+) => {
+  return new Promise<void>((resolve, reject) => {
+    ldapClient.bind(bindDn, bindSecret, (err) => {
+      if (err) {
+        logger.error(`LDAP bind error: ${err}`);
+        reject(err);
+      } else {
+        ldapClient.modify(name, change, (err) => {
+          if (err) {
+            logger.error(`LDAP modify error: ${err}`);
+            reject(err);
+          } else {
+            resolve();
+          }
+        });
+      }
+    });
+  });
+};
