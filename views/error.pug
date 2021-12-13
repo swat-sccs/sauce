@@ -1,0 +1,34 @@
+include include/sauce-common
+
+doctype
+html(lang='en')
+  head
+    include include/head.pug
+    title= title
+  body
+    +sauce-container('', null, showNavbar, showFooter)
+      h1.mb-4.display-1= title
+      div(style='max-width: 600px')
+        case status
+          when 500
+            p
+              | Something weird just happened on our end. We've been notified
+              | about the problem. If you have any questions, email us
+              | at&nbsp;#[a(href='mailto:staff@sccs.swarthmore.edu') staff@sccs.swarthmore.edu].
+          when 404
+            if msg
+              - var loc = `at <code>${msg}</code>`;
+            else
+              - var loc = 'here';
+            p
+              | There's no page !{ loc }. If you got here from clicking a link on an
+              | SCCS website, please let us know at
+              |                  #[a(href='mailto:staff@sccs.swarthmore.edu') staff@sccs.swarthmore.edu].
+          when 403
+            p
+              | You don't have permission to access this page. If you think this is in
+              | error, contact SCCS leadership.
+          default
+            p !{ friendlyMessage }
+
+        p #[a(href='/') Back to homepage]

@@ -1,13 +1,12 @@
 import { Handler, Router } from 'express';
 import * as jf from 'joiful';
 import { isAdmin, isLoggedIn } from '../util/authUtils';
-import { ldapClient } from '../integration/ldap';
-import { searchAsync } from '../util/ldapUtils';
 import { logger } from '../util/logging';
 import { PendingOperationModel } from '../integration/models';
 import timeAgo from 'node-time-ago';
 import { functions } from '../functions/taskFunctionMap';
 import { catchErrors } from '../util/asyncCatch';
+import { HttpException } from '../error/httpException';
 
 /**
  */
@@ -62,7 +61,7 @@ router.get(
     const { error, value } = jf.validateAsClass(req.query, AdminPageReq);
     if (error) {
       logger.warn(`AdminPageReq validation error: ${error.message}`);
-      return res.status(400).send(`Invalid request: ${error.message}`);
+      throw new HttpException(400, { message: `Invalid request: ${error.message}` });
     }
 
     logger.debug(`Admin search query: ${JSON.stringify(req.query)}`);
@@ -97,8 +96,7 @@ router.post(
     const { error, value } = jf.validateAsClass(req.body, AdminModifyTaskReq);
 
     if (error) {
-      logger.warn(`AdminModifyTaskReq validation error: ${error.message}`);
-      return res.status(400).send(`Invalid request: ${error.message}`);
+      throw new HttpException(400, { message: `Invalid request: ${error.message}` });
     }
 
     logger.debug(`${value.reject ? 'Rejecting' : 'Accepting'} task ${value.id}`);
@@ -107,12 +105,14 @@ router.post(
 
     if (!task) {
       logger.warn(`Task ${value.id} not found`);
-      return res.status(404).send(`Task ${value.id} not found`);
+      throw new HttpException(400, { message: `Task ${value.id} not found` });
     }
 
     if (task.status === 'executed' || task.status === 'rejected') {
       logger.warn(`Task ${value.id} is ${task.status} and cannot be modified`);
-      return res.status(400).send(`Task ${value.id} is ${task.status} and cannot be modified`);
+      throw new HttpException(400, {
+        message: `Task ${value.id} is ${task.status} and cannot be modified`,
+      });
     }
 
     const params = new URLSearchParams(value.query);

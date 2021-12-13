@@ -3,6 +3,7 @@ import { ldapClient } from '../integration/ldap';
 
 import { logger } from './logging';
 import { searchAsync, searchAsyncUid } from './ldapUtils';
+import { HttpException } from '../error/httpException';
 
 export const isLoggedIn: Handler = (req: any, res, next) => {
   // if user is authenticated in the session, carry on
@@ -24,8 +25,9 @@ export const isAdmin: Handler = async (req: any, res, next) => {
           logger.debug(`${req.user.uid} is an admin`);
           next();
         } else {
-          logger.warn(`${req.user.uid} is not an admin and is unauthorized`);
-          res.status(403).render('403');
+          throw new HttpException(403, {
+            message: `${req.user.uid} is not an admin and is unauthorized`,
+          });
         }
       } else {
         throw Error("req.user didn't exist on an authenticated request");

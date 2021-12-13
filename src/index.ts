@@ -13,6 +13,8 @@ import { accountRouter } from './routes/account';
 import { adminRouter } from './routes/admin';
 import { loginRouter } from './routes/login';
 import { getUserInfo } from './util/authUtils';
+import { HttpException } from './error/httpException';
+import { errorHandler } from './error/errorHandler';
 
 const initExpress = (): void => {
   const port = process.env.PORT || 3000;
@@ -73,18 +75,11 @@ const initExpress = (): void => {
   app.use('/static', express.static('public/'));
 
   app.use((req: any, res, next) => {
-    res.status(404).render('404', { path: req.path });
+    next(new HttpException(404, { message: req.path }));
   });
 
   // error handler
-  app.use((err, req, res: any, next) => {
-    logger.error(err);
-    if (!res.headersSent) {
-      return res.status(500).render('500');
-    } else {
-      next(err);
-    }
-  });
+  app.use(errorHandler);
 
   app.set('view engine', 'pug');
 

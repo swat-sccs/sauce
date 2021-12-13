@@ -5,6 +5,7 @@ import { Change } from 'ldapjs';
 import { nanoid } from 'nanoid';
 import nodemailer from 'nodemailer';
 import { v4 as uuidv4 } from 'uuid';
+import { HttpException } from '../error/httpException';
 import { mailTransporter } from '../integration/email';
 import { ldapClient } from '../integration/ldap';
 import { PasswordResetRequestModel, PendingOperationModel } from '../integration/models';
@@ -67,12 +68,12 @@ router.post(
 
     if (error) {
       logger.warn(`CreateAccountReq validation error: ${error.message}`);
-      return res.status(400).send(`Invalid request: ${error.message}`);
+      throw new HttpException(400, { message: `Invalid request: ${error.message}` });
     }
 
     // TODO also search and see if that user ID is in the creation queue
     if (await searchAsyncUid(ldapClient, req.params.username)) {
-      return res.status(400).send(`Username ${req.params.username} already exists`);
+      throw new HttpException(400, { message: `Username ${req.params.username} already exists` });
     }
     // TODO check that an account doesn't already exist with the given email
 
@@ -195,12 +196,12 @@ router.post(
     const identifier = req.body.id;
     if (!identifier) {
       logger.warn('ForgotRequest had missing ID');
-      return res.status(400).send('Missing request parameter: id');
+      throw new HttpException(400, { message: 'Missing request parameter: id' });
     }
 
     if (!USERNAME_OR_EMAIL_REGEX.test(identifier)) {
       logger.warn(`ForgotRequest: id ${identifier} isn't a valid username or email`);
-      return res.status(400).send('ID must be a valid username or email');
+      throw new HttpException(400, { message: 'ID must be a valid username or email' });
     }
 
     // this runs asynchronously after we reply, so we get super-quick page returns and also prevent
@@ -218,25 +219,32 @@ router.get(
     const key = req.query.key;
 
     const invalidProps = {
-      msg: 'This password reset link is invalid or expired. <a href="/account/forgot">Request a new one</a>.',
+      friendlyMessage:
+        'This password reset link is invalid or expired. <a href="/account/forgot">Request a new one</a>.',
     };
 
     if (!id || !key || !(typeof key === 'string' || key instanceof String)) {
-      logger.warn('Password reset request missing query params');
-      return res.render('400', invalidProps);
+      throw new HttpException(400, {
+        ...invalidProps,
+        message: 'Password reset request missing query params',
+      });
     }
 
     const resetRequest = await PasswordResetRequestModel.findById(id);
     if (!resetRequest) {
-      logger.warn(`Password reset ID ${id} did not match any request`);
-      return res.render('400', invalidProps);
+      throw new HttpException(400, {
+        ...invalidProps,
+        message: `Password reset ID ${id} did not match any request`,
+      });
     }
 
     if (await argon2.verify(resetRequest.key, key as string)) {
       return res.render('resetPassword', { id: id, key: key, username: resetRequest.user });
     } else {
-      logger.warn(`Password reset key did not match database`);
-      return res.render('400', invalidProps);
+      throw new HttpException(400, {
+        ...invalidProps,
+        message: 'Password reset key did not match database',
+      });
     }
   }),
 );
@@ -260,18 +268,21 @@ router.post(
   catchErrors(async (req, res, next) => {
     const { error, value } = jf.validateAsClass(req.body, ResetPasswordReq);
     if (error) {
-      logger.warn(`ResetPassword validation error: ${error.message}`);
-      return res.status(400).send(`Invalid request: ${error.message}`);
+      throw new HttpException(400, { message: `Invalid request: ${error.message}` });
     }
 
     const invalidProps = {
-      msg: 'The password reset request you used is invalid or expired. Your password has not been changed, but you\'ll need to <a href="/account/forgot">request a new password reset link</a>.',
+      friendlyMessage:
+        'The password reset request you used is invalid or expired. Your password has not been changed, but you\'ll need to <a href="/account/forgot">request a new password reset link</a>.',
     };
 
     const resetRequest = await PasswordResetRequestModel.findById(value.id);
+
     if (!resetRequest) {
-      logger.warn(`Password reset ID ${value.id} did not match any request`);
-      return res.render('400', invalidProps);
+      throw new HttpException(400, {
+        ...invalidProps,
+        message: `Password reset ID ${value.id} did not match any request`,
+      });
     }
 
     if (await argon2.verify(resetRequest.key, value.key as string)) {
@@ -279,8 +290,10 @@ router.post(
       const testResult = await testPassword(value.password);
       if (testResult.score < 2) {
         // this really shouldn't happen if they submitted something via the web form
-        logger.warn(`Provided password was too weak`);
-        return res.render('400', invalidProps);
+        throw new HttpException(400, {
+          ...invalidProps,
+          message: 'Provided password was too weak',
+        });
       }
 
       const ldapEntry = await searchAsyncUid(ldapClient, resetRequest.user);
@@ -348,8 +361,10 @@ router.post(
       logger.info(`Password reset successful for ${resetRequest.user}`);
       return res.render('resetPasswordSuccess');
     } else {
-      logger.warn(`Password reset key did not match database`);
-      return res.render('400', invalidProps);
+      throw new HttpException(400, {
+        ...invalidProps,
+        message: 'Password reset key did not match database',
+      });
     }
   }),
 );
