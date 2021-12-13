@@ -13,6 +13,7 @@ import {
   PendingOperationModel,
 } from '../integration/models';
 import { generateEmail } from '../util/emailTemplates';
+import { sendTaskNotification } from '../util/emailUtils';
 import { modifyLdap, searchAsync, searchAsyncUid } from '../util/ldapUtils';
 import { logger } from '../util/logging';
 import { testPassword } from '../util/passwordStrength';
@@ -74,6 +75,8 @@ export const submitCreateAccountRequest = async (req: CreateAccountReq) => {
   });
 
   await operation.save();
+
+  sendTaskNotification(operation);
 };
 
 export const createPasswordResetRequest = async (identifier: string) => {
