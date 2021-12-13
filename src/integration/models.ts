@@ -48,7 +48,7 @@ export const PendingOperationModel = mongoose.model<PendingOperation>(
 
 interface PasswordResetRequest {
   // password reset requests generate two keys: the ID, which is stored plain, and the key, which is
-  // hashed with bcrypt before being stored. Both are provided to the user and they make a request;
+  // hashed with argon2 before being stored. Both are provided to the user and they make a request;
   // then we look up the request for the ID and compare hashed keys, basically exactly like a normal
   // username/password login flow.
   _id: string;

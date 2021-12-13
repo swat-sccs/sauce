@@ -1,9 +1,7 @@
-import bcrypt from 'bcrypt';
-
+import argon2 from 'argon2';
 import { Router } from 'express';
 import * as jf from 'joiful';
 import { Change } from 'ldapjs';
-import argon2 from 'argon2';
 import { nanoid } from 'nanoid';
 import nodemailer from 'nodemailer';
 import { v4 as uuidv4 } from 'uuid';
@@ -157,7 +155,7 @@ const processPasswordReset = async (identifier: string) => {
 
       await new PasswordResetRequestModel({
         _id: resetId,
-        key: await bcrypt.hash(resetKey, 10),
+        key: await argon2.hash(resetKey, { raw: false }),
         user: uid,
         timestamp: new Date(),
       }).save();
@@ -234,7 +232,7 @@ router.get('/reset', async (req, res, next) => {
       return res.render('400', invalidProps);
     }
 
-    if (await bcrypt.compare(key as string, resetRequest.key)) {
+    if (await argon2.verify(resetRequest.key, key as string)) {
       return res.render('resetPassword', { id: id, key: key, username: resetRequest.user });
     } else {
       logger.warn(`Password reset key did not match database`);
@@ -277,7 +275,7 @@ router.post('/reset', async (req, res, next) => {
       return res.render('400', invalidProps);
     }
 
-    if (await bcrypt.compare(value.key as string, resetRequest.key)) {
+    if (await argon2.verify(resetRequest.key, value.key as string)) {
       // now we check the password
       const testResult = await testPassword(value.password);
       if (testResult.score < 2) {

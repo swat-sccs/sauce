@@ -14,7 +14,6 @@
     "@zxcvbn-ts/language-common": "^1.0.0",
     "@zxcvbn-ts/language-en": "^1.0.0",
     "argon2": "^0.28.3",
-    "bcrypt": "^5.0.1",
     "connect-mongo": "^4.6.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
