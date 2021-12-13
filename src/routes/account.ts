@@ -301,7 +301,51 @@ router.post('/reset', async (req, res, next) => {
         }),
       );
 
-      await resetRequest.delete();
+      // spin off an async function here to do the slow stuff
+      (async () => {
+        try {
+          await resetRequest.delete();
+
+          if (!resetRequest.suppressEmail) {
+            /* 
+            We send the email to their primary email, but if that's not their Swarthmore email we
+            BCC that one too. This is to guard against a potential attack where an attacker could 
+            register a new email and change the password without the user knowing.
+            */
+            const emailTo = ldapEntry.email || ldapEntry.swatmail;
+            const emailBcc = ldapEntry.email ? ldapEntry.swatmail : undefined;
+
+            logger.debug(
+              `Sending notification email to ${emailTo}${emailBcc ? `(bcc: ${emailBcc})` : ''}`,
+            );
+            const [emailText, transporter] = await Promise.all([
+              generateEmail('passwordResetNotification.html', {
+                username: resetRequest.user,
+                domain: process.env.EXTERNAL_ADDRESS,
+              }),
+              mailTransporter,
+            ]);
+
+            const info = await transporter.sendMail({
+              from: process.env.EMAIL_FROM,
+              to: emailTo,
+              bcc: emailBcc,
+              subject: 'Your SCCS password was reset',
+              html: emailText,
+            });
+
+            const msgUrl = nodemailer.getTestMessageUrl(info);
+            if (msgUrl) {
+              logger.debug(`View message at ${msgUrl}`);
+            }
+          } else {
+            logger.debug('Suppressing notification email');
+          }
+        } catch (err) {
+          logger.error('Error performing post-reset tasks: ', err);
+        }
+      })();
+
       logger.info(`Password reset successful for ${resetRequest.user}`);
       return res.render('resetPasswordSuccess');
     } else {

@@ -55,6 +55,7 @@ interface PasswordResetRequest {
   key: string;
   user: string;
   timestamp: Date;
+  suppressEmail?: boolean;
 }
 
 const passwordResetRequestSchema = new mongoose.Schema<PasswordResetRequest>({
@@ -74,6 +75,10 @@ const passwordResetRequestSchema = new mongoose.Schema<PasswordResetRequest>({
   timestamp: {
     type: Date,
     expires: 3600,
+  },
+  suppressEmail: {
+    type: Boolean,
+    required: false,
   },
 });
 
