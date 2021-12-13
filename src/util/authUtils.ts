@@ -1,9 +1,8 @@
 import { Handler } from 'express';
-import { ldapClient } from '../integration/ldap';
-
-import { logger } from './logging';
-import { searchAsync, searchAsyncUid } from './ldapUtils';
 import { HttpException } from '../error/httpException';
+import { ldapClient } from '../integration/ldap';
+import { searchAsync, searchAsyncUid } from './ldapUtils';
+import { logger } from './logging';
 
 export const isLoggedIn: Handler = (req: any, res, next) => {
   // if user is authenticated in the session, carry on

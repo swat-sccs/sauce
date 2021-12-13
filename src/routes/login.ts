@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import passport from 'passport';
-import { logger } from '../util/logging';
 import { isLoggedIn } from '../util/authUtils';
+import { logger } from '../util/logging';
 
 // eslint-disable-next-line new-cap
 export const loginRouter = Router();

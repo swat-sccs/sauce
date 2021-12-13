@@ -1,56 +1,11 @@
-import { Handler, Router } from 'express';
+import { Router } from 'express';
 import * as jf from 'joiful';
-import { isAdmin, isLoggedIn } from '../util/authUtils';
-import { logger } from '../util/logging';
-import { PendingOperationModel } from '../integration/models';
 import timeAgo from 'node-time-ago';
-import { functions } from '../functions/taskFunctionMap';
-import { catchErrors } from '../util/asyncCatch';
+import * as controller from '../controllers/adminController';
 import { HttpException } from '../error/httpException';
-
-/**
- */
-class AdminPageReq {
-  @jf
-    .number()
-    .not((joi) => joi.negative())
-    .default(0)
-  page: number;
-
-  @jf.number().positive().max(100).default(10)
-  perPage: number;
-
-  @jf
-    .array({ elementClass: String })
-    .single()
-    .items((joi) => joi.valid('pending', 'executed', 'rejected', 'failed'))
-    .default('pending')
-  status: string[];
-
-  // used to display status when page is re-rendered after task execution
-
-  @jf.string().valid('executed', 'failed', 'rejected').optional()
-  opStatus?: 'executed' | 'failed' | 'rejected';
-
-  @jf.string().guid().optional()
-  opTask?: string;
-}
-/**
- */
-class AdminModifyTaskReq {
-  @jf.string().guid({ version: 'uuidv4' }).required()
-  id: string;
-
-  @jf.boolean().default(false)
-  reject: boolean; // if true, reject, otherwise, execute
-
-  /**
-   * Query for the originating admin page. Used to preserve e.g. search
-   * parameters when redirecting.
-   */
-  @jf.string().default('')
-  query: string;
-}
+import { catchErrors } from '../util/asyncCatch';
+import { isAdmin } from '../util/authUtils';
+import { logger } from '../util/logging';
 
 const router = Router(); // eslint-disable-line new-cap
 
@@ -58,22 +13,16 @@ router.get(
   '/',
   isAdmin,
   catchErrors(async (req: any, res, next) => {
-    const { error, value } = jf.validateAsClass(req.query, AdminPageReq);
+    const { error, value } = jf.validateAsClass(req.query, controller.AdminPageReq);
     if (error) {
       logger.warn(`AdminPageReq validation error: ${error.message}`);
       throw new HttpException(400, { message: `Invalid request: ${error.message}` });
     }
 
     logger.debug(`Admin search query: ${JSON.stringify(req.query)}`);
-    const results = await PendingOperationModel.find()
-      .in('status', value.status)
-      .skip(value.perPage * value.page)
-      .limit(value.perPage)
-      .sort('-createdTimestamp')
-      .exec();
-    const numResults = await PendingOperationModel.count().in('status', value.status).exec();
-    const numPages = Math.ceil(numResults / value.perPage);
-    logger.debug(`Returning ${results.length} of ${numResults} results`);
+
+    const { results, pages } = await controller.searchTasks(value);
+
     res.render('admin', {
       user: req.user,
       results: results,
@@ -83,7 +32,7 @@ router.get(
       // page (e.g. pagination) when they didn't need to be supplied (because
       // they were default values).
       query: req.query,
-      numPages: numPages,
+      numPages: pages,
       timeAgo: timeAgo,
     });
   }),
@@ -93,65 +42,18 @@ router.post(
   '/modifyTask',
   isAdmin,
   catchErrors(async (req: any, res, next) => {
-    const { error, value } = jf.validateAsClass(req.body, AdminModifyTaskReq);
+    const { error, value } = jf.validateAsClass(req.body, controller.AdminModifyTaskReq);
 
     if (error) {
       throw new HttpException(400, { message: `Invalid request: ${error.message}` });
     }
 
-    logger.debug(`${value.reject ? 'Rejecting' : 'Accepting'} task ${value.id}`);
-
-    const task = await PendingOperationModel.findById(value.id).exec();
-
-    if (!task) {
-      logger.warn(`Task ${value.id} not found`);
-      throw new HttpException(400, { message: `Task ${value.id} not found` });
-    }
-
-    if (task.status === 'executed' || task.status === 'rejected') {
-      logger.warn(`Task ${value.id} is ${task.status} and cannot be modified`);
-      throw new HttpException(400, {
-        message: `Task ${value.id} is ${task.status} and cannot be modified`,
-      });
-    }
+    const status = await controller.modifyTask(value);
 
     const params = new URLSearchParams(value.query);
     params.set('opTask', value.id);
-
-    if (value.reject) {
-      logger.info(`Rejecting ${task.operation} task ${value.id}`);
-      task.status = 'rejected';
-      task.actionTimestamp = new Date();
-      await task.save();
-
-      params.set('opStatus', 'rejected');
-      return res.redirect(`/admin?${params.toString()}`);
-    } else {
-      logger.debug(`Executing ${task.operation} task ${value.id}`);
-      try {
-        functions[task.operation](task.data);
-      } catch (err) {
-        logger.error(`Execution of ${task.operation} task ${value.id} failed`, err);
-        task.actionTimestamp = new Date();
-        task.data['error'] = err.toString();
-        task.markModified('data');
-        task.status = 'failed';
-        await task.save();
-        logger.debug('Saved failure record to database');
-
-        params.set('opStatus', 'failed');
-        return res.redirect(`/admin?${params.toString()}`);
-      }
-
-      task.actionTimestamp = new Date();
-      task.status = 'executed';
-
-      await task.save();
-      params.set('opStatus', 'executed');
-      logger.info(`Successfully executed ${task.operation} task ${value.id}`);
-
-      return res.redirect(`/admin?${params.toString()}`);
-    }
+    params.set('opStatus', status);
+    return res.redirect(`/admin?${params.toString()}`);
   }),
 );
 

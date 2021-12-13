@@ -27,6 +27,8 @@ The repo is set up to run Prettier and ESLint before each commit.
     footers)
   - `/views/js`: Client-side JavaScript for incorporation into templated pages
 - `/src`: Server code; root folder contains `index.ts` with main configuration
+  - `/src/controllers`: Business logic and controllers called from routes
+  - `/src/error/`: HTTP and application error handling
   - `/src/functions`: Functions that will be run on a delayed basis (e.g. `createUser`); contains
     business logic to actually do those tasks.
   - `/src/routes`: HTTP routing code for app functions

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-interface PendingOperation {
+export interface PendingOperation {
   _id: string;
   operation: 'createAccount';
   createdTimestamp: Date;
@@ -46,7 +46,7 @@ export const PendingOperationModel = mongoose.model<PendingOperation>(
   pendingOperationSchema,
 );
 
-interface PasswordResetRequest {
+export interface PasswordResetRequest {
   // password reset requests generate two keys: the ID, which is stored plain, and the key, which is
   // hashed with argon2 before being stored. Both are provided to the user and they make a request;
   // then we look up the request for the ID and compare hashed keys, basically exactly like a normal
