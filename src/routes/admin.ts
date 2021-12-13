@@ -7,6 +7,7 @@ import { logger } from '../util/logging';
 import { PendingOperationModel } from '../integration/models';
 import timeAgo from 'node-time-ago';
 import { functions } from '../functions/taskFunctionMap';
+import { catchErrors } from '../util/asyncCatch';
 
 /**
  */
@@ -54,8 +55,10 @@ class AdminModifyTaskReq {
 
 const router = Router(); // eslint-disable-line new-cap
 
-router.get('/', isAdmin, async (req: any, res, next) => {
-  try {
+router.get(
+  '/',
+  isAdmin,
+  catchErrors(async (req: any, res, next) => {
     const { error, value } = jf.validateAsClass(req.query, AdminPageReq);
     if (error) {
       logger.warn(`AdminPageReq validation error: ${error.message}`);
@@ -84,13 +87,13 @@ router.get('/', isAdmin, async (req: any, res, next) => {
       numPages: numPages,
       timeAgo: timeAgo,
     });
-  } catch (err) {
-    next(err);
-  }
-});
+  }),
+);
 
-router.post('/modifyTask', isAdmin, async (req: any, res, next) => {
-  try {
+router.post(
+  '/modifyTask',
+  isAdmin,
+  catchErrors(async (req: any, res, next) => {
     const { error, value } = jf.validateAsClass(req.body, AdminModifyTaskReq);
 
     if (error) {
@@ -149,9 +152,7 @@ router.post('/modifyTask', isAdmin, async (req: any, res, next) => {
 
       return res.redirect(`/admin?${params.toString()}`);
     }
-  } catch (err) {
-    next(err);
-  }
-});
+  }),
+);
 
 export const adminRouter = router;

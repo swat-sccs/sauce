@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { mailTransporter } from '../integration/email';
 import { ldapClient } from '../integration/ldap';
 import { PasswordResetRequestModel, PendingOperationModel } from '../integration/models';
+import { catchErrors } from '../util/asyncCatch';
 import { generateEmail } from '../util/emailTemplates';
 import { modifyLdap, searchAsync, searchAsyncUid } from '../util/ldapUtils';
 import { logger } from '../util/logging';
@@ -49,18 +50,19 @@ class CreateAccountReq {
 
 export const router = Router(); // eslint-disable-line new-cap
 
-router.get('/create', (req, res, next) => {
-  // TODO how do we handle someone going to create an account if they're
-  //  already logged in?
-  try {
-    res.render('createAccount', { classes: VALID_CLASSES });
-  } catch (err) {
-    next(err);
-  }
-});
+router.get(
+  '/create',
+  catchErrors((req, res, next) => {
+    // TODO how do we handle someone going to create an account if they're
+    //  already logged in?
 
-router.post('/create', async (req: any, res, next) => {
-  try {
+    res.render('createAccount', { classes: VALID_CLASSES });
+  }),
+);
+
+router.post(
+  '/create',
+  catchErrors(async (req: any, res, next) => {
     const { error, value } = jf.validateAsClass(req.body, CreateAccountReq);
 
     if (error) {
@@ -83,13 +85,12 @@ router.post('/create', async (req: any, res, next) => {
     });
     await operation.save();
     res.render('createAccountSuccess', { email: value.email });
-  } catch (err) {
-    next(err);
-  }
-});
+  }),
+);
 
-router.get('/username-ok/:username', async (req: any, res, next) => {
-  try {
+router.get(
+  '/username-ok/:username',
+  catchErrors(async (req: any, res, next) => {
     const [inDatabase, inPending] = await Promise.all([
       searchAsyncUid(ldapClient, req.params.username),
       PendingOperationModel.exists({ 'data.username': req.params.username, status: 'pending' }),
@@ -103,14 +104,12 @@ router.get('/username-ok/:username', async (req: any, res, next) => {
       res.send(true);
       logger.debug(`${req.params.username} does not already exist`);
     }
-  } catch (err) {
-    next(err);
-  }
-});
+  }),
+);
 
-router.get('/email-ok/:email', async (req: any, res, next) => {
-  try {
-    // TODO also search and see if that user ID is in the creation queue
+router.get(
+  '/email-ok/:email',
+  catchErrors(async (req: any, res, next) => {
     const [inDatabase, inPending] = await Promise.all([
       searchAsync(ldapClient, `(swatmail=${req.params.email})`),
       PendingOperationModel.exists({ 'data.email': req.params.email, status: 'pending' }),
@@ -123,14 +122,15 @@ router.get('/email-ok/:email', async (req: any, res, next) => {
       res.send(true);
       logger.debug(`${req.params.email} does not already exist`);
     }
-  } catch (err) {
-    next(err);
-  }
-});
+  }),
+);
 
-router.get('/forgot', (req, res, next) => {
-  res.render('forgot', { done: false, inputRegex: USERNAME_OR_EMAIL_REGEX.source });
-});
+router.get(
+  '/forgot',
+  catchErrors((req, res, next) => {
+    res.render('forgot', { done: false, inputRegex: USERNAME_OR_EMAIL_REGEX.source });
+  }),
+);
 
 const processPasswordReset = async (identifier: string) => {
   try {
@@ -189,8 +189,9 @@ const processPasswordReset = async (identifier: string) => {
   }
 };
 
-router.post('/forgot', (req: any, res, next) => {
-  try {
+router.post(
+  '/forgot',
+  catchErrors((req: any, res, next) => {
     const identifier = req.body.id;
     if (!identifier) {
       logger.warn('ForgotRequest had missing ID');
@@ -207,13 +208,12 @@ router.post('/forgot', (req: any, res, next) => {
     processPasswordReset(identifier);
 
     res.render('forgot', { done: true });
-  } catch (err) {
-    next(err);
-  }
-});
+  }),
+);
 
-router.get('/reset', async (req, res, next) => {
-  try {
+router.get(
+  '/reset',
+  catchErrors(async (req, res, next) => {
     const id = req.query.id;
     const key = req.query.key;
 
@@ -238,10 +238,8 @@ router.get('/reset', async (req, res, next) => {
       logger.warn(`Password reset key did not match database`);
       return res.render('400', invalidProps);
     }
-  } catch (err) {
-    next(err);
-  }
-});
+  }),
+);
 
 /**
  *
@@ -257,8 +255,9 @@ class ResetPasswordReq {
   password: string;
 }
 
-router.post('/reset', async (req, res, next) => {
-  try {
+router.post(
+  '/reset',
+  catchErrors(async (req, res, next) => {
     const { error, value } = jf.validateAsClass(req.body, ResetPasswordReq);
     if (error) {
       logger.warn(`ResetPassword validation error: ${error.message}`);
@@ -352,9 +351,7 @@ router.post('/reset', async (req, res, next) => {
       logger.warn(`Password reset key did not match database`);
       return res.render('400', invalidProps);
     }
-  } catch (err) {
-    next(err);
-  }
-});
+  }),
+);
 
 export const accountRouter = router;
