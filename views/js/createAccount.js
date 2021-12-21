@@ -51,7 +51,7 @@
         return true;
       } else {
         emailFeedback.innerHTML =
-          "An account already exists for this email. <br> Forgot your username? <a href='/find-username'>Click here</a>.";
+          "An account already exists for this email. <br> Forgot your username? <a href='/account/forgot'>Click here</a>.";
       }
     } else {
       if (emailInput.value) {
