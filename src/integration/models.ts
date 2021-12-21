@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-export interface PendingOperation {
+export interface Task {
   _id: string;
   operation: 'createAccount';
   createdTimestamp: Date;
@@ -9,7 +9,7 @@ export interface PendingOperation {
   data: any;
 }
 
-const pendingOperationSchema = new mongoose.Schema<PendingOperation>({
+const taskSchema = new mongoose.Schema<Task>({
   _id: {
     type: String,
     required: true,
@@ -41,10 +41,7 @@ const pendingOperationSchema = new mongoose.Schema<PendingOperation>({
   },
 });
 
-export const PendingOperationModel = mongoose.model<PendingOperation>(
-  'PendingOperation',
-  pendingOperationSchema,
-);
+export const TaskModel = mongoose.model<Task>('Task', taskSchema);
 
 export interface PasswordResetRequest {
   // password reset requests generate two keys: the ID, which is stored plain, and the key, which is

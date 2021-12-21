@@ -1,7 +1,7 @@
 import * as jf from 'joiful';
 import { HttpException } from '../error/httpException';
 import * as taskFunctionMap from '../functions/taskFunctionMap';
-import { PendingOperation, PendingOperationModel } from '../integration/models';
+import { Task, TaskModel } from '../integration/models';
 import { logger } from '../util/logging';
 
 /**
@@ -50,19 +50,19 @@ export class AdminModifyTaskReq {
 }
 
 interface AdminSearchResults {
-  results: PendingOperation[];
+  results: Task[];
   totalResults: number;
   pages: number;
 }
 
 export const searchTasks = async (query: AdminPageReq): Promise<AdminSearchResults> => {
-  const results = await PendingOperationModel.find()
+  const results = await TaskModel.find()
     .in('status', query.status)
     .skip(query.perPage * query.page)
     .limit(query.perPage)
     .sort('-createdTimestamp')
     .exec();
-  const numResults = await PendingOperationModel.count().in('status', query.status).exec();
+  const numResults = await TaskModel.count().in('status', query.status).exec();
   const numPages = Math.ceil(numResults / query.perPage);
   logger.debug(`Returning ${results.length} of ${numResults} results`);
   return { results: results, totalResults: numResults, pages: numPages };
@@ -73,7 +73,7 @@ export const modifyTask = async (
 ): Promise<'failed' | 'rejected' | 'executed'> => {
   logger.debug(`${req.reject ? 'Rejecting' : 'Accepting'} task ${req.id}`);
 
-  const task = await PendingOperationModel.findById(req.id).exec();
+  const task = await TaskModel.findById(req.id).exec();
 
   if (!task) {
     logger.warn(`Task ${req.id} not found`);

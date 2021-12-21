@@ -1,10 +1,10 @@
 import { mailTransporter } from '../integration/email';
-import { PendingOperation } from '../integration/models';
+import { Task } from '../integration/models';
 import { generateEmail } from './emailTemplates';
 import nodemailer from 'nodemailer';
 import { logger } from './logging';
 
-export const sendTaskNotification = async (task: PendingOperation) => {
+export const sendTaskNotification = async (task: Task) => {
   try {
     const [emailText, transporter] = await Promise.all([
       generateEmail('taskNotification.html', {

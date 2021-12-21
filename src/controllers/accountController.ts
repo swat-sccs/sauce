@@ -7,11 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { HttpException } from '../error/httpException';
 import { mailTransporter } from '../integration/email';
 import { ldapClient } from '../integration/ldap';
-import {
-  PasswordResetRequest,
-  PasswordResetRequestModel,
-  PendingOperationModel,
-} from '../integration/models';
+import { PasswordResetRequest, PasswordResetRequestModel, TaskModel } from '../integration/models';
 import { generateEmail } from '../util/emailTemplates';
 import { sendTaskNotification } from '../util/emailUtils';
 import { modifyLdap, searchAsync, searchAsyncUid } from '../util/ldapUtils';
@@ -67,7 +63,7 @@ export const submitCreateAccountRequest = async (req: CreateAccountReq) => {
   }
 
   logger.info(`Submitting CreateAccountReq ${JSON.stringify(req)}`);
-  const operation = new PendingOperationModel({
+  const operation = new TaskModel({
     _id: uuidv4(),
     operation: 'createAccount',
     createdTimestamp: Date.now(),
@@ -265,7 +261,7 @@ export const doPasswordReset = async (params: PasswordResetRequestParams) => {
 export const isUsernameAvailable = async (username: string): Promise<boolean> => {
   const [inDatabase, inPending] = await Promise.all([
     searchAsyncUid(ldapClient, username),
-    PendingOperationModel.exists({ 'data.username': username, status: 'pending' }),
+    TaskModel.exists({ 'data.username': username, status: 'pending' }),
   ]);
 
   if (inDatabase || inPending) {
@@ -280,7 +276,7 @@ export const isUsernameAvailable = async (username: string): Promise<boolean> =>
 export const isEmailAvailable = async (email: string): Promise<boolean> => {
   const [inDatabase, inPending] = await Promise.all([
     searchAsync(ldapClient, `(swatmail=${email})`),
-    PendingOperationModel.exists({ 'data.email': email, status: 'pending' }),
+    TaskModel.exists({ 'data.email': email, status: 'pending' }),
   ]);
 
   if (inDatabase || inPending) {
