@@ -6,7 +6,7 @@ import { logger } from '../util/logging';
 // eslint-disable-next-line new-cap
 export const loginRouter = Router();
 
-loginRouter.get('/', isLoggedIn, (req: any, res) => {
+loginRouter.get('/', (req: any, res) => {
   res.render('index', { user: req.user });
 });
 

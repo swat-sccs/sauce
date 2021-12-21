@@ -6,10 +6,9 @@ html(lang='en')
     include include/head.pug
     title SAUCE
   body
-    +sauce-container('index', user)
-      h1 SAUCE
-      p.text-muted SCCS Account and User Control Engine
-      p Hello, #{ user.uid }!
-      p
-        a(href='/logout') Log out
+    +sauce-container('', user, user != null)
+      if user
+        include dashboard
+      else
+        include logout-splash
     include include/body-scripts.pug
