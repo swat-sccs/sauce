@@ -97,7 +97,7 @@ export const modifyTask = async (
   } else {
     logger.debug(`Executing ${task.operation} task ${req.id}`);
     try {
-      taskFunctionMap.functions[task.operation](task.data);
+      await taskFunctionMap.functions[task.operation](task.data);
     } catch (err) {
       logger.error(`Execution of ${task.operation} task ${req.id} failed`, err);
       task.actionTimestamp = new Date();

@@ -71,7 +71,7 @@ const passwordResetRequestSchema = new mongoose.Schema<PasswordResetRequest>({
   },
   timestamp: {
     type: Date,
-    expires: 3600,
+    expires: 0,
   },
   suppressEmail: {
     type: Boolean,
