@@ -1,7 +1,6 @@
 import argon2 from 'argon2';
 import * as jf from 'joiful';
 import { Change } from 'ldapjs';
-import { nanoid } from 'nanoid';
 import nodemailer from 'nodemailer';
 import { v4 as uuidv4 } from 'uuid';
 import { HttpException } from '../error/httpException';
@@ -12,6 +11,7 @@ import { generateEmail } from '../util/emailTemplates';
 import { sendTaskNotification } from '../util/emailUtils';
 import { modifyLdap, searchAsync, searchAsyncUid } from '../util/ldapUtils';
 import { logger } from '../util/logging';
+import { createPasswordResetRequest } from '../util/passwordReset';
 import { testPassword } from '../util/passwordStrength';
 
 export const VALID_CLASSES = ['22', '23', '24', '25', 'faculty', 'staff'];
@@ -75,7 +75,7 @@ export const submitCreateAccountRequest = async (req: CreateAccountReq) => {
   sendTaskNotification(operation);
 };
 
-export const createPasswordResetRequest = async (identifier: string) => {
+export const doPasswordResetRequest = async (identifier: string) => {
   try {
     let account: any = null;
     if (USERNAME_REGEX.test(identifier)) {
@@ -91,17 +91,8 @@ export const createPasswordResetRequest = async (identifier: string) => {
     if (account) {
       const uid = account.uid;
       const email = account.email || account.swatmail;
-      logger.debug(`Creating password reset/reminder for ${uid}`);
 
-      const resetId = nanoid();
-      const resetKey = nanoid();
-
-      await new PasswordResetRequestModel({
-        _id: resetId,
-        key: await argon2.hash(resetKey, { raw: false }),
-        user: uid,
-        timestamp: new Date(),
-      }).save();
+      const [resetId, resetKey] = await createPasswordResetRequest(uid);
 
       const [emailText, transporter] = await Promise.all([
         generateEmail('resetPassword.html', {

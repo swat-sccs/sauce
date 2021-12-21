@@ -70,7 +70,7 @@ router.post(
 
     // this runs asynchronously after we reply, so we get super-quick page returns and also prevent
     // enumeration attacks.
-    controller.createPasswordResetRequest(identifier);
+    controller.doPasswordResetRequest(identifier);
 
     res.render('forgot', { done: true });
   }),
