@@ -1,0 +1,18 @@
+include include/sauce-common
+
+doctype
+html(lang='en')
+  head
+    include include/head.pug
+    title Your request has been submitted!
+  body
+    +sauce-container('', user)
+      .row(style='max-width: 768px')
+        .col-md-8
+          h1.mb-4 Your request has been submitted!
+          p.
+            To prevent abuse, SCCS staff manually approve all mailing list creation 
+            requests. When classes are in session, this usually happens within a
+            few hours. You'll get an email once your list has been created with
+            instructions on how to log into the Mailman GUI and manage your list.
+    include include/body-scripts.pug

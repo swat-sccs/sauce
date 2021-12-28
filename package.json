@@ -14,6 +14,7 @@
     "@zxcvbn-ts/language-common": "^1.0.0",
     "@zxcvbn-ts/language-en": "^1.0.0",
     "argon2": "^0.28.3",
+    "axios": "^0.24.0",
     "chmodr": "^1.2.0",
     "chownr": "^2.0.0",
     "connect-mongo": "^4.6.0",

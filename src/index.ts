@@ -15,6 +15,7 @@ import { loginRouter } from './routes/login';
 import { getUserInfo } from './util/authUtils';
 import { HttpException } from './error/httpException';
 import { errorHandler } from './error/errorHandler';
+import { mailingRouter } from './routes/mailingList';
 
 const initExpress = (): void => {
   const port = process.env.PORT || 3000;
@@ -71,6 +72,7 @@ const initExpress = (): void => {
   app.use('/', loginRouter);
   app.use('/account', accountRouter);
   app.use('/admin', adminRouter);
+  app.use('/lists', mailingRouter);
 
   app.use('/static', express.static('public/'));
 

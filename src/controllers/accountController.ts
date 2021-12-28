@@ -252,7 +252,7 @@ export const doPasswordReset = async (params: PasswordResetRequestParams) => {
 export const isUsernameAvailable = async (username: string): Promise<boolean> => {
   const [inDatabase, inPending] = await Promise.all([
     searchAsyncUid(ldapClient, username),
-    TaskModel.exists({ 'data.username': username, status: 'pending' }),
+    TaskModel.exists({ operation: 'createAccount', 'data.username': username, status: 'pending' }),
   ]);
 
   if (inDatabase || inPending) {

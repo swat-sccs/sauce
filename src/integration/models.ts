@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 export interface Task {
   _id: string;
-  operation: 'createAccount';
+  operation: 'createAccount' | 'createMailingList';
   createdTimestamp: Date;
   actionTimestamp?: Date;
   status: 'pending' | 'executed' | 'rejected' | 'failed';
@@ -16,7 +16,7 @@ const taskSchema = new mongoose.Schema<Task>({
   },
   operation: {
     type: String,
-    enum: ['createAccount'],
+    enum: ['createAccount', 'createMailingList'],
     required: true,
   },
   createdTimestamp: {
