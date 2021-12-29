@@ -1,86 +1,64 @@
 include include/sauce-common
-
-doctype
-html(lang='en')
-  head
-    include include/head.pug
-    title Create your SCCS account
-  body
-    +sauce-container('', null, false)
-      .row(style='max-width: 768px')
-        .col-md-8
-          h1.mb-4 Get your SCCS account
-          p
-            | Your SCCS account lets you manage your mailing lists, create RSD
-            | events, sign into computers in the Media Lounge, and much more.
-            | SCCS accounts are available to all Swarthmore students, faculty,
-            | and staff&mdash;and you'll still be able to access it after
-            | graduation.
-          form#createForm.form-signin.needs-validation(
-            action='/account/create',
-            method='post',
-            novalidate
++sauce-layout('Get your SCCS account', '', null, false)
+  h1.mb-4 Get your SCCS account
+  p
+    | Your SCCS account lets you manage your mailing lists, create RSD
+    | events, sign into computers in the Media Lounge, and much more.
+    | SCCS accounts are available to all Swarthmore students, faculty,
+    | and staff&mdash;and you'll still be able to access it after
+    | graduation.
+  form#createForm.form-signin.needs-validation(action='/account/create', method='post', novalidate)
+    .form-group.mb-3
+      .form-floating
+        script(type='text/javascript').
+          function validateUsername() {
+            console.log(this);
+          }
+        input#usernameInput.form-control(
+          type='text',
+          pattern='^[a-z][-a-z0-9]*$',
+          name='username',
+          placeholder='Username',
+          aria-describedby='usernameHelp',
+          onchange='validateUsername',
+          required
+        )
+        label(for='usernameInput') Username
+        .valid-feedback Username is available
+        #usernameFeedback.invalid-feedback 
+        small#usernameHelp.text-muted 
+          | This should be at least vaguely
+          | related to your real name, and contain only lowercase
+          | letters, numbers, and hyphens.
+    .form-group.mb-3
+      .form-floating
+        input#emailInput.form-control(
+          type='email',
+          pattern='.+@swarthmore\.edu',
+          name='email',
+          placeholder='Email',
+          required
+        )
+        label(for='emailInput') Swarthmore email
+        #emailFeedback.invalid-feedback Please provide a valid @swarthmore.edu email
+    .form-group.mb-3
+      .form-floating
+        input#nameInput.form-control(type='text', name='name', placeholder='Name', required)
+        label(for='nameInput') Full name
+        .invalid-feedback Please provide a valid name
+    .form-group.mb-3 
+      each val in classes
+        .form-check.form-check-inline
+          input.form-check-input(
+            type='radio',
+            name='classYear',
+            id='classYear1' + val,
+            value=val,
+            required
           )
-            .form-group.mb-3
-              .form-floating
-                script(type='text/javascript').
-                  function validateUsername() {
-                    console.log(this);
-                  }
-                input#usernameInput.form-control(
-                  type='text',
-                  pattern='^[a-z][-a-z0-9]*$',
-                  name='username',
-                  placeholder='Username',
-                  aria-describedby='usernameHelp',
-                  onchange='validateUsername',
-                  required
-                )
-                label(for='usernameInput') Username
-                .valid-feedback Username is available
-                #usernameFeedback.invalid-feedback 
-                small#usernameHelp.text-muted 
-                  | This should be at least vaguely
-                  | related to your real name, and contain only lowercase
-                  | letters, numbers, and hyphens.
-            .form-group.mb-3
-              .form-floating
-                input#emailInput.form-control(
-                  type='email',
-                  pattern='.+@swarthmore\.edu',
-                  name='email',
-                  placeholder='Email',
-                  required
-                )
-                label(for='emailInput') Swarthmore email
-                #emailFeedback.invalid-feedback Please provide a valid @swarthmore.edu email
-            .form-group.mb-3
-              .form-floating
-                input#nameInput.form-control(
-                  type='text',
-                  name='name',
-                  placeholder='Name',
-                  required
-                )
-                label(for='nameInput') Full name
-                .invalid-feedback Please provide a valid name
-            .form-group.mb-3 
-              each val in classes
-                .form-check.form-check-inline
-                  input.form-check-input(
-                    type='radio',
-                    name='classYear',
-                    id='classYear1' + val,
-                    value=val,
-                    required
-                  )
-                  label.form-check-label(
-                    for='classYear1' + val,
-                    style='text-transform: capitalize'
-                  )= /^\d+$/.test(val) ? '\u2019' + val : val
-            button#submitButton.btn.btn-large.btn-primary.mb-3(type='submit') Request Your Account
-            p.text-muted Already have an account? #[a(href='/login') Log in].
-          script(type='text/javascript')
-            include js/createAccount.js
-        .col
-    include include/body-scripts.pug
+          label.form-check-label(for='classYear1' + val, style='text-transform: capitalize')= /^\d+$/.test(val) ? '\u2019' + val : val
+    button#submitButton.btn.btn-large.btn-primary.mb-3(type='submit') Request Your Account
+    p.text-muted Already have an account? #[a(href='/login') Log in].
+  script(type='text/javascript')
+    include js/createAccount.js
+  //- .col

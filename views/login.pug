@@ -1,43 +1,24 @@
 include include/sauce-common
 
-doctype
-html(lang='en')
-  head
-    include include/head.pug
-    title SAUCE login
-  body
-    +sauce-container('', null, false)
-      .row(style='max-width: 768px')
-        //- .col
-        .col-md-8
-          h1.mb-4 Log into SAUCE
-          p
-            | Use your SCCS account to log in, not your Swarthmore ITS account.
-            | Don't have a SCCS account? #[a(href='/account/create') Create&nbsp;one].
-          form.form-signin(action='/login', method='post')
-            input(type='hidden', name='next', value=nextUrl)
-            .form-group.mb-3
-              .form-floating
-                input#usernameInput.form-control(
-                  type='text',
-                  name='username',
-                  placeholder='Username'
-                )
-                label(for='usernameInput') Username
++sauce-layout('SAUCE login', '', null, false)
+  h1.mb-4 Log into SAUCE
+  p
+    | Use your SCCS account to log in, not your Swarthmore ITS account.
+    | Don't have a SCCS account? #[a(href='/account/create') Create&nbsp;one].
+  form.form-signin(action='/login', method='post')
+    input(type='hidden', name='next', value=nextUrl)
+    .form-group.mb-3
+      .form-floating
+        input#usernameInput.form-control(type='text', name='username', placeholder='Username')
+        label(for='usernameInput') Username
 
-            .form-group.mb-3
-              .form-floating
-                input#passwordInput.form-control(
-                  type='password',
-                  name='password',
-                  placeholder='Password'
-                )
-                label(for='passwordInput') Password
+    .form-group.mb-3
+      .form-floating
+        input#passwordInput.form-control(type='password', name='password', placeholder='Password')
+        label(for='passwordInput') Password
 
-            button.btn.btn-large.btn-primary.mb-3(type='submit') Sign in
-            if failedAlready
-              p.text-danger That username and password combination doesn't match any SCCS account on file.
-            p#userPasswordHelp.small
-              a(href='/account/forgot') Forgot username or password?
-        .col
-    include include/body-scripts.pug
+    button.btn.btn-large.btn-primary.mb-3(type='submit') Sign in
+    if failedAlready
+      p.text-danger That username and password combination doesn't match any SCCS account on file.
+    p#userPasswordHelp.small
+      a(href='/account/forgot') Forgot username or password?

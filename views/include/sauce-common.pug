@@ -63,3 +63,16 @@ mixin sauce-container(pageId = '', user = null, showNavbar = true, showFooter = 
           span.small.text-muted
             | &copy; #{ new Date().getFullYear() } Swarthmore College Computer Society
             | | Problems with this website? Email&nbsp;#[a(href='mailto:staff@sccs.swarthmore.edu') staff@sccs.swarthmore.edu].
+
+mixin sauce-layout(title, pageId = '', user = null, showNavbar = true, showFooter = true)
+  doctype
+  html(lang='en')
+    head
+      include head.pug
+      title= title
+    body
+      +sauce-container(pageId, user, showNavbar, showFooter)
+        .row(style='max-width: 768px')
+          .col-md-8
+            block
+      include body-scripts.pug
