@@ -5,7 +5,7 @@ import { catchErrors } from '../util/asyncCatch';
 import { isLoggedIn } from '../util/authUtils';
 import { logger } from '../util/logging';
 
-const NAME_REGEX = /[a-zA-Z0-9]+/;
+const NAME_REGEX = /[a-zA-Z0-9][a-zA-Z0-9-]*/;
 // eslint-disable-next-line new-cap
 export const mailingRouter = Router();
 

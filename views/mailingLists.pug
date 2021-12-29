@@ -2,12 +2,12 @@ include include/sauce-common
 
 +sauce-layout('SCCS Mailing Lists', 'mailing', user)
   h1.mb-4 Mailing List Management
-  #listCreateSuccess.alert.alert-success.alert-dismissible.fade.show.d-none(role='alert')
-    p.
-      Your list creation request was successfully submitted! To prevent abuse, SCCS staff manually 
-      approve all mailing list creation requests. When classes are in session, this usually happens 
-      within a few hours. You'll get an email once your list has been created.
-    button.btn-close(type='button', data-bs-dismiss='alert', aria-label='Close')
+  #creationAlertContainer
+  script#creationAlert(type='text/html')
+    #listCreateSuccess.alert.alert-success.alert-dismissible.fade.show(role='alert')
+      p.mb-0.
+        Your list creation request was successfully submitted!
+      button.btn-close(type='button', data-bs-dismiss='alert', aria-label='Close')
   p.
     Lorem ipsum dolor sit amet
   button.btn.btn-primary(type='button', data-bs-toggle='modal', data-bs-target='#newMailingModal') Create List
@@ -23,8 +23,11 @@ include include/sauce-common
           button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
         form#mailingForm.form-mailing.needs-validation(novalidate)
           .modal-body
-            p Enter the name of your new mailing list.
-            .form-group.mb-3
+            p.
+              To prevent abuse, SCCS staff manually 
+              approve all mailing list creation requests. When classes are in session, this usually 
+              happens within a few hours. You'll get an email once your request is approved.
+            .form-group
               .input-group.has-validation
                 //- TODO actually go and check if the mailing list name is taken
                 input#nameInput.form-control(
@@ -32,13 +35,20 @@ include include/sauce-common
                   name='name',
                   placeholder='List address',
                   pattern=nameRegex,
-                  aria-describedby='nameLabel'
+                  aria-describedby='nameLabel nameHelp'
                 )
                 span#nameLabel.input-group-text @sccs.swarthmore.edu
-                .invalid-feedback
-                  p#nameFeedback List name is invalid, or list already exists.
+                p#nameFeedback.invalid-feedback.mb-0 List name is invalid, or list already exists.
+                #nameHelp.form-text
+                  | List addresses can contain lowercase or uppercase letters, numbers, and hyphens
+                  | (#[code -]).
+
           .modal-footer
             button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Close
-            button#createButton.btn.btn-success(type='submit') Create
+            button#createButton.btn.btn-success(type='submit') Request
+            script#createLoading(type='text/html')
+              span.spinner-border.spinner-border-sm(role='status', aria-hidden='true')
+.
+                &nbsp;Requesting...
   script(type='text/javascript')
     include js/mailingLists.js

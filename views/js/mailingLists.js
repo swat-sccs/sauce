@@ -4,16 +4,16 @@
   const form = document.getElementById('mailingForm');
   const nameInput = document.getElementById('nameInput');
   const createButton = document.getElementById('createButton');
-  const successAlert = document.getElementById('listCreateSuccess');
+  const alertContainer = document.getElementById('creationAlertContainer');
   const mailingModal = new window.bootstrap.Modal(document.getElementById('newMailingModal'));
   const nameFeedback = document.getElementById('nameFeedback');
+  const createLoading = document.getElementById('createLoading');
 
   createButton.addEventListener('click', function (event) {
     nameInput.setCustomValidity('');
     if (form.checkValidity()) {
       createButton.disabled = true;
-      createButton.innerHTML =
-        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating...';
+      createButton.innerHTML = createLoading.innerHTML;
       const formData = new FormData();
       formData.append('name', nameInput.value);
       fetch('lists/create', {
@@ -26,17 +26,16 @@
         .then((response) => response.json())
         .then((json) => {
           if (json['ok']) {
-            successAlert.classList.remove('d-none');
-            successAlert.classList.add('show');
+            alertContainer.innerHTML = document.getElementById('creationAlert').innerHTML;
             mailingModal.hide();
+            nameInput.value = '';
             nameInput.setCustomValidity('');
           } else {
             nameFeedback.innerHTML = 'List already exists';
             nameInput.setCustomValidity('err');
+            form.classList.add('was-validated');
           }
-
-          form.classList.add('was-validated');
-          createButton.innerHTML = 'Create';
+          createButton.innerHTML = 'Request';
           createButton.disabled = false;
         })
         .catch((err) => {
