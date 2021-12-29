@@ -12,11 +12,18 @@ mixin sauce-container(pageId = '', user = null, showNavbar = true, showFooter = 
                 needsAdmin: false
               },
               {
+                id: 'mailing',
+                title: 'Mailing Lists',
+                href: '/lists',
+                needsAdmin: false
+              },
+              {
                 id: 'admin',
                 title: 'Admin',
                 href: '/admin',
                 needsAdmin: true
               }
+  
             ]
           .container-fluid 
             span.navbar-brand.mb-0.h1 SAUCE
@@ -71,8 +78,8 @@ mixin sauce-layout(title, pageId = '', user = null, showNavbar = true, showFoote
       include head.pug
       title= title
     body
+      include body-scripts.pug
       +sauce-container(pageId, user, showNavbar, showFooter)
         .row(style='max-width: 768px')
           .col-md-8
             block
-      include body-scripts.pug

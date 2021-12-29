@@ -1,0 +1,44 @@
+include include/sauce-common
+
++sauce-layout('SCCS Mailing LIsts', 'mailing', user)
+  h1.mb-4 Mailing List Management
+  #listCreateSuccess.alert.alert-success.alert-dismissible.fade.show.d-none(role='alert')
+    p.
+      Your list creation request was successfully submitted! To prevent abuse, SCCS staff manually 
+      approve all mailing list creation requests. When classes are in session, this usually happens 
+      within a few hours. You'll get an email once your list has been created.
+    button.btn-close(type='button', data-bs-dismiss='alert', aria-label='Close')
+  p.
+    Lorem ipsum dolor sit amet
+  button.btn.btn-primary(type='button', data-bs-toggle='modal', data-bs-target='#newMailingModal') Create List
+  #newMailingModal.modal.fade(
+    tabindex='-1',
+    aria-labelledby='newMailingModalTitle',
+    aria-hidden='true'
+  )
+    .modal-dialog 
+      .modal-content 
+        .modal-header
+          h5#newMailingModalTitle.modal-title Create a New Mailing List
+          button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+        form#mailingForm.form-mailing.needs-validation(novalidate)
+          .modal-body
+            p Enter the name of your new mailing list.
+            .form-group.mb-3
+              .input-group.has-validation
+                //- TODO actually go and check if the mailing list name is taken
+                input#nameInput.form-control(
+                  type='text',
+                  name='name',
+                  placeholder='List adddress',
+                  pattern=nameRegex,
+                  aria-describedby='nameLabel'
+                )
+                span#nameLabel.input-group-text @sccs.swarthmore.edu
+                .invalid-feedback
+                  p#nameFeedback List name is invalid, or list already exists.
+          .modal-footer
+            button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Close
+            button#createButton.btn.btn-success(type='submit') Create
+  script(type='text/javascript')
+    include js/mailingLists.js

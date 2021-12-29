@@ -17,18 +17,24 @@ export class CreateMailingListReq {
 
 export const isMailingListNameAvailable = async (name: string): Promise<boolean> => {
   logger.debug(`Checking if mailing list ${name} exists`);
-  return (
-    TaskModel.exists({
+  return !(
+    (await TaskModel.exists({
       operation: 'createMailingList',
       'data.listName': name,
       status: 'pending',
-    }) || (await listMailingLists()).some((value) => value['list_name'] === name)
+    })) || (await listMailingLists()).some((value) => value['list_name'] === name)
   );
 };
 
-export const submitCreateMailingListRequest = async (req: CreateMailingListReq) => {
-  if (!isMailingListNameAvailable(req.listName)) {
-    throw new HttpException(400, { message: 'Mailing list already exists' });
+export const submitCreateMailingListRequest = async (
+  req: CreateMailingListReq,
+): Promise<boolean> => {
+  // TODO also catch reserved thingies e.g. staff
+  if (!(await isMailingListNameAvailable(req.listName))) {
+    logger.warn(`Mailing list already exists: ${req.listName}`);
+    return false;
+  } else {
+    logger.info(`Mailing list does not already exist`);
   }
 
   logger.info(`Submitting CreateMailingListReq ${JSON.stringify(req)}`);
@@ -43,4 +49,6 @@ export const submitCreateMailingListRequest = async (req: CreateMailingListReq) 
   await operation.save();
 
   sendTaskNotification(operation);
+
+  return true;
 };
