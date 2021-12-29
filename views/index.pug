@@ -6,7 +6,7 @@ html(lang='en')
     include include/head.pug
     title SAUCE
   body
-    +sauce-container('', user, user != null)
+    +sauce-container('index', user, user != null)
       if user
         include dashboard
       else
