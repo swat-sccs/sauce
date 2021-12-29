@@ -1,6 +1,8 @@
 include include/sauce-common
 
 +sauce-layout('SCCS Mailing Lists', 'mailing', user)
+  script(type='text/javascript')
+    include js/mailingLists.js
   h1.mb-4 Mailing List Management
   #creationAlertContainer
   script#creationAlert(type='text/html')
@@ -28,7 +30,10 @@ include include/sauce-common
         .modal-header
           h5#newMailingModalTitle.modal-title Create a New Mailing List
           button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
-        form#mailingForm.form-mailing.needs-validation(novalidate)
+        form#mailingForm.form-mailing.needs-validation(
+          novalidate,
+          onsubmit='doFormSubmit(); return false;'
+        )
           .modal-body
             p.
               To prevent abuse, SCCS staff manually 
@@ -36,13 +41,13 @@ include include/sauce-common
               happens within a few hours. You'll get an email once your request is approved.
             .form-group
               .input-group.has-validation
-                //- TODO actually go and check if the mailing list name is taken
                 input#nameInput.form-control(
                   type='text',
                   name='name',
                   placeholder='List address',
                   pattern=nameRegex,
-                  aria-describedby='nameLabel nameHelp'
+                  aria-describedby='nameLabel nameHelp',
+                  oninput='clearValidation()'
                 )
                 span#nameLabel.input-group-text @sccs.swarthmore.edu
                 p#nameFeedback.invalid-feedback.mb-0 List name is invalid, or list already exists.
@@ -55,7 +60,4 @@ include include/sauce-common
             button#createButton.btn.btn-success(type='submit') Request
             script#createLoading(type='text/html')
               span.spinner-border.spinner-border-sm(role='status', aria-hidden='true')
-.
-                &nbsp;Requesting...
-  script(type='text/javascript')
-    include js/mailingLists.js
+              | &nbsp;Requesting...
