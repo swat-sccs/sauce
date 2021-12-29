@@ -1,9 +1,6 @@
 import { Router } from 'express';
-import * as jf from 'joiful';
-import { CreateAccountReq } from '../controllers/accountController';
 import * as controller from '../controllers/mailingController';
 import { HttpException } from '../error/httpException';
-import { listMailingLists } from '../integration/mailman';
 import { catchErrors } from '../util/asyncCatch';
 import { isLoggedIn } from '../util/authUtils';
 import { logger } from '../util/logging';
