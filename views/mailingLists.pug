@@ -9,8 +9,15 @@ include include/sauce-common
         Your list creation request was successfully submitted!
       button.btn-close(type='button', data-bs-dismiss='alert', aria-label='Close')
   p.
-    Lorem ipsum dolor sit amet
-  button.btn.btn-primary(type='button', data-bs-toggle='modal', data-bs-target='#newMailingModal') Create List
+    SCCS mailing lists are great for clubs&mdash;you can send email blasts, add moderation rules, 
+    and much more. You can manage your existing mailing lists through the GNU Mailman web interface,
+    or create a new mailing list here. 
+  a.btn.btn-primary.btn-lg.me-2(href='https://lists.sccs.swarthmore.edu/') Manage my Lists
+  button.btn.btn-primary.btn-lg(
+    type='button',
+    data-bs-toggle='modal',
+    data-bs-target='#newMailingModal'
+  ) Create a New List
   #newMailingModal.modal.fade(
     tabindex='-1',
     aria-labelledby='newMailingModalTitle',
