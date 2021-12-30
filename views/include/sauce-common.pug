@@ -9,21 +9,30 @@ mixin sauce-container(pageId = '', user = null, showNavbar = true, showFooter = 
                 id: 'index',
                 title: 'Home',
                 href: '/',
-                needsAdmin: false
+                needsAdmin: false,
+                needsUser: false,
               },
               {
                 id: 'mailing',
                 title: 'Mailing Lists',
                 href: '/lists',
-                needsAdmin: false
+                needsAdmin: false,
+                needsUser: false,
               },
               {
                 id: 'admin',
                 title: 'Admin',
                 href: '/admin',
-                needsAdmin: true
+                needsAdmin: true,
+                needsUser: true,
+              },
+              {
+                id: 'logout',
+                title: 'Sign Out',
+                href: '/logout',
+                needsAdmin: false,
+                needsUser: true,
               }
-  
             ]
           .container-fluid 
             span.navbar-brand.mb-0.h1 SAUCE
@@ -39,23 +48,13 @@ mixin sauce-container(pageId = '', user = null, showNavbar = true, showFooter = 
             #navbarNavAltMarkup.collapse.navbar-collapse
               .navbar-nav
                 each page in PAGES
-                  if ((user && user.admin) || !page.needsAdmin)
-                    a.nav-link(
-                      class={ active: page.id === pageId },
-                      aria-current=page.id === pageId ? 'page' : 'false',
-                      href=page.href
-                    )= page.title
-                if user
-                  li.nav-item.dropdown
-                    a#userDropdown.nav-link.dropdown-toggle(
-                      href='#',
-                      role='button',
-                      data-bs-toggle='dropdown',
-                      aria-expanded='false'
-                    ) #{ user.uid }
-                    ul.dropdown-menu(aria-labelledby='userDropdown')
-                      li
-                        a.dropdown-item(href='/logout') Log out
+                  if (user || !page.needsUser)
+                    if ((user && user.admin) || !page.needsAdmin)
+                      a.nav-link(
+                        class={ active: page.id === pageId },
+                        aria-current=page.id === pageId ? 'page' : 'false',
+                        href=page.href
+                      )= page.title
 
     main.flex-fill
       .container(style='padding-top: 75px')

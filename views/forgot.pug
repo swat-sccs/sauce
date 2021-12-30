@@ -7,13 +7,13 @@ include include/sauce-common
       | If that username or email matched an account in our database, we've sent instructions to
       | the associated email address.
     p
-      a(href='/login') Back to login
+      a(href='/login') Back to sign-in
   else
     h1.mb-4 Account Recovery
     p
       | Enter your username or email address. If it matches an account on file, you'll receive
       | an email with your username and a link to reset your password. Or, you can go back to
-      | the #[a(href='/login') login page].
+      | the #[a(href='/login') sign-in page].
     form#forgotForm.form-forgot.needs-validation(method='post', novalidate)
       .form-group.mb-3
         .form-floating

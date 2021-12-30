@@ -1,9 +1,9 @@
 include include/sauce-common
 
-+sauce-layout('SAUCE login', '', null, false)
-  h1.mb-4 Log into SAUCE
++sauce-layout('Sign in to SAUCE', '', null, false)
+  h1.mb-4 Sign in to SAUCE
   p
-    | Use your SCCS account to log in, not your Swarthmore ITS account.
+    | Use your SCCS account to sign in, not your Swarthmore ITS account.
     | Don't have a SCCS account? #[a(href='/account/create') Create&nbsp;one].
   form.form-signin(action='/login', method='post')
     input(type='hidden', name='next', value=nextUrl)
