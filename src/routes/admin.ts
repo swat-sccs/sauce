@@ -1,11 +1,13 @@
 import { Router } from 'express';
 import * as jf from 'joiful';
 import timeAgo from 'node-time-ago';
+import { URLSearchParams } from 'url';
 import * as controller from '../controllers/adminController';
 import { HttpException } from '../error/httpException';
 import { catchErrors } from '../util/asyncCatch';
 import { isAdmin } from '../util/authUtils';
 import { logger } from '../util/logging';
+import { groupParamsByKey } from '../util/paramUtils';
 
 const router = Router(); // eslint-disable-line new-cap
 
@@ -39,7 +41,7 @@ router.get(
 );
 
 router.post(
-  '/modifyTask',
+  '/',
   isAdmin,
   catchErrors(async (req: any, res, next) => {
     const { error, value } = jf.validateAsClass(req.body, controller.AdminModifyTaskReq);
@@ -48,12 +50,31 @@ router.post(
       throw new HttpException(400, { message: `Invalid request: ${error.message}` });
     }
 
+    const params = groupParamsByKey(new URLSearchParams(value.query));
+    const { error: pageErr, value: pageReq } = jf.validateAsClass(params, controller.AdminPageReq);
+
+    if (pageErr) {
+      throw new HttpException(400, { message: `Invalid value for query: ${pageErr.message}` });
+    }
+
     const status = await controller.modifyTask(value);
 
-    const params = new URLSearchParams(value.query);
-    params.set('opTask', value.id);
-    params.set('opStatus', status);
-    return res.redirect(`/admin?${params.toString()}`);
+    logger.debug(`Re-rendering page with search query: ${JSON.stringify(pageReq)}`);
+
+    const { results, pages } = await controller.searchTasks(
+      pageReq as unknown as controller.AdminPageReq,
+    );
+
+    return res.render('admin', {
+      user: req.user,
+      results: results,
+      request: pageReq,
+      query: params,
+      numPages: pages,
+      timeAgo: timeAgo,
+      opTask: value.id,
+      opStatus: status,
+    });
   }),
 );
 

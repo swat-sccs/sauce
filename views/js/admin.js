@@ -28,7 +28,6 @@
     const dataPairs = [];
     modalData.replaceChildren();
     for (const [key, value] of Object.entries(taskData.data)) {
-      console.log(key, value);
       const row = document.createElement('tr');
       const keyElement = document.createElement('th');
       keyElement.innerText = key;
@@ -55,4 +54,23 @@
     const retry = document.getElementById('taskRetryButton');
     retry.style.display = failed ? '' : 'none';
   });
+
+  const approve = document.getElementById('taskApproveButton');
+  const reject = document.getElementById('taskRejectButton');
+  const retry = document.getElementById('taskRetryButton');
+  const form = document.getElementById('editForm');
+  const buttonListener = function (event) {
+    event.target.innerHTML = document.getElementById('buttonLoader').innerHTML;
+    approve.disabled = true;
+    reject.disabled = true;
+    retry.disabled = true;
+    // weird terrible hack because button-based inputs don't seem to work
+    document.getElementById('rejectInput').value = event.target.value;
+    form.submit();
+    return true;
+  };
+
+  approve.addEventListener('click', buttonListener);
+  reject.addEventListener('click', buttonListener);
+  retry.addEventListener('click', buttonListener);
 })();
