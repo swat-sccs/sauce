@@ -11,7 +11,7 @@ export class CreateMailingListReq {
   @jf.string().required()
   creator: string;
 
-  @jf.string()
+  @jf.string().lowercase()
   listName: string;
 }
 

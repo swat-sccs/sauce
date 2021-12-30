@@ -14,12 +14,12 @@ include include/sauce-common
     SCCS mailing lists are great for clubs&mdash;you can send email blasts, add moderation rules, 
     and much more. You can manage your existing mailing lists through the GNU Mailman web interface,
     or create a new mailing list here. 
-  a.btn.btn-primary.btn-lg.me-2(href='https://lists.sccs.swarthmore.edu/') Manage my Lists
+  a.btn.btn-primary.btn-lg.me-2(href='https://lists.sccs.swarthmore.edu/') Manage my lists
   button.btn.btn-primary.btn-lg(
     type='button',
     data-bs-toggle='modal',
     data-bs-target='#newMailingModal'
-  ) Create a New List
+  ) Create a new list
   #newMailingModal.modal.fade(
     tabindex='-1',
     aria-labelledby='newMailingModalTitle',
@@ -52,8 +52,7 @@ include include/sauce-common
                 span#nameLabel.input-group-text @sccs.swarthmore.edu
                 p#nameFeedback.invalid-feedback.mb-0 List name is invalid, or list already exists.
                 #nameHelp.form-text
-                  | List addresses can contain lowercase or uppercase letters, numbers, and hyphens
-                  | (#[code -]).
+                  | List addresses can contain lowercase letters, numbers, hyphens, and underscores.
 
           .modal-footer
             button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Close
