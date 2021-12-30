@@ -15,6 +15,9 @@ function doFormSubmit() {
   const createLoading = document.getElementById('createLoading');
   const creationAlert = document.getElementById('creationAlert');
 
+  // prevents the form from flashing green if we've previously tried something that failed validation
+  form.classList.remove('was-validated');
+
   nameInput.setCustomValidity('');
   if (form.checkValidity()) {
     createButton.disabled = true;
