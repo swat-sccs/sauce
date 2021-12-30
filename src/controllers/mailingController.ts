@@ -1,7 +1,7 @@
 import * as jf from 'joiful';
 import { v4 as uuidv4 } from 'uuid';
 import { HttpException } from '../error/httpException';
-import { listMailingLists } from '../integration/mailman';
+import { getMailingList, listMailingLists } from '../integration/mailman';
 import { TaskModel } from '../integration/models';
 import { sendTaskNotification } from '../util/emailUtils';
 import { logger } from '../util/logging';
@@ -22,7 +22,7 @@ export const isMailingListNameAvailable = async (name: string): Promise<boolean>
       operation: 'createMailingList',
       'data.listName': name,
       status: 'pending',
-    })) || (await listMailingLists()).some((value) => value['list_name'] === name)
+    })) || (await getMailingList(name)) !== null
   );
 };
 
