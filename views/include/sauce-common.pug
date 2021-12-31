@@ -20,6 +20,13 @@ mixin sauce-container(pageId = '', user = null, showNavbar = true, showFooter = 
                 needsUser: false,
               },
               {
+                id: 'account',
+                title: 'Account',
+                href: '/account',
+                needsAdmin: true,
+                needsUser: true,
+              },
+              {
                 id: 'admin',
                 title: 'Admin',
                 href: '/admin',

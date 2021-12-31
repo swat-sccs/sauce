@@ -3,6 +3,7 @@ import * as jf from 'joiful';
 import * as controller from '../controllers/accountController';
 import { HttpException } from '../error/httpException';
 import { catchErrors } from '../util/asyncCatch';
+import { isLoggedIn } from '../util/authUtils';
 import { logger } from '../util/logging';
 
 export const router = Router(); // eslint-disable-line new-cap
@@ -113,6 +114,14 @@ router.post(
     await controller.doPasswordReset(value);
 
     return res.render('resetPasswordSuccess');
+  }),
+);
+
+router.get(
+  '/',
+  isLoggedIn,
+  catchErrors((req, res, next) => {
+    return res.render('account', { user: req.user });
   }),
 );
 

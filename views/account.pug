@@ -1,0 +1,27 @@
+include include/sauce-common
+
++sauce-layout('Account info', 'account', user)
+  script(type='text/javascript')
+    include js/account.js
+  h1.mb-4 Your SCCS Account
+  p Welcome, #{ user.uid }.
+
+  script#passwordResetSuccess(type='text/html')
+    .alert.alert-success.alert-dismissible.fade.show(role='alert')
+      p.mb-0.
+        A link to reset your password has been sent to #{ user.email || user.swatmail }.
+      button.btn-close(type='button', data-bs-dismiss='alert', aria-label='Close')
+  script#passwordResetFail(type='text/html')
+    .alert.alert-success.alert-dismissible.fade.show(role='alert')
+      p.mb-0.
+        An unexpected error occured. Please try again later.
+      button.btn-close(type='button', data-bs-dismiss='alert', aria-label='Close')
+  script#buttonProcessing(type='text/html')
+    span.spinner-border.spinner-border-sm(role='status', aria-hidden='true')
+    | &nbsp;Processing...
+
+  #alertContainer
+  button#changePasswordButton.btn.btn-primary(
+    type='button',
+    onclick=`sendResetRequest("${user.uid}")`
+  ) Change password
