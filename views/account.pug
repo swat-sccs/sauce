@@ -49,11 +49,11 @@ include include/sauce-common
           | Advanced email settings
       #collapseAdvanced.accordion-collapse.collapse(aria-labelledby='headingAdvanced')
         .accordion-body
-          p
-            //- TODO add actual helptext
-            a(href='') What's this?
-
-          h3 Forwarding configuration
+          h3 Email forwarding
+          button.btn.btn-link.btn-sm.p-0.mb-2(
+            data-bs-toggle='modal',
+            data-bs-target='#forwardingHelpModal'
+          ) What's this?
 
           if forwardFileText
             p Your .forward file (at #[code #{ user.homeDirectory }/.forward]) contains the following:
@@ -66,7 +66,7 @@ include include/sauce-common
           hr
 
           h4 Update forwarding
-          p.mb-1 Forward messages sent to my SCCS email:
+          p.mb-1 Deliver messages sent to my SCCS email:
 
           form#forwardForm.container.mb-3.gx-0(
             action='/account/configForwarding',
@@ -132,3 +132,32 @@ include include/sauce-common
                 }
               });
             })();
+
+  #forwardingHelpModal.modal.fade(
+    tabindex='-1',
+    aria-labelledby='forwardingHelpModalTitle',
+    aria-hidden='true'
+  )
+    .modal-dialog
+      .modal-content 
+        .modal-header
+          h5#forwardingHelpModalTitle.modal-title About Email Forwarding
+          button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+        .modal-body
+          p.
+            Your SCCS account also gives you access to an email account hosted on our servers at 
+            #[code #{ user.uid }@sccs.swarthmore.edu]. This service is mostly offered for historical
+            reasons, dating back to an era where email accounts were associated with a specific
+            machine and free email providers such as Gmail didn't exist. You can technically use 
+            us as your only email provider (set up email forwarding to forward to your SCCS mailbox 
+            and read mail via command line on our SSH server), but this is an #[em extremely] bad 
+            idea in the year #{ new Date().getFullYear() } for a variety of reasons. If you need to 
+            receive mail to your SCCS account, it's a better idea to  forward it to an existing 
+            email account.
+          p.
+            Under the hood, this page just provides a convenient way to edit your .forward file on
+            our SSH server. (Read more about .forward files #[a(href='https://www.ibm.com/docs/en/aix/7.2?topic=files-forward-file') here].) You can forward to multiple 
+            places (in which case a copy of each message will be sent to each address) and also 
+            choose to deposit a copy in your local mailbox. For advanced users, you can always 
+            manually edit your .forward file in your home directory on our SSH server, though if you
+            edit your settings through this page it will overwrite any existing directives.
