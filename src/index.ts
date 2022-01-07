@@ -16,6 +16,7 @@ import { getUserInfo } from './util/authUtils';
 import { HttpException } from './error/httpException';
 import { errorHandler } from './error/errorHandler';
 import { mailingRouter } from './routes/mailingList';
+import { minecraftRouter } from './routes/minecraft';
 
 const initExpress = (): void => {
   const port = process.env.PORT || 3000;
@@ -73,6 +74,7 @@ const initExpress = (): void => {
   app.use('/account', accountRouter);
   app.use('/admin', adminRouter);
   app.use('/lists', mailingRouter);
+  app.use('/minecraft', minecraftRouter);
 
   app.use('/static', express.static('public/'));
 

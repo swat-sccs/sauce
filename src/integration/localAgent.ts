@@ -14,3 +14,11 @@ export const getForwardFile = async (uid: string): Promise<string> => {
   logger.error('getForwardFile not yet implemented');
   return '';
 };
+
+export const whitelistMinecraftUser = async (uuid: string): Promise<void> => {
+  logger.error('whitelistMinecraftUser not yet implemented');
+};
+
+export const unWhitelistMinecraftUser = async (uuid: string): Promise<void> => {
+  logger.error('unWhitelistMinecraftUser not yet implemented');
+};

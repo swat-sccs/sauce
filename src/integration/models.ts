@@ -83,3 +83,25 @@ export const PasswordResetRequestModel = mongoose.model<PasswordResetRequest>(
   'PasswordReset',
   passwordResetRequestSchema,
 );
+
+export interface MinecraftWhitelist {
+  _id: string;
+  mcUuid: string;
+}
+
+// TODO probably better if this used account UUIDs in some way?
+const minecraftWhitelistSchema = new mongoose.Schema<MinecraftWhitelist>({
+  _id: {
+    type: String,
+    required: true,
+  },
+  mcUuid: {
+    type: String,
+    required: true,
+  },
+});
+
+export const MinecraftWhitelistModel = mongoose.model<MinecraftWhitelist>(
+  'MinecraftWhitelist',
+  minecraftWhitelistSchema,
+);
