@@ -2,6 +2,7 @@ import { Router } from 'express';
 import * as jf from 'joiful';
 import * as controller from '../controllers/accountController';
 import { HttpException } from '../error/httpException';
+import { getForwardFile } from '../integration/localAgent';
 import { catchErrors } from '../util/asyncCatch';
 import { isLoggedIn } from '../util/authUtils';
 import { logger } from '../util/logging';
@@ -120,8 +121,26 @@ router.post(
 router.get(
   '/',
   isLoggedIn,
-  catchErrors((req, res, next) => {
-    return res.render('account', { user: req.user });
+  catchErrors(async (req: any, res, next) => {
+    return res.render('account', {
+      user: req.user,
+      forwardFileText: await getForwardFile(req.user.uid),
+    });
+  }),
+);
+
+router.post(
+  '/configForwarding',
+  isLoggedIn,
+  catchErrors(async (req: any, res, next) => {
+    const { error, value } = jf.validateAsClass(req.body, controller.EmailForwardingConfig);
+    if (error) {
+      throw new HttpException(400, { message: `Invalid request: ${error.message}` });
+    }
+
+    controller.configureEmailForwarding(req.user.uid, value);
+
+    res.redirect('/account');
   }),
 );
 

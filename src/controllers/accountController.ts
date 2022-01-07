@@ -1,4 +1,5 @@
 import argon2 from 'argon2';
+import Joi from 'joi';
 import * as jf from 'joiful';
 import { Change } from 'ldapjs';
 import nodemailer from 'nodemailer';
@@ -6,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { HttpException } from '../error/httpException';
 import { mailTransporter } from '../integration/email';
 import { ldapClient } from '../integration/ldap';
+import { modifyForwardFile } from '../integration/localAgent';
 import { PasswordResetRequest, PasswordResetRequestModel, TaskModel } from '../integration/models';
 import { generateEmail } from '../util/emailTemplates';
 import { sendTaskNotification } from '../util/emailUtils';
@@ -277,4 +279,34 @@ export const isEmailAvailable = async (email: string): Promise<boolean> => {
     logger.debug(`${email} is not already registered`);
     return true;
   }
+};
+
+/**
+ */
+export class EmailForwardingConfig {
+  @jf.boolean().default(false)
+  forwardSwarthmore: boolean;
+  @jf.boolean().default(false)
+  forwardCustom: boolean;
+  @jf.any().custom((options) =>
+    options.schema.when('forwardCustom', {
+      is: Joi.boolean().equal(true),
+      then: Joi.string().email().required(),
+      otherwise: Joi.forbidden().empty(''),
+    }),
+  )
+  customEmail: string;
+  @jf.boolean().default(false)
+  forwardLocal: boolean;
+}
+
+export const configureEmailForwarding = async (
+  uid: string,
+  config: EmailForwardingConfig,
+): Promise<void> => {
+  logger.debug(`Updating email forwarding for ${uid} to ${JSON.stringify(config)}`);
+
+  await modifyForwardFile(uid, config);
+
+  logger.info(`Updated email forwarding for ${uid} to ${JSON.stringify(config)}`);
 };

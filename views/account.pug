@@ -6,22 +6,129 @@ include include/sauce-common
   h1.mb-4 Your SCCS Account
   p Welcome, #{ user.uid }.
 
-  script#passwordResetSuccess(type='text/html')
-    .alert.alert-success.alert-dismissible.fade.show(role='alert')
-      p.mb-0.
-        A link to reset your password has been sent to #{ user.email || user.swatmail }.
-      button.btn-close(type='button', data-bs-dismiss='alert', aria-label='Close')
-  script#passwordResetFail(type='text/html')
-    .alert.alert-success.alert-dismissible.fade.show(role='alert')
-      p.mb-0.
-        An unexpected error occured. Please try again later.
-      button.btn-close(type='button', data-bs-dismiss='alert', aria-label='Close')
-  script#buttonProcessing(type='text/html')
-    span.spinner-border.spinner-border-sm(role='status', aria-hidden='true')
-    | &nbsp;Processing...
+  .mb-4
+    h2 Password Settings
 
-  #alertContainer
-  button#changePasswordButton.btn.btn-primary(
-    type='button',
-    onclick=`sendResetRequest("${user.uid}")`
-  ) Change password
+    script#passwordResetSuccess(type='text/html')
+      .alert.alert-success.alert-dismissible.fade.show(role='alert')
+        p.mb-0.
+          A link to reset your password has been sent to #{ user.email || user.swatmail }.
+        button.btn-close(type='button', data-bs-dismiss='alert', aria-label='Close')
+    script#passwordResetFailure(type='text/html')
+      .alert.alert-success.alert-dismissible.fade.show(role='alert')
+        p.mb-0.
+          An unexpected error occured. Please try again later.
+        button.btn-close(type='button', data-bs-dismiss='alert', aria-label='Close')
+    script#buttonProcessing(type='text/html')
+      span.spinner-border.spinner-border-sm(role='status', aria-hidden='true')
+      | &nbsp;Processing...
+
+    #alertContainer
+
+    p SCCS staff members will never ask for your password.
+    button#changePasswordButton.btn.btn-primary(
+      type='button',
+      onclick=`sendResetRequest("${user.uid}")`
+    ) Change password
+
+  h2 Email Settings
+
+  p.mb-0 Your Swarthmore email is #[code= user.swatmail].
+  p.small.text-muted If you need to change this, #[a(href='mailto:staff@sccs.swarthmore.edu') contact SCCS staff.]
+
+  #advancedAccordion.accordion
+    .accordion-item
+      h2#headingAdvanced.accordion-header
+        button.accordion-button.collapsed(
+          type='button',
+          data-bs-toggle='collapse',
+          data-bs-target='#collapseAdvanced',
+          aria-expanded='false',
+          aria-controls='collapseAdvanced'
+        )
+          | Advanced email settings
+      #collapseAdvanced.accordion-collapse.collapse(aria-labelledby='headingAdvanced')
+        .accordion-body
+          p
+            //- TODO add actual helptext
+            a(href='') What's this?
+
+          h3 Forwarding configuration
+
+          if forwardFileText
+            p Your .forward file (at #[code #{ user.homeDirectory }/.forward]) contains the following:
+            .card.mb-3(style='width: 100%')
+              .card-body
+                pre.mb-0= forwardFileText
+          else
+            p You currently don't have a .forward file.
+
+          hr
+
+          h4 Update forwarding
+          p.mb-1 Forward messages sent to my SCCS email:
+
+          form#forwardForm.container.mb-3.gx-0(
+            action='/account/configForwarding',
+            method='post',
+            novalidate
+          )
+            .row
+              .col
+                .form-check
+                  input#forwardSwarthmoreCheck.form-check-input(
+                    type='checkbox',
+                    name='forwardSwarthmore',
+                    value='true'
+                  )
+                  label.form-check-label(for='forwardSwarthmoreCheck') to my Swarthmore email (#[code= user.swatmail])
+            .row.align-items-center
+              .col-auto.pe-0
+                .form-check
+                  input#forwardCustomCheck.form-check-input(
+                    type='checkbox',
+                    name='forwardCustom',
+                    value='true',
+                    oninput='updateCustomEmailField();'
+                  )
+                  label.form-check-label(for='forwardCustomCheck') to another email:
+              .col.px-1.validate-me
+                //- FIXME: HTML email validation and Joi's server-side validation disagree on what a
+                //-  valid email is
+                input#forwardCustomEmail.form-control.form-control-sm(
+                  type='email',
+                  aria-label='input for another email',
+                  name='customEmail',
+                  disabled
+                )
+            .row
+              .col
+                .form-check
+                  input#forwardLocalCheck.form-check-input(
+                    type='checkbox',
+                    name='forwardLocal',
+                    value='true'
+                  )
+                  label.form-check-label(for='forwardLocalCheck') to my SCCS mailbox
+            .row 
+              .col-auto.mt-1
+                //- TODO add a confirmation
+                button.btn.btn-sm.btn-primary(type='submit') Apply
+
+          //- this is separate from the main script because it has to activate after all the form stuff is there
+          script(type='text/javascript').
+            (function () {
+              'use strict';
+              const form = document.getElementById('forwardForm');
+
+              form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                  event.preventDefault();
+                  event.stopPropagation();
+
+                  Array.prototype.slice.call(document.querySelectorAll('#forwardForm .validate-me')).forEach(function (item) {
+                    item.classList.add('was-validated');
+                  });
+                }
+              });
+            })();

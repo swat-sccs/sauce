@@ -32,3 +32,11 @@ function sendResetRequest(userId) {
       btn.innerHTML = oldInner;
     });
 }
+
+function updateCustomEmailField() {
+  const customCheck = document.getElementById('forwardCustomCheck');
+  const customEmail = document.getElementById('forwardCustomEmail');
+
+  customEmail.disabled = !customCheck.checked;
+  customEmail.required = customCheck.checked;
+}

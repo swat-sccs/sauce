@@ -11,7 +11,7 @@ import { createPasswordResetRequest } from '../util/passwordReset';
 import chownr from 'chownr';
 import chmodr from 'chmodr';
 import { exec } from 'child_process';
-import { createLocalUser } from '../integration/localUser';
+import { createLocalUser } from '../integration/localAgent';
 
 export interface CreateAccountData {
   username: string;
