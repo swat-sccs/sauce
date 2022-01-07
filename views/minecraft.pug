@@ -9,29 +9,28 @@ include include/sauce-common
     | need to connect your SCCS account to your Minecraft account below.
   p 
     | For more information about the server, check out
-    |       #[a(href='https://www.instagram.com/swarthmore.mc/') @swarthmore.mc] on Instagram.
+    |        #[a(href='https://www.instagram.com/swarthmore.mc/') @swarthmore.mc] on Instagram.
   a.btn.btn-secondary.mb-3(href='https://mc.sccs.swarthmore.edu') Live Server Map
 
   hr
 
   if mcInfo !== null
-    .container
-      .row
-        .col-auto
-          img.me-3(
-            src=`https://crafatar.com/renders/body/${mcInfo.uuid}?overlay=true`,
-            alt='Minecraft Skin'
-          )
-        .col
-          h3 You're ready to go!
-          p
-            | Your Minecraft account #[code #{ mcInfo.username }] has been connected and added to the
-            | server whitelist. Connect to #[code mc.sccs.swarthmore.edu] to start playing!
-          p.small.text-muted
-            | If you'd like to whitelist more than one account, contact the server adminstrator.
-          p.small
-            form(action='/minecraft/remove', method='post')
-              button.btn.btn-link.btn-sm.text-danger.p-0(type='submit') Unlink account
+    .row
+      .col-12.col-sm-auto.text-center
+        img.me-3.mb-3(
+          src=`https://crafatar.com/renders/body/${mcInfo.uuid}?overlay=true`,
+          alt='Minecraft Skin'
+        )
+      .col
+        h3 You're ready to go!
+        p
+          | Your Minecraft account #[code #{ mcInfo.username }] has been connected and added to the
+          | server whitelist. Connect to #[code mc.sccs.swarthmore.edu] to start playing!
+        p.small.text-muted
+          | If you'd like to whitelist more than one account, contact the server adminstrator.
+        p.small
+          form(action='/minecraft/remove', method='post')
+            button.btn.btn-link.btn-sm.text-danger.p-0(type='submit') Unlink account
 
   else
     p You haven't added a Minecraft account yet.
