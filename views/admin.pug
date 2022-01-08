@@ -11,133 +11,158 @@ html(lang='en')
         .col-lg-10
           h1 SAUCE Admin
           p.text-muted SCCS Account and User Control Engine
-          //- display alert for completed task
-          if opTask && opStatus
-            .alert.alert-dismissible.fade.show(
-              class={
-                'alert-success': opStatus === 'executed',
-                'alert-danger': opStatus === 'rejected',
-                'alert-warning': opStatus === 'failed',
-              },
-              role='alert'
-            )
-              - const taskTruncated = opTask.substring(0, 6) + '...';
-              if opStatus === 'executed'
-                div Task #[code= taskTruncated] executed.
-              else if opStatus === 'rejected'
-                div Task #[code= taskTruncated] rejected.
-              else if opStatus === 'failed'
-                div Task #[code= taskTruncated] failed! Check the task data and server logs for error details.
-              button.btn-close(type='button', data-bs-dismiss='alert', aria-label='Close')
-          form#filterForm(aria-label='Task status filter')
-            each status in ['pending', 'executed', 'rejected', 'failed']
-              .form-check.form-check-inline
-                input.form-check-input(
-                  id=`#${status}Check`,
-                  type='checkbox',
-                  name='status',
-                  value=status,
-                  checked=request.status.includes(status)
-                )
-                label.form-check-label(for=`${status}Check`)= status.charAt(0).toUpperCase() + status.slice(1)
-            if query.page
-              input(type='hidden', name='page', value=query.page)
-            if query.perPage
-              input(type='hidden', name='perPage', value=query.perPage)
-            button.btn.btn-sm.btn-primary(type='submit') Apply
-          table.table 
-            thead
-              tr 
-                th.w-10(scope='col') ID
-                th.w-10(scope='col') Operation
-                th.w-25(scope='col') Created
-                th.w-25(scope='col') Status
-                th.w-10(scope='col')
-                //- th(scope='col') Data
-            tbody
-              if results.length == 0
-                tr
-                  td(colspan=5)
-                    p.mb-0.text-center.fst-italic No tasks for this query
-              each task in results
-                tr(
+          ul#navTab.nav.nav-tabs(role='tablist')
+            mixin navTab(id, name, selected = false)
+              li.nav-item(role='presentation')
+                button.nav-link(
+                  class={ active: selected },
+                  id=`${id}-tab`,
+                  data-bs-toggle='tab',
+                  data-bs-target=`#${id}`,
+                  type='button',
+                  role='tab',
+                  aria-controls=id,
+                  aria-selected=selected
+                )= name
+            +navTab('tasks', 'Tasks', true)
+            +navTab('accounts', 'Accounts')
+          #tabContent.tab-content
+            mixin tabPane(id, selected = false)
+              .tab-pane.fade.border.border-top-0.rounded-bottom.p-3(
+                class={ show: selected, active: selected },
+                id=id,
+                role='tabpanel',
+                aria-labelledby=`${id}-tab`
+              )
+                block
+            +tabPane('tasks', true)
+              //- display alert for completed task
+              if opTask && opStatus
+                .alert.alert-dismissible.fade.show(
                   class={
-                    'table-success': task.status === 'executed',
-                    'table-danger': task.status === 'rejected',
-                    'table-warning': task.status === 'failed',
-                    'table-info': task.status === 'pending',
-                  }
-                ) 
-                  th(scope='row')
-                    code(data-bs-toggle='tooltip', data-bs-placement='left', title=task._id)= task._id.substring(0, 6) + '...'
-                  td= task.operation
-                  td
-                    //- TODO add timezones to these
-                    span(
-                      data-bs-toggle='tooltip',
-                      data-bs-placement='top',
-                      title=task.createdTimestamp.toLocaleString()
-                    )= timeAgo(task.createdTimestamp)
-                  td
-                    if task.actionTimestamp
-                      span(
-                        data-bs-toggle='tooltip',
-                        data-bs-placement='top',
-                        title=task.actionTimestamp.toLocaleString()
-                      )= `${task.status} ${timeAgo(task.actionTimestamp)}`
-                    else
-                      span= task.status
-                  td
-                    button.btn.btn-primary.btn-sm(
-                      type='button',
-                      data-bs-toggle='modal',
-                      data-bs-target='#editAccountModal',
-                      data-bs-task-json=JSON.stringify(task)
-                    ) Review
-                  //- td
-                  //-   code= JSON.stringify(task.data)
-          nav(aria-label='Results page navigation') 
-            -
-              function constructQuery(page) {
-                const params = new URLSearchParams();
-                for (const [key, value] of Object.entries(query)) {
-                  if (Array.isArray(value)) {
-                    for (item of value) params.append(key, item);
-                  } else {
-                    params.append(key, value);
-                  }
-                }
-                params.set('page', page)
-                return '?' + params.toString();
-              }
-            ul.pagination
-              - var i = 0;
-              - const prevDisabled = request.page === 0;
-              li.page-item(class={ disabled: prevDisabled })
-                a.page-link(
-                  href=constructQuery(request.page - 1),
-                  aria-disabled=prevDisabled,
-                  tabindex=prevDisabled ? '-1' : ''
-                ) Previous
-              while i < numPages
-                - i++;
-                li.page-item(
-                  class={ active: i === request.page + 1 },
-                  aria-current=i === request.page + 1 ? 'page' : 'false'
+                    'alert-success': opStatus === 'executed',
+                    'alert-danger': opStatus === 'rejected',
+                    'alert-warning': opStatus === 'failed',
+                  },
+                  role='alert'
                 )
-                  a.page-link(href=constructQuery(i - 1))= i
-              - const nextDisabled = request.page + 1 >= numPages;
-              li.page-item(class={ disabled: nextDisabled })
-                a.page-link(
-                  href=constructQuery(request.page + 1),
-                  aria-disabled=nextDisabled,
-                  tabindex=nextDisabled ? '-1' : ''
-                ) Next
-          //- TODO display timezone somewhere
-          p.text-muted Last updated: #{ new Date().toLocaleString() }
-          p
-            a(href='/logout') Log out
-        .col
+                  - const taskTruncated = opTask.substring(0, 6) + '...';
+                  if opStatus === 'executed'
+                    div Task #[code= taskTruncated] executed.
+                  else if opStatus === 'rejected'
+                    div Task #[code= taskTruncated] rejected.
+                  else if opStatus === 'failed'
+                    div Task #[code= taskTruncated] failed! Check the task data and server logs for error details.
+                  button.btn-close(type='button', data-bs-dismiss='alert', aria-label='Close')
+              form#filterForm(aria-label='Task status filter')
+                each status in ['pending', 'executed', 'rejected', 'failed']
+                  .form-check.form-check-inline
+                    input.form-check-input(
+                      id=`#${status}Check`,
+                      type='checkbox',
+                      name='status',
+                      value=status,
+                      checked=request.status.includes(status)
+                    )
+                    label.form-check-label(for=`${status}Check`)= status.charAt(0).toUpperCase() + status.slice(1)
+                if query.page
+                  input(type='hidden', name='page', value=query.page)
+                if query.perPage
+                  input(type='hidden', name='perPage', value=query.perPage)
+                button.btn.btn-sm.btn-primary(type='submit') Apply
+              table.table 
+                thead
+                  tr 
+                    th.w-10(scope='col') ID
+                    th.w-10(scope='col') Operation
+                    th.w-25(scope='col') Created
+                    th.w-25(scope='col') Status
+                    th.w-10(scope='col')
+                    //- th(scope='col') Data
+                tbody
+                  if results.length == 0
+                    tr
+                      td(colspan=5)
+                        p.mb-0.text-center.fst-italic No tasks for this query
+                  each task in results
+                    tr(
+                      class={
+                        'table-success': task.status === 'executed',
+                        'table-danger': task.status === 'rejected',
+                        'table-warning': task.status === 'failed',
+                        'table-info': task.status === 'pending',
+                      }
+                    ) 
+                      th(scope='row')
+                        code(data-bs-toggle='tooltip', data-bs-placement='left', title=task._id)= task._id.substring(0, 6) + '...'
+                      td= task.operation
+                      td
+                        //- TODO add timezones to these
+                        span(
+                          data-bs-toggle='tooltip',
+                          data-bs-placement='top',
+                          title=task.createdTimestamp.toLocaleString()
+                        )= timeAgo(task.createdTimestamp)
+                      td
+                        if task.actionTimestamp
+                          span(
+                            data-bs-toggle='tooltip',
+                            data-bs-placement='top',
+                            title=task.actionTimestamp.toLocaleString()
+                          )= `${task.status} ${timeAgo(task.actionTimestamp)}`
+                        else
+                          span= task.status
+                      td
+                        button.btn.btn-primary.btn-sm(
+                          type='button',
+                          data-bs-toggle='modal',
+                          data-bs-target='#editAccountModal',
+                          data-bs-task-json=JSON.stringify(task)
+                        ) Review
+                      //- td
+                      //-   code= JSON.stringify(task.data)
+              nav(aria-label='Results page navigation') 
+                -
+                  function constructQuery(page) {
+                    const params = new URLSearchParams();
+                    for (const [key, value] of Object.entries(query)) {
+                      if (Array.isArray(value)) {
+                        for (item of value) params.append(key, item);
+                      } else {
+                        params.append(key, value);
+                      }
+                    }
+                    params.set('page', page)
+                    return '?' + params.toString();
+                  }
+                ul.pagination
+                  - var i = 0;
+                  - const prevDisabled = request.page === 0;
+                  li.page-item(class={ disabled: prevDisabled })
+                    a.page-link(
+                      href=constructQuery(request.page - 1),
+                      aria-disabled=prevDisabled,
+                      tabindex=prevDisabled ? '-1' : ''
+                    ) Previous
+                  while i < numPages
+                    - i++;
+                    li.page-item(
+                      class={ active: i === request.page + 1 },
+                      aria-current=i === request.page + 1 ? 'page' : 'false'
+                    )
+                      a.page-link(href=constructQuery(i - 1))= i
+                  - const nextDisabled = request.page + 1 >= numPages;
+                  li.page-item(class={ disabled: nextDisabled })
+                    a.page-link(
+                      href=constructQuery(request.page + 1),
+                      aria-disabled=nextDisabled,
+                      tabindex=nextDisabled ? '-1' : ''
+                    ) Next
+              //- TODO display timezone somewhere
+              p.text-muted.mb-0 Last updated: #{ new Date().toLocaleString() }
+              .col
+            +tabPane('accounts')
+              p Accounts Page Goes Here
     //- modal
     #editAccountModal.modal.fade(
       tabindex='-1',

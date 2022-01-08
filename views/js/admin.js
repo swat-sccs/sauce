@@ -1,4 +1,25 @@
 (function () {
+  // tab listener to modify URL
+  const hash = location.hash.replace(/^#/, '');
+  if (hash) {
+    const tabEl = document.getElementById(`${hash}`);
+    if (tabEl) {
+      // eslint-disable-next-line no-undef
+      new bootstrap.Tab(document.getElementById(`${hash}`)).show();
+    } else {
+      console.error(`Could not find tab with id ${hash}`);
+      window.location.hash = '';
+    }
+  }
+
+  Array.prototype.slice
+    .call(document.querySelectorAll('#navTab .nav-link'))
+    .forEach(function (item) {
+      item.addEventListener('shown.bs.tab', function (event) {
+        window.location.hash = event.target.id;
+      });
+    });
+
   // tooltips, see https://getbootstrap.com/docs/5.0/components/tooltips/#example-enable-tooltips-everywhere
   const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
   const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
