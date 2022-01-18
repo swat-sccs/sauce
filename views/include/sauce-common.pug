@@ -91,7 +91,6 @@ mixin sauce-layout(title, pageId = '', user = null, showNavbar = true, showFoote
       include head.pug
       title= title
     body
-      include body-scripts.pug
       +sauce-container(pageId, user, showNavbar, showFooter)
         .row(style='max-width: 768px')
           .col-md-8

@@ -1,7 +1,6 @@
 include include/sauce-common
 
 +sauce-layout('Account info', 'account', user)
-  script(type='text/javascript', src='/static/js/account.js')
   h1.mb-4 Your SCCS Account
   p Welcome, #{ user.uid }.
 
@@ -25,10 +24,7 @@ include include/sauce-common
     #alertContainer
 
     p SCCS staff members will never ask for your password.
-    button#changePasswordButton.btn.btn-primary(
-      type='button',
-      onclick=`sendResetRequest("${user.uid}")`
-    ) Change password
+    button#changePasswordButton.btn.btn-primary(type='button') Change password
 
   h2 Email Settings
 
@@ -87,8 +83,7 @@ include include/sauce-common
                   input#forwardCustomCheck.form-check-input(
                     type='checkbox',
                     name='forwardCustom',
-                    value='true',
-                    oninput='updateCustomEmailField();'
+                    value='true'
                   )
                   label.form-check-label(for='forwardCustomCheck') to another email:
               .col.px-1.validate-me
@@ -160,3 +155,6 @@ include include/sauce-common
             choose to deposit a copy in your local mailbox. For advanced users, you can always 
             manually edit your .forward file in your home directory on our SSH server, though if you
             edit your settings through this page it will overwrite any existing directives.
+  script(type='text/javascript').
+    const UID = '#{user.uid}';
+  script(type='text/javascript', src='/dist/js/account.js')

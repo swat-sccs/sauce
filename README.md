@@ -8,8 +8,28 @@ _Very_ WIP at the moment.
 
 ## Development
 
-```
+Installation:
+
+```bash
 npm install
+```
+
+Build static web files and compile TypeScript:
+
+```bash
+npm run build
+```
+
+Run the server:
+
+```bash
+npm start
+```
+
+Or in production:
+
+```
+node build/src/index.js
 ```
 
 Requires a MongoDB instance and LDAP server; these can be configured in a `.env` file. An example
@@ -25,7 +45,6 @@ The repo is set up to run Prettier and ESLint before each commit.
 - `/views`: Pug templates for the web interface
   - `/views/include`: Common code for all templates (e.g. `sauce-container` to add headers and
     footers)
-  - `/views/js`: Client-side JavaScript for incorporation into templated pages
 - `/src`: Server code; root folder contains `index.ts` with main configuration
   - `/src/controllers`: Business logic and controllers called from routes
   - `/src/error/`: HTTP and application error handling
@@ -35,3 +54,5 @@ The repo is set up to run Prettier and ESLint before each commit.
   - `/src/integration`: Definitions and config for all external services (MongoDB, LDAP, SMTP
     server, etc.)
   - `/src/util`: Misc utilities
+- `/webStatic`: Client-side static code (SCSS and JS). This is its own Node project built with
+  Webpack.

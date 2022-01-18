@@ -77,6 +77,7 @@ const initExpress = (): void => {
   app.use('/minecraft', minecraftRouter);
 
   app.use('/static', express.static('public/'));
+  app.use('/dist', express.static('dist/'));
 
   app.use((req: any, res, next) => {
     next(new HttpException(404, { message: req.path }));

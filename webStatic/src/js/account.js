@@ -1,6 +1,8 @@
 /* eslint-disable require-jsdoc */
 
-function sendResetRequest(userId) {
+import 'bootstrap';
+
+document.getElementById('changePasswordButton').addEventListener('click', function () {
   const container = document.getElementById('alertContainer');
   const success = document.getElementById('passwordResetSuccess');
   const failure = document.getElementById('passwordResetFailure');
@@ -14,7 +16,9 @@ function sendResetRequest(userId) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      id: userId,
+      // constant set in the pug template
+      // eslint-disable-next-line no-undef
+      id: UID,
     }),
   })
     .then((res) => {
@@ -31,12 +35,14 @@ function sendResetRequest(userId) {
       container.innerHTML = failure.innerHTML;
       btn.innerHTML = oldInner;
     });
-}
+});
 
-function updateCustomEmailField() {
-  const customCheck = document.getElementById('forwardCustomCheck');
-  const customEmail = document.getElementById('forwardCustomEmail');
+document
+  .getElementById('forwardCustomCheck')
+  .addEventListener('input', function updateCustomEmailField() {
+    const customCheck = document.getElementById('forwardCustomCheck');
+    const customEmail = document.getElementById('forwardCustomEmail');
 
-  customEmail.disabled = !customCheck.checked;
-  customEmail.required = customCheck.checked;
-}
+    customEmail.disabled = !customCheck.checked;
+    customEmail.required = customCheck.checked;
+  });

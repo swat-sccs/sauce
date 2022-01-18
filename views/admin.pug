@@ -4,11 +4,6 @@ doctype
 html(lang='en')
   head
     include include/head.pug
-    link(
-      rel='stylesheet',
-      type='text/css',
-      href='https://cdn.datatables.net/v/bs5/dt-1.11.3/r-2.2.9/datatables.min.css'
-    )
 
     title SAUCE
   body
@@ -124,18 +119,8 @@ html(lang='en')
               script#buttonLoader(type='text/html')
                 span.spinner-border.spinner-border-sm(role='status', aria-hidden='true')
                 | &nbsp;Processing...
-    include include/body-scripts.pug
-    script(type='text/javascript', src='https://code.jquery.com/jquery-3.5.1.js')
-    script(
-      type='text/javascript',
-      src='https://cdn.datatables.net/v/bs5/dt-1.11.3/r-2.2.9/datatables.min.js'
-    )
-    script(
-      type='text/javascript',
-      src='https://cdn.jsdelivr.net/npm/luxon@2.3.0/build/global/luxon.min.js'
-    )
     //- defined here so I can access the rendery variables.
     script(type='text/javascript').
       const TASK_DATA_URL = '#{taskDataUrl}';
       const USER_DATA_URL = '#{userDataUrl}';
-    script(type='text/javascript', src='/static/js/admin.js')
+    script(type='text/javascript', src='/dist/js/admin.js')

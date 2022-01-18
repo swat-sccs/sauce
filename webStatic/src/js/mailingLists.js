@@ -1,3 +1,14 @@
+import * as bootstrap from 'bootstrap';
+
+if (!window.bootstrap) {
+  window.bootstrap = bootstrap;
+}
+
+// eslint-disable-next-line require-jsdoc
+function openModal() {
+  window.bootstrap.Modal.getOrCreateInstance(document.getElementById('newMailingModal')).show();
+}
+
 // eslint-disable-next-line require-jsdoc
 function clearValidation() {
   'use strict';
@@ -61,3 +72,8 @@ function doFormSubmit() {
     form.classList.add('was-validated');
   }
 }
+
+// needed because otherwise webpack will get rid of the functions
+window.openModal = openModal;
+window.clearValidation = clearValidation;
+window.doFormSubmit = doFormSubmit;

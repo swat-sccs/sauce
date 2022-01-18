@@ -1,14 +1,28 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable require-jsdoc */
 /* eslint-disable no-undef */
 
-const DateTime = luxon.DateTime;
+import 'datatables.net-bs5/css/dataTables.bootstrap5.css';
+import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.css';
+
+import * as bootstrap from 'bootstrap';
+window.bootstrap = bootstrap; // makes responsive-bs5 not throw errors in the console
+import { Tooltip, Tab } from 'bootstrap';
+import { DateTime as _DateTime } from 'luxon';
+import 'jquery';
+import 'datatables.net';
+import dt from 'datatables.net-bs5';
+dt(window, $);
+import responsive from 'datatables.net-responsive-bs5';
+responsive(window, $);
+
+const DateTime = _DateTime;
 
 function refreshTooltips() {
   // tooltips, see https://getbootstrap.com/docs/5.0/components/tooltips/#example-enable-tooltips-everywhere
   const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
   const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    // eslint-disable-next-line no-undef
-    return new bootstrap.Tooltip(tooltipTriggerEl);
+    return new Tooltip(tooltipTriggerEl);
   });
 }
 
@@ -24,8 +38,7 @@ function refreshTaskTimestamp() {
   if (hash) {
     const tabEl = document.getElementById(`${hash}`);
     if (tabEl) {
-      // eslint-disable-next-line no-undef
-      new bootstrap.Tab(document.getElementById(`${hash}`)).show();
+      new Tab(document.getElementById(`${hash}`)).show();
     } else {
       console.error(`Could not find tab with id ${hash}`);
       window.location.hash = '';

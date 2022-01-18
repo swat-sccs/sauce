@@ -5,7 +5,10 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon --exec npx ts-node --files src/index.ts",
-    "build": "cd src && tsc",
+    "postinstall": "cd webStatic && npm install",
+    "build": "npm run buildWebStatic && npm run packageWebStatic && cd src && tsc",
+    "buildWebStatic": "cd webStatic && npm run build",
+    "packageWebStatic": "npx copyfiles -E -u 1 \"webStatic/dist/**\" .",
     "pre-commit": "lint-staged",
     "prepare": "husky install"
   },
@@ -55,6 +58,7 @@
     "@types/uuid": "^8.3.3",
     "@types/zxcvbn": "^4.4.1",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "copyfiles": "^2.4.1",
     "cross-env": "^6.0.3",
     "eslint": "^8.3.0",
     "eslint-config-google": "^0.14.0",
