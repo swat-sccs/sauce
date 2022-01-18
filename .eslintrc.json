@@ -38,7 +38,7 @@
   },
   "overrides": [
     {
-      "files": "views/**/*.js",
+      "files": "public/js/**/*.js",
       "env": { "node": false, "browser": true }
     }
   ]

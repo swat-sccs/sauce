@@ -1,8 +1,7 @@
 include include/sauce-common
 
 +sauce-layout('Account info', 'account', user)
-  script(type='text/javascript')
-    include js/account.js
+  script(type='text/javascript', src='/static/js/account.js')
   h1.mb-4 Your SCCS Account
   p Welcome, #{ user.uid }.
 

@@ -1,8 +1,7 @@
 include include/sauce-common
 
 +sauce-layout('SCCS Mailing Lists', 'mailing', user)
-  script(type='text/javascript')
-    include js/mailingLists.js
+  script(type='text/javascript', src='/static/js/mailingLists.js')
   h1.mb-4 Mailing List Management
   #creationAlertContainer
   script#creationAlert(type='text/html')
