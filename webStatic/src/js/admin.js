@@ -237,6 +237,8 @@ $(document).ready(function () {
     ],
   });
 
+  taskTable.on('responsive-display', refreshTooltips);
+
   // clear lingering POST data so if we're being rendered as a response to a POST request a refresh
   // doesn't resend the request
   if (window.history.replaceState) {
