@@ -86,7 +86,11 @@ html(lang='en')
               p#lastUpdated.text-muted.mb-0
               .col
             +tabPane('accounts')
-              p Accounts Page Goes Here
+              table#userTable.table(width='100%', style='white-space: nowrap')
+                thead
+                  tr 
+                    th(scope='col') foo
+                    th.none(scope='col') bar
     //- modal
     #editAccountModal.modal.fade(
       tabindex='-1',
@@ -132,4 +136,5 @@ html(lang='en')
     //- defined here so I can access the rendery variables.
     script(type='text/javascript').
       const TASK_DATA_URL = '#{taskDataUrl}';
+      const USER_DATA_URL = '#{userDataUrl}';
     script(type='text/javascript', src='/static/js/admin.js')

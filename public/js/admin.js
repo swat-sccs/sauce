@@ -12,7 +12,7 @@ function refreshTooltips() {
   });
 }
 
-function refreshTimestamp() {
+function refreshTaskTimestamp() {
   document.getElementById('lastUpdated').innerHTML = `Last updated: ${DateTime.now().toLocaleString(
     DateTime.TIME_24_WITH_SHORT_OFFSET,
   )}`;
@@ -41,7 +41,7 @@ function refreshTimestamp() {
     });
 
   refreshTooltips();
-  refreshTimestamp();
+  refreshTaskTimestamp();
 
   // passing data to modals
   const acctModal = document.getElementById('editAccountModal');
@@ -115,9 +115,9 @@ function refreshTimestamp() {
 })();
 
 $(document).ready(function () {
-  let tableUid = 0;
+  let taskTableUid = 0;
   // eslint-disable-next-line new-cap
-  const table = $('#taskTable').DataTable({
+  const taskTable = $('#taskTable').DataTable({
     ajax: TASK_DATA_URL,
     responsive: {
       details: { type: 'column' },
@@ -144,14 +144,14 @@ $(document).ready(function () {
         orderable: false,
         render: function (data, type, row) {
           if (type === 'display') {
-            tableUid++;
+            taskTableUid++;
             return `<button 
             class="btn btn-primary btn-sm" 
             type="button" 
             data-bs-toggle="modal" 
             data-bs-target="#editAccountModal" 
-            data-bs-json-id="task-json-${tableUid}">Review
-            </button><script id="task-json-${tableUid}" type="text/json">${JSON.stringify(
+            data-bs-json-id="task-json-${taskTableUid}">Review
+            </button><script id="task-json-${taskTableUid}" type="text/json">${JSON.stringify(
               row,
             )}</script>`;
           } else {
@@ -233,7 +233,7 @@ $(document).ready(function () {
   // see https://bugs.jquery.com/ticket/4898#comment:2
   jQuery.ajaxSetup({ cache: true });
 
-  const refreshTable = function () {
+  const refreshTaskTable = function () {
     console.log('Reloading table');
     const params = new URLSearchParams();
 
@@ -243,16 +243,23 @@ $(document).ready(function () {
       }
     });
 
-    table.ajax.url(TASK_DATA_URL + '?' + params.toString());
-    table.ajax.reload();
+    taskTable.ajax.url(TASK_DATA_URL + '?' + params.toString());
+    taskTable.ajax.reload();
 
-    refreshTimestamp();
+    refreshTaskTimestamp();
 
     console.log('Reloaded');
   };
 
   // eslint-disable-next-line guard-for-in
   ['pending', 'executed', 'rejected', 'failed'].forEach((status) => {
-    document.getElementById(`${status}Check`).addEventListener('input', refreshTable);
+    document.getElementById(`${status}Check`).addEventListener('input', refreshTaskTable);
+  });
+
+  // eslint-disable-next-line new-cap
+  const userTable = $('#userTable').DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: USER_DATA_URL,
   });
 });

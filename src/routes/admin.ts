@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import * as jf from 'joiful';
-import timeAgo from 'node-time-ago';
 import { URLSearchParams } from 'url';
 import * as controller from '../controllers/adminController';
+import * as dtUserSearchController from '../controllers/dtUserSearchController';
 import { HttpException } from '../error/httpException';
 import { catchErrors } from '../util/asyncCatch';
 import { isAdmin } from '../util/authUtils';
@@ -18,6 +18,7 @@ router.get(
     res.render('admin', {
       user: req.user,
       taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/tasks`,
+      userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/users`,
     });
   }),
 );
@@ -47,6 +48,7 @@ router.post(
     res.render('admin', {
       user: req.user,
       taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/tasks`,
+      userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/users`,
       query: pageReq,
       opTask: value.id,
       opStatus: status,
@@ -68,6 +70,25 @@ router.get(
     return res.json({
       data: await controller.searchTasks(value as unknown as controller.AdminSearchReq),
     });
+  }),
+);
+
+router.get(
+  '/users',
+  isAdmin,
+  catchErrors(async (req, res, next) => {
+    const { error, value } = jf.validateAsClass(req.query, dtUserSearchController.DtServerRequest);
+    if (error) {
+      // this is an API endpoint so no fancy page for you
+      logger.warn(`Bad users API request: ${error.message}`);
+      return res.status(400).json({ message: error.message });
+    }
+
+    return res.json(
+      await dtUserSearchController.processUserSearch(
+        value as unknown as dtUserSearchController.DtServerRequest,
+      ),
+    );
   }),
 );
 
