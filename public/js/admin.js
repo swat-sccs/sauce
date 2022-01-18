@@ -122,6 +122,7 @@ $(document).ready(function () {
     responsive: {
       details: { type: 'column' },
     },
+    processing: true,
     drawCallback: refreshTooltips,
     order: [[3, 'desc']],
     language: {
