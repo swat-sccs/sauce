@@ -30,7 +30,7 @@ router.post(
       await controller.associateMcWithLdap(req.user.uid, req.body.mcUser);
     } catch (e) {
       if (e instanceof HttpException) {
-        res.render('minecraft', {
+        return res.render('minecraft', {
           user: req.user,
           mcInfo: await controller.getMcForLdapUser(req.user.uid),
           err: e.friendlyMessage,
