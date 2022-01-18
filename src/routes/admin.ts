@@ -14,28 +14,10 @@ const router = Router(); // eslint-disable-line new-cap
 router.get(
   '/',
   isAdmin,
-  catchErrors(async (req: any, res, next) => {
-    const { error, value } = jf.validateAsClass(req.query, controller.AdminPageReq);
-    if (error) {
-      logger.warn(`AdminPageReq validation error: ${error.message}`);
-      throw new HttpException(400, { message: `Invalid request: ${error.message}` });
-    }
-
-    logger.debug(`Admin search query: ${JSON.stringify(req.query)}`);
-
-    const { results, pages } = await controller.searchTasks(value);
-
+  catchErrors((req: any, res, next) => {
     res.render('admin', {
       user: req.user,
-      results: results,
-      request: value,
-      // This would probably work fine if we provided the value instead, but
-      // providing the query lets us not supply params in links on the
-      // page (e.g. pagination) when they didn't need to be supplied (because
-      // they were default values).
-      query: req.query,
-      numPages: pages,
-      timeAgo: timeAgo,
+      taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/tasks`,
     });
   }),
 );
@@ -51,7 +33,10 @@ router.post(
     }
 
     const params = groupParamsByKey(new URLSearchParams(value.query));
-    const { error: pageErr, value: pageReq } = jf.validateAsClass(params, controller.AdminPageReq);
+    const { error: pageErr, value: pageReq } = jf.validateAsClass(
+      params,
+      controller.AdminSearchReq,
+    );
 
     if (pageErr) {
       throw new HttpException(400, { message: `Invalid value for query: ${pageErr.message}` });
@@ -59,21 +44,29 @@ router.post(
 
     const status = await controller.modifyTask(value);
 
-    logger.debug(`Re-rendering page with search query: ${JSON.stringify(pageReq)}`);
-
-    const { results, pages } = await controller.searchTasks(
-      pageReq as unknown as controller.AdminPageReq,
-    );
-
-    return res.render('admin', {
+    res.render('admin', {
       user: req.user,
-      results: results,
-      request: pageReq,
-      query: params,
-      numPages: pages,
-      timeAgo: timeAgo,
+      taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/tasks`,
+      query: pageReq,
       opTask: value.id,
       opStatus: status,
+    });
+  }),
+);
+
+router.get(
+  '/tasks',
+  isAdmin,
+  catchErrors(async (req, res, next) => {
+    const { error, value } = jf.validateAsClass(req.query, controller.AdminSearchReq);
+    if (error) {
+      // this is an API endpoint so no fancy page for you
+      logger.warn(`Bad tasks API request: ${error.message}`);
+      return res.status(400).send(error.message);
+    }
+
+    return res.json({
+      data: await controller.searchTasks(value as unknown as controller.AdminSearchReq),
     });
   }),
 );

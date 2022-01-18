@@ -6,16 +6,7 @@ import { logger } from '../util/logging';
 
 /**
  */
-export class AdminPageReq {
-  @jf
-    .number()
-    .not((joi) => joi.negative())
-    .default(0)
-  page: number;
-
-  @jf.number().positive().max(100).default(10)
-  perPage: number;
-
+export class AdminSearchReq {
   @jf
     .array({ elementClass: String })
     .single()
@@ -23,13 +14,8 @@ export class AdminPageReq {
     .default('pending')
   status: string[];
 
-  // used to display status when page is re-rendered after task execution
-
-  @jf.string().valid('executed', 'failed', 'rejected').optional()
-  opStatus?: 'executed' | 'failed' | 'rejected';
-
-  @jf.string().guid().optional()
-  opTask?: string;
+  @jf.any().optional()
+  '_': any;
 }
 
 /**
@@ -49,23 +35,10 @@ export class AdminModifyTaskReq {
   query: string;
 }
 
-interface AdminSearchResults {
-  results: Task[];
-  totalResults: number;
-  pages: number;
-}
-
-export const searchTasks = async (query: AdminPageReq): Promise<AdminSearchResults> => {
-  const results = await TaskModel.find()
-    .in('status', query.status)
-    .skip(query.perPage * query.page)
-    .limit(query.perPage)
-    .sort('-createdTimestamp')
-    .exec();
-  const numResults = await TaskModel.count().in('status', query.status).exec();
-  const numPages = Math.ceil(numResults / query.perPage);
-  logger.debug(`Returning ${results.length} of ${numResults} results`);
-  return { results: results, totalResults: numResults, pages: numPages };
+export const searchTasks = async (query: AdminSearchReq): Promise<Task[]> => {
+  const results = await TaskModel.find().in('status', query.status).exec();
+  logger.debug(`Returning ${results.length} results`);
+  return results;
 };
 
 export const modifyTask = async (
