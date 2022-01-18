@@ -1,4 +1,4 @@
-import ldap from 'ldapjs';
+import ldap, { Filter } from 'ldapjs';
 import { ldapClient } from '../integration/ldap';
 import { logger } from './logging';
 
@@ -41,7 +41,7 @@ export const searchAsync = async (
 
 export const searchAsyncMultiple = async (
   ldapClient: ldap.Client,
-  filter: string,
+  filter: string | Filter,
   attributes: string | string[] = [],
   base: string = process.env.LDAP_SEARCH_BASE,
 ): Promise<any[]> => {

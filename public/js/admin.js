@@ -260,6 +260,21 @@ $(document).ready(function () {
   const userTable = $('#userTable').DataTable({
     processing: true,
     serverSide: true,
+    responsive: true,
     ajax: USER_DATA_URL,
+    columns: [
+      {
+        data: 'uid',
+        defaultContent: '',
+      },
+      {
+        data: 'cn',
+        defaultContent: '',
+      },
+      {
+        data: 'swatmail',
+        defaultContent: '',
+      },
+    ],
   });
 });

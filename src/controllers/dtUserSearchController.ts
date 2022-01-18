@@ -1,6 +1,14 @@
 import * as jf from 'joiful';
-import { Filter } from 'ldapjs';
+import {
+  AndFilter,
+  EqualityFilter,
+  Filter,
+  OrFilter,
+  PresenceFilter,
+  SubstringFilter,
+} from 'ldapjs';
 import { ldapClient } from '../integration/ldap';
+import { MinecraftWhitelistModel } from '../integration/models';
 import { searchAsyncMultiple } from '../util/ldapUtils';
 import { logger } from '../util/logging';
 
@@ -153,10 +161,91 @@ export interface DtServerResponse {
 }
 
 export const processUserSearch = async (request: DtServerRequest): Promise<DtServerResponse> => {
+  // just start this so it can run
+  const resultsForCount = searchAsyncMultiple(ldapClient, null, 'uid');
+
+  const attributes = request.columns.flatMap((column) => {
+    // weird mapNotNull
+    return column.data ? [column.data] : [];
+  });
+
+  const attribFilter = new PresenceFilter({ attribute: 'uid' });
+
+  // we construct an AND filter to combine all the possible column filters
+  const columnFilters = request.columns.flatMap((column) => {
+    const filters: Filter[] = [];
+    if (column.searchable) {
+      if (column.search && column.search.value !== '') {
+        // word-by-word fuzzy matching
+        column.search.value.split(' ').forEach((searchTerm) => {
+          filters.push(
+            new SubstringFilter({ attribute: column.data, initial: '', any: [searchTerm] }),
+          );
+        });
+      }
+    }
+    return filters;
+  });
+
+  // and an OR filter to pick up any entry with a column matching the global search
+  const globalFilter =
+    request.search && request.search.value !== ''
+      ? new OrFilter({
+          filters: request.columns.flatMap((column) => {
+            const filters: Filter[] = [];
+            if (column.searchable) {
+              if (request.search) {
+                // word-by-word fuzzy matching
+                request.search.value.split(' ').forEach((searchTerm) => {
+                  filters.push(
+                    new SubstringFilter({ attribute: column.data, initial: '', any: [searchTerm] }),
+                  );
+                });
+              }
+            }
+            return filters;
+          }),
+        })
+      : null;
+
+  let filter: string | Filter;
+
+  if (columnFilters.length > 0 && globalFilter) {
+    filter = new AndFilter({ filters: columnFilters.concat(globalFilter, attribFilter) });
+  } else if (columnFilters.length > 0) {
+    filter = new AndFilter({ filters: columnFilters.concat(attribFilter) });
+  } else if (globalFilter) {
+    filter = new AndFilter({ filters: [globalFilter, attribFilter] });
+  } else {
+    filter = attribFilter;
+  }
+
+  const results = await searchAsyncMultiple(ldapClient, filter, attributes);
+
+  results.sort((a, b) => {
+    for (let i = 0; i < request.order.length; i++) {
+      const element = request.order[i];
+      const key = request.columns[element.column].data;
+      const aVal = a[key];
+      const bVal = b[key];
+
+      const result = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
+
+      if (result !== 0) {
+        return element.dir == 'asc' ? result : -result;
+      }
+    }
+  });
+
+  const pagedResults =
+    request.length != -1 ? results.slice(request.start, request.start + request.length) : results;
+
+  logger.debug(`Found ${results.length} results, returning ${pagedResults.length}`);
+
   return {
     draw: request.draw,
-    recordsTotal: 0,
-    recordsFiltered: 0,
-    data: [],
+    recordsTotal: (await resultsForCount).length,
+    recordsFiltered: results.length,
+    data: pagedResults,
   };
 };
