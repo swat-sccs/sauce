@@ -1,1 +1,9 @@
 @import "~bootstrap/scss/bootstrap";
+
+$theme-colors: (
+  "primary": #F46523,
+  "danger": $danger
+);
+$body-bg: #f423d1;
+
+$font-family-base: Raleway, !default;
