@@ -22,6 +22,6 @@ export const doRequestId: RequestHandler = async (_req, res, next) => {
 };
 
 export const logRequest: RequestHandler = async (req, res, next) => {
-  logger.debug(`${req.method} ${req.path}`);
+  logger.debug(`${req.ip} ${req.method} ${req.path}`);
   next();
 };
