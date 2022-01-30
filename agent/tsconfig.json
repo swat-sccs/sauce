@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "lib": ["es2020", "DOM"],
+    "target": "es2020",
+    "rootDir": "./",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "outDir": "./build"
+  }
+}
