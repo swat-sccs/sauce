@@ -5,7 +5,7 @@ html(lang='en')
   head
     include include/head.pug
 
-    title SAUCE
+    title SAUCE Admin: tasks
   body
     +sauce-container('admin', user)
       .row
@@ -17,7 +17,7 @@ html(lang='en')
               li.nav-item(role='presentation')
                 button.nav-link(
                   class={ active: selected },
-                  id=`${id}-tab`,
+                  id=`${id}Tab`,
                   data-bs-toggle='tab',
                   data-bs-target=`#${id}`,
                   type='button',
@@ -88,18 +88,14 @@ html(lang='en')
                     th(scope='col') Name
                     th(scope='col') Email
     //- modal
-    #editAccountModal.modal.fade(
-      tabindex='-1',
-      aria-labelledby='editAccountModalTitle',
-      aria-hidden='true'
-    )
+    #taskModal.modal.fade(tabindex='-1', aria-labelledby='taskModalTitle', aria-hidden='true')
       .modal-dialog 
         .modal-content 
           .modal-header
-            h5#editAccountModal.modal-title Modal Title
+            h5#taskModalTitle.modal-title Modal Title
             button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
           .modal-body 
-            p Operation: #[code#editModalOperation]
+            p Operation: #[code#taskModalOperation]
             h5 Data
             .table-responsive 
               table.table
@@ -107,11 +103,11 @@ html(lang='en')
                   tr 
                     th(scope='col') Key
                     th(scope='col') Value
-                tbody#editModalData
-          form#editForm(action='/admin/', method='post')
+                tbody#taskModalData
+          form#taskForm(action='/admin/', method='post')
             .modal-footer
               button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Close
-              input#editModalId(type='hidden', name='id')
+              input#taskModalId(type='hidden', name='id')
               input#rejectInput(type='hidden', name='reject', value='true')
               button#taskRejectButton.btn.btn-danger(value='true') Reject
               button#taskApproveButton.btn.btn-success(value='false') Approve
@@ -123,4 +119,10 @@ html(lang='en')
     script(type='text/javascript').
       const TASK_DATA_URL = '#{taskDataUrl}';
       const USER_DATA_URL = '#{userDataUrl}';
+    if tab
+      script(type='text/javascript').
+        window.tabToJumpTo = '#{tab}';
+    if taskData
+      script(type='text/javascript').
+        window.taskToJumpTo = JSON.parse('!{JSON.stringify(taskData)}');
     script(type='text/javascript', src='/dist/js/admin.js')

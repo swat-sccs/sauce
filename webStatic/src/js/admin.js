@@ -7,7 +7,7 @@ import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.css';
 
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap; // makes responsive-bs5 not throw errors in the console
-import { Tooltip, Tab } from 'bootstrap';
+import { Tooltip, Tab, Modal } from 'bootstrap';
 import { DateTime as _DateTime } from 'luxon';
 import 'jquery';
 import 'datatables.net';
@@ -33,49 +33,23 @@ function refreshTaskTimestamp() {
 }
 
 (function () {
-  // tab listener to modify URL
-  const hash = location.hash.replace(/^#/, '');
-  if (hash) {
-    const tabEl = document.getElementById(`${hash}`);
-    if (tabEl) {
-      new Tab(document.getElementById(`${hash}`)).show();
-    } else {
-      console.error(`Could not find tab with id ${hash}`);
-      window.location.hash = '';
-    }
-  }
-
-  Array.prototype.slice
-    .call(document.querySelectorAll('#navTab .nav-link'))
-    .forEach(function (item) {
-      item.addEventListener('shown.bs.tab', function (event) {
-        window.location.hash = event.target.id;
-      });
-    });
-
   refreshTooltips();
   refreshTaskTimestamp();
 
   // passing data to modals
-  const acctModal = document.getElementById('editAccountModal');
-  const acctModalBody = document.getElementById('');
+  const taskModal = document.getElementById('taskModal');
 
-  acctModal.addEventListener('show.bs.modal', function (event) {
-    const btn = event.relatedTarget;
-    const taskData = JSON.parse(
-      document.getElementById(btn.getAttribute('data-bs-json-id')).innerHTML,
-    );
-
-    const title = acctModal.querySelector('.modal-title');
+  function renderTaskInModal(taskData) {
+    const title = taskModal.querySelector('.modal-title');
     title.textContent = `${taskData._id} (${taskData.status})`;
 
-    const operation = document.getElementById('editModalOperation');
+    const operation = document.getElementById('taskModalOperation');
     operation.textContent = taskData.operation;
 
-    const editModalIdField = document.getElementById('editModalId');
-    editModalIdField.value = taskData._id;
+    const taskModalIdField = document.getElementById('taskModalId');
+    taskModalIdField.value = taskData._id;
 
-    const modalData = document.getElementById('editModalData');
+    const modalData = document.getElementById('taskModalData');
 
     const dataPairs = [];
     modalData.replaceChildren();
@@ -105,12 +79,13 @@ function refreshTaskTimestamp() {
     approve.style.display = pending ? '' : 'none';
     const retry = document.getElementById('taskRetryButton');
     retry.style.display = failed ? '' : 'none';
-  });
+  }
 
+  // modal button hackiness
   const approve = document.getElementById('taskApproveButton');
   const reject = document.getElementById('taskRejectButton');
   const retry = document.getElementById('taskRetryButton');
-  const form = document.getElementById('editForm');
+  const form = document.getElementById('taskForm');
   const buttonListener = function (event) {
     event.target.innerHTML = document.getElementById('buttonLoader').innerHTML;
     approve.disabled = true;
@@ -125,6 +100,54 @@ function refreshTaskTimestamp() {
   approve.addEventListener('click', buttonListener);
   reject.addEventListener('click', buttonListener);
   retry.addEventListener('click', buttonListener);
+
+  taskModal.addEventListener('show.bs.modal', function (event) {
+    const btn = event.relatedTarget;
+    if (btn) {
+      // we're rendering from clicking a "review task" button
+      const taskData = JSON.parse(
+        document.getElementById(btn.getAttribute('data-bs-json-id')).innerHTML,
+      );
+      document.title = 'SAUCE Admin: task ' + taskData._id;
+      window.history.replaceState({}, '', '/admin/tasks/' + taskData._id);
+
+      renderTaskInModal(taskData);
+    } // otherwise we're coming in from a link and it's already been rendered
+  });
+
+  // make the URL/history go back to task view when we hide
+  taskModal.addEventListener('hidden.bs.modal', function (event) {
+    document.title = 'SAUCE Admin: tasks';
+    window.history.replaceState({}, '', '/admin/tasks');
+  });
+
+  function handleTaskOrTab(task, tab) {
+    if (task) {
+      Modal.getOrCreateInstance(taskModal).show();
+      document.title = 'SAUCE Admin: task ' + task._id;
+      renderTaskInModal(task);
+    } else {
+      Modal.getOrCreateInstance(taskModal).hide();
+      if (tab === 'tasks') {
+        new Tab(document.getElementById('tasksTab')).show();
+      } else if (tab === 'accounts') {
+        new Tab(document.getElementById('accountsTab')).show();
+      }
+    }
+  }
+
+  handleTaskOrTab(window.taskToJumpTo, window.tabToJumpTo);
+
+  // add stuff to history when switching tabs
+  document.getElementById('tasksTab').addEventListener('shown.bs.tab', function (event) {
+    document.title = 'SAUCE Admin: tasks';
+    window.history.replaceState({}, '', '/admin/tasks');
+  });
+
+  document.getElementById('accountsTab').addEventListener('shown.bs.tab', function (event) {
+    document.title = 'SAUCE Admin: accounts';
+    window.history.replaceState({}, '', '/admin/users');
+  });
 })();
 
 $(document).ready(function () {
@@ -163,7 +186,7 @@ $(document).ready(function () {
             class="btn btn-primary btn-sm" 
             type="button" 
             data-bs-toggle="modal" 
-            data-bs-target="#editAccountModal" 
+            data-bs-target="#taskModal" 
             data-bs-json-id="task-json-${taskTableUid}">Review
             </button><script id="task-json-${taskTableUid}" type="text/json">${JSON.stringify(
               row,
@@ -250,7 +273,6 @@ $(document).ready(function () {
   jQuery.ajaxSetup({ cache: true });
 
   const refreshTaskTable = function () {
-    console.log('Reloading table');
     const params = new URLSearchParams();
 
     ['pending', 'executed', 'rejected', 'failed'].forEach((status) => {
@@ -263,8 +285,6 @@ $(document).ready(function () {
     taskTable.ajax.reload();
 
     refreshTaskTimestamp();
-
-    console.log('Reloaded');
   };
 
   // eslint-disable-next-line guard-for-in
