@@ -6,8 +6,8 @@ html(lang='en')
     include include/head.pug
     title SAUCE
   body
-    +sauce-container('index', user, user != null)
+    +sauce-container('index', user)
       if user
         include dashboard
       else
-        include logout-splash
+        include homepage-splash

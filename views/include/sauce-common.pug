@@ -6,18 +6,11 @@ mixin sauce-container(pageId = '', user = null, showNavbar = true, showFooter = 
           -
             const PAGES = [
               {
-                id: 'index',
-                title: 'Home',
-                href: '/',
-                needsAdmin: false,
-                needsUser: false,
-              },
-              {
                 id: 'mailing',
                 title: 'Mailing Lists',
                 href: '/lists',
                 needsAdmin: false,
-                needsUser: false,
+                needsUser: true,
               },
               {
                 id: 'minecraft',
@@ -49,7 +42,7 @@ mixin sauce-container(pageId = '', user = null, showNavbar = true, showFooter = 
               }
             ]
           .container-fluid 
-            span.navbar-brand.mb-0.h1 SAUCE
+            a.navbar-brand.mb-0.h1(href='/') SCCS
             button.navbar-toggler(
               type='button',
               data-bs-toggle='collapse',

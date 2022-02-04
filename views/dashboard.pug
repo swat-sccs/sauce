@@ -1,5 +1,11 @@
-h1 SAUCE Dashboard
-p.text-muted SCCS Account and User Control Engine
-p Hello, #{ user.uid }!
-p
-  a(href='/logout') Sign out
+.row
+  .col-12.col-lg-7
+    h1.display-1 SCCS Dashboard
+  .col-12.col-lg
+    h2.mb-4 News and Updates
+    each post in posts
+      .card.w-100.mb-2.shadow-sm
+        .card-body 
+          h5.card-title= post.data.title
+          h6.card-subtitle.mb-2.text-muted= post.data.date.toLocaleDateString()
+          div!= post.content

@@ -25,3 +25,5 @@ yarn-error.log*
 *.icloud
 
 /fstest
+
+_posts
