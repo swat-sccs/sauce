@@ -17,4 +17,5 @@
         .card-body 
           h5.card-title= post.data.title
           h6.card-subtitle.mb-2.text-muted= post.data.date.toLocaleDateString()
-          div!= post.content
+          //- counteract the margin-bottom applied to <p> elements so the card bottom isn't weirdly long
+          div(style='margin-bottom: -1rem')!= post.content
