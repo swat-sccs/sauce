@@ -5,7 +5,7 @@ import { logger } from './logging';
 export const generateEmail = async (templateName: string, params: any): Promise<string> => {
   logger.debug(`Reading email template ${templateName}`);
   return new Promise((resolve, reject) => {
-    fs.readFile(`emailTemplates/${templateName}`, {}, (err, data) => {
+    fs.readFile(`emailTemplates/${templateName}`, (err, data) => {
       if (err) {
         logger.error('Error reading email template', err);
         reject(err);
