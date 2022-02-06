@@ -1,6 +1,8 @@
 /* eslint-disable require-jsdoc */
 
-import 'bootstrap';
+import * as bootstrap from 'bootstrap';
+
+window.bootstrap = bootstrap;
 
 document.getElementById('changePasswordButton').addEventListener('click', function () {
   const container = document.getElementById('alertContainer');

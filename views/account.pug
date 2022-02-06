@@ -1,6 +1,6 @@
 include include/sauce-common
 
-+sauce-layout('Account info', 'account', user)
++sauce-layout('Account info')(pageId='account', user=user)
   h1.mb-4 Your SCCS Account
   p Welcome, #{ user.uid }.
 

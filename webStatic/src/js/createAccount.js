@@ -1,3 +1,7 @@
+import * as bootstrap from 'bootstrap';
+
+window.bootstrap = bootstrap;
+
 /* eslint-disable require-jsdoc */
 // form validation
 (function () {

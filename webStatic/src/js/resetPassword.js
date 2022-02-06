@@ -1,3 +1,7 @@
+import * as bootstrap from 'bootstrap';
+
+window.bootstrap = bootstrap;
+
 import { zxcvbn, ZxcvbnOptions } from '@zxcvbn-ts/core';
 import zxcvbnCommonPackage from '@zxcvbn-ts/language-common';
 import zxcvbnEnPackage from '@zxcvbn-ts/language-en';

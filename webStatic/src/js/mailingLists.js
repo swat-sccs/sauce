@@ -1,8 +1,6 @@
 import * as bootstrap from 'bootstrap';
 
-if (!window.bootstrap) {
-  window.bootstrap = bootstrap;
-}
+window.bootstrap = bootstrap;
 
 // eslint-disable-next-line require-jsdoc
 function openModal() {

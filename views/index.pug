@@ -6,8 +6,9 @@ html(lang='en')
     include include/head.pug
     title SAUCE
   body
-    +sauce-container('index', user)
+    +sauce-container('index')(pageId='index', user=user)
       if user
         include dashboard
       else
         include homepage-splash
+    script(type='text/javascript', src='/dist/js/bootstrapScripts.js')

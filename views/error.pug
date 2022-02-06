@@ -6,7 +6,7 @@ html(lang='en')
     include include/head.pug
     title= title
   body
-    +sauce-container('', null, showNavbar, showFooter)
+    +sauce-container(hideNavbar=!showNavbar, hideFooter=!showFooter)
       h1.mb-4.display-1= title
       div(style='max-width: 600px')
         case status
