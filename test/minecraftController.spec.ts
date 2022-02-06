@@ -11,7 +11,6 @@ import * as minecraftApi from '../src/integration/minecraftApi';
 import { MinecraftWhitelistModel } from '../src/integration/models';
 import { initMongo } from '../src/integration/mongo';
 
-//
 describe('minecraftController', function () {
   let sandbox: SinonSandbox;
   let expect: Chai.ExpectStatic;
