@@ -10,7 +10,7 @@ interface DocumentOrIndex {
   /**
    * path for hyperlinking; no extensions.
    */
-  hrefPath: string;
+  hrefPath?: string;
   title: string;
   contents?: GrayMatterFile<Buffer>;
   /**
@@ -22,13 +22,21 @@ interface DocumentOrIndex {
 }
 
 const getParents = (docFile: string): DocumentOrIndex[] => {
+  logger.debug(`Getting parents of ${docFile}`);
   const parent = path.dirname(docFile).replace(/\/|\./, '');
-  console.log(parent);
+  logger.debug(`Parent: ${parent}`);
   if (parent) {
-    return [getDocsData(parent, false)].concat(getParents(parent));
+    let parentData = getDocsData(parent, false);
+    if (!parentData) {
+      parentData = {
+        title: path.basename(parent),
+      };
+    }
+
+    return (parentData ? [parentData] : []).concat(getParents(parent));
   } else {
     // no parents
-    return [];
+    return [{ hrefPath: '/docs/', title: 'Docs' }];
   }
 };
 
@@ -38,8 +46,8 @@ export const getDocsData = (docFile: string, recurse = true): DocumentOrIndex =>
 
   logger.debug(`Looking for docs file at ${filePath}`);
   if (fs.existsSync(filePath)) {
-    const fileContents = matter(fs.readFileSync(filePath));
     logger.debug('Found docs file');
+    const fileContents = matter(fs.readFileSync(filePath));
     const fileData: DocumentOrIndex = {
       hrefPath: docFile,
       title: fileContents.data.title || path.basename(docFile),
@@ -52,28 +60,27 @@ export const getDocsData = (docFile: string, recurse = true): DocumentOrIndex =>
 
     return fileData;
   } else {
-    logger.debug(`Looking for index dir at ${dirPath}`);
     if (fs.existsSync(dirPath) && fs.lstatSync(dirPath).isDirectory) {
-      logger.debug('Found index dir');
+      const indexPath = path.join(dirPath, 'index.md');
+      logger.debug(`Looking for ${indexPath}`);
+      if (fs.existsSync(indexPath)) {
+        logger.debug('Found index file');
+        const fileContents = matter(fs.readFileSync(indexPath));
 
-      if (recurse) {
-        return {
+        const fileData: DocumentOrIndex = {
           hrefPath: docFile,
-          title: path.basename(docFile) || 'Index',
-          children: fs
-            .readdirSync(dirPath)
-            .map((filename) => path.basename(filename, '.md'))
-            .map((filename) => getDocsData(path.join(docFile, filename), false)),
-          parents: getParents(docFile),
+          title: fileContents.data.title || path.basename(docFile),
+          contents: fileContents,
         };
-      } else {
-        return {
-          hrefPath: docFile,
-          title: path.basename(docFile) || 'Index',
-        };
+
+        if (recurse) {
+          fileData.parents = getParents(docFile);
+        }
+
+        return fileData;
       }
     } else {
-      logger.warn(`Index dir and file missing for ${dirPath}`);
+      logger.warn(`File and index-file missing for ${dirPath}`);
       return null;
     }
   }

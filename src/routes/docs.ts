@@ -26,8 +26,6 @@ router.get(
       docOrIndex.contents.content = marked(docOrIndex.contents.content);
     }
 
-    logger.debug(docOrIndex);
-
     return res.render('docPage', {
       user: req.user,
       data: docOrIndex,
