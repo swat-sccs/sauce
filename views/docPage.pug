@@ -1,6 +1,6 @@
 include include/sauce-common
 
-+sauce-layout('SCCS Docs: ' + data.title)(pageId='docs', includeBootstrapScripts)
++sauce-layout('SCCS Docs: ' + data.title)(pageId='docs', user=user, includeBootstrapScripts)
   nav(aria-label='breadcrumb')
     ol.breadcrumb
       each page in data.parents.reverse()
