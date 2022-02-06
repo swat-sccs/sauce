@@ -24,7 +24,7 @@ interface DocumentOrIndex {
 const getParents = (docFile: string): DocumentOrIndex[] => {
   logger.debug(`Getting parents of ${docFile}`);
   const parent = path.dirname(docFile).replace(/\/|\./, '');
-  logger.debug(`Parent: ${parent}`);
+
   if (parent) {
     let parentData = getDocsData(parent, false);
     if (!parentData) {
