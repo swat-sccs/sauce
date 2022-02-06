@@ -20,11 +20,12 @@
       | Looking for something a bit more low-level? We can also help with advanced web hosting,
       | databases, or anything else along those lines. Just contact #[a(href='mailto:staff@sccs.swarthmore.edu') staff@sccs.swarthmore.edu].
   .col-12.col-xl
-    h2.mb-4 News and Updates
-    each post in posts
-      .card.w-100.mb-2.shadow-sm
-        .card-body 
-          h5.card-title= post.data.title
-          h6.card-subtitle.mb-2.text-muted= post.data.date.toLocaleDateString()
-          //- counteract the margin-bottom applied to <p> elements so the card bottom isn't weirdly long
-          div(style='margin-bottom: -1rem')!= post.content
+    if posts
+      h2.mb-4 News and Updates
+      each post in posts
+        .card.w-100.mb-2.shadow-sm
+          .card-body 
+            h5.card-title= post.data.title
+            h6.card-subtitle.mb-2.text-muted= post.data.date.toLocaleDateString()
+            //- counteract the margin-bottom applied to <p> elements so the card bottom isn't weirdly long
+            div(style='margin-bottom: -1rem')!= post.content

@@ -1,10 +1,21 @@
 import { existsSync, promises as fsPromises } from 'fs';
-import matter from 'gray-matter';
+import matter, { GrayMatterFile } from 'gray-matter';
 import path from 'path';
 import { logger } from '../../agent/src/api';
 import { marked } from 'marked';
 
-export const getPosts = async () => {
+interface PostFile extends GrayMatterFile<Buffer> {
+  data: {
+    date: Date;
+    title: string;
+  };
+}
+
+const isPostFile = (file: GrayMatterFile<Buffer>): file is PostFile => {
+  return file.data.date && file.data.title;
+};
+
+export const getPosts = async (): Promise<PostFile[] | null> => {
   const postsPath = path.join('./', process.env.POSTS_DIR || '_posts/');
   logger.debug(`Reading posts from ${postsPath}`);
 
@@ -29,13 +40,17 @@ export const getPosts = async () => {
         }),
       )
     )
-      .filter((file) => file.data.date && file.data.title)
+      .filter(isPostFile)
       .sort((a, b) => b.data.date.getTime() - a.data.date.getTime()); // sort in descending order
     logger.debug(`Found ${parsedFiles.length} posts`);
 
-    return parsedFiles;
+    if (parsedFiles.length === 0) {
+      return null;
+    } else {
+      return parsedFiles;
+    }
   } else {
     logger.debug(`Post folder ${postsPath} does not exist`);
-    return [];
+    return null;
   }
 };

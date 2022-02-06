@@ -11,11 +11,12 @@
       a.btn.btn-primary.btn-lg.me-2.mb-4(href='/account/create') Get My SCCS Account
       a.btn.btn-outline-primary.btn-lg.ms-2.mb-4(href='/login') Sign In
   .col-12.col-lg
-    h2.mb-4 News and Updates
-    each post in posts
-      .card.w-100.mb-2.shadow-sm
-        .card-body 
-          h5.card-title= post.data.title
-          h6.card-subtitle.mb-2.text-muted= post.data.date.toLocaleDateString()
-          //- counteract the margin-bottom applied to <p> elements so the card bottom isn't weirdly long
-          div(style='margin-bottom: -1rem')!= post.content
+    if posts
+      h2.mb-4 News and Updates
+      each post in posts
+        .card.w-100.mb-2.shadow-sm
+          .card-body 
+            h5.card-title= post.data.title
+            h6.card-subtitle.mb-2.text-muted= post.data.date.toLocaleDateString()
+            //- counteract the margin-bottom applied to <p> elements so the card bottom isn't weirdly long
+            div(style='margin-bottom: -1rem')!= post.content
