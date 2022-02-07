@@ -5,6 +5,7 @@ import { Logger } from 'tslog';
 import express from 'express';
 import { Strategy as BearerStrategy } from 'passport-http-bearer';
 import { apiRouter } from './api';
+import argon2 from 'argon2';
 
 export const logger: Logger = new Logger();
 
@@ -14,8 +15,8 @@ app.use(express.json());
 
 passport.use(
   'bearer',
-  new BearerStrategy(function (token, done) {
-    if (token === process.env.SECRET) {
+  new BearerStrategy(async function (token, done) {
+    if (await argon2.verify(process.env.SECRET_HASH, token)) {
       done(null, true);
     } else {
       done(null, false);
