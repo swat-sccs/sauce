@@ -33,4 +33,4 @@ app.use((err, req, res, next) => {
   res.status(500).send(err.toString());
 });
 
-app.listen(3000, '');
+app.listen(process.env.PORT || 3001);
