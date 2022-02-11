@@ -1,70 +1,15 @@
-import { RequestHandler, Router } from 'express';
 import * as jf from 'joiful';
-import { Logger } from 'tslog';
-import { execFileSync } from 'child_process';
 import passport from 'passport';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import path from 'path';
-
-export const logger: Logger = new Logger();
+import { catchErrors, LocalUser, logger } from './util';
+import { Router } from 'express';
 
 const router = Router(); // eslint-disable-line new-cap
 
-export const apiRouter = router;
+export const forwardingRouter = router;
 
-export const catchErrors = (action: RequestHandler): RequestHandler => {
-  return async (req, res, next): Promise<any> => {
-    try {
-      return await action(req, res, next);
-    } catch (err) {
-      next(err);
-    }
-  };
-};
-
-const USERNAME_REGEX = /^[a-z][-a-z0-9]*$/;
-const CLASSYEAR_REGEX = /^(\d\d|faculty|staff)$/;
-
-/**
- */
-class LocalUser {
-  @jf.string().regex(USERNAME_REGEX, 'POSIX username').required()
-  username: string;
-
-  @jf.string().regex(CLASSYEAR_REGEX, 'classYear').required()
-  classYear: string;
-}
-
-apiRouter.post(
-  '/newUser/:classYear/:username',
-  passport.authenticate('bearer', { session: false }),
-  catchErrors(async (req, res, next) => {
-    const { error, value } = jf.validateAsClass(req.params, LocalUser);
-    if (error) {
-      logger.warn(`newUser validation error: ${error.message}`);
-      return res.status(400).send(error.message);
-    }
-
-    const { username, classYear } = value;
-
-    logger.debug(`Creating user ${username} (${classYear})`);
-    try {
-      const stdout = execFileSync('./createNewUser.sh', [username, classYear]);
-      if (stdout) {
-        logger.info(`createNewUser stdout: ${stdout.toString().trimEnd()}`);
-      }
-
-      logger.info(`Created user ${username}`);
-
-      res.sendStatus(201);
-    } catch (e) {
-      logger.info(`stdout: ${e.stdout.toString().trimEnd()}`);
-      throw new Error(`Error creating user: ${e.stderr.toString().trimEnd()}`);
-    }
-  }),
-);
-
-apiRouter.get(
+forwardingRouter.get(
   '/forwardFile/:classYear/:username',
   passport.authenticate('bearer', { session: false }),
   catchErrors((req, res, next) => {
@@ -84,7 +29,7 @@ apiRouter.get(
   }),
 );
 
-apiRouter.post(
+forwardingRouter.post(
   '/forwardFile/:classYear/:username',
   passport.authenticate('bearer', { session: false }),
   catchErrors((req, res, next) => {

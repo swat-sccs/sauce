@@ -1,13 +1,12 @@
 import 'dotenv/config';
 import 'reflect-metadata'; // needed for joiful to work
 import passport from 'passport';
-import { Logger } from 'tslog';
 import express from 'express';
 import { Strategy as BearerStrategy } from 'passport-http-bearer';
-import { apiRouter } from './api';
+import { userRouter } from './user';
 import argon2 from 'argon2';
-
-export const logger: Logger = new Logger();
+import { logger } from './util';
+import { forwardingRouter } from './forwardFile';
 
 const app = express();
 
@@ -27,7 +26,8 @@ passport.use(
 
 app.use(passport.initialize());
 
-app.use(apiRouter);
+app.use(userRouter);
+app.use(forwardingRouter);
 
 app.use((err, req, res, next) => {
   logger.error(err);
