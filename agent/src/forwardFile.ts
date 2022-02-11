@@ -19,7 +19,7 @@ forwardingRouter.get(
       return res.status(400).send(error.message);
     }
 
-    const file = `home/${value.classYear}/${value.username}/.forward`;
+    const file = `/home/${value.classYear}/${value.username}/.forward`;
 
     if (existsSync(file)) {
       res.send(readFileSync(file).toString());
@@ -44,7 +44,7 @@ forwardingRouter.post(
       return res.status(400).send('Body must have type text/plain');
     }
 
-    const file = `home/${value.classYear}/${value.username}/.forward`;
+    const file = `/home/${value.classYear}/${value.username}/.forward`;
 
     if (existsSync(path.dirname(file))) {
       logger.info(`Replacing contents of forward file at ${file}`);
