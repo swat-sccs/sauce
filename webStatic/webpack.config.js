@@ -17,7 +17,7 @@ module.exports = {
   resolve: {
     modules: [path.resolve('./node_modules')],
   },
-  mode: 'development',
+  mode: 'production',
   output: {
     path: `${__dirname}/dist/js/`,
     filename: '[name].js',
