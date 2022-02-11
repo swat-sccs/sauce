@@ -30,6 +30,11 @@ Installation:
 
 ```bash
 npm install
+# necessary for development; if you have prebuilt web static files (e.g. you are installing inside a
+# Docker container) you don't need this
+npm run install:webStatic
+# only necessary if you are using the agent
+npm run install:agent
 ```
 
 Build static web files and compile TypeScript:

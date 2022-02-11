@@ -5,7 +5,6 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon --exec npx ts-node --files src/index.ts",
-    "postinstall": "npm run install:webStatic && npm run install:agent",
     "install:webStatic": "cd webStatic && npm install",
     "install:agent": "cd agent && npm install",
     "build": "npm run build:webStatic && npm run packageWebStatic && cd src && npx tsc",
