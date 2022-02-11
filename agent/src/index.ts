@@ -12,6 +12,7 @@ export const logger: Logger = new Logger();
 const app = express();
 
 app.use(express.json());
+app.use(express.raw({ type: 'text/plain' }));
 
 passport.use(
   'bearer',
@@ -34,4 +35,6 @@ app.use((err, req, res, next) => {
   res.status(500).send(err.toString());
 });
 
-app.listen(process.env.PORT || 3001);
+const port = process.env.PORT || 3001;
+logger.info(`Listening on port ${port}`);
+app.listen(port);
