@@ -15,14 +15,14 @@ const doWhitelist = async (
   res: Response<any, Record<string, any>>,
 ) => {
   if (!validate(mcUuid)) {
-    logger.warn('POST whitelist: invalid uuid');
+    logger.warn('Invalid minecraft uuid');
     res.sendStatus(400);
     return;
   }
 
   const data = await getMinecraftUser(mcUuid);
 
-  logger.info(`Adding ${data.username} to whitelist`);
+  logger.info(`Starting: ${op} account ${data.username} to/from whitelist`);
   if (data) {
     try {
       const stdout = execFileSync(process.env.MINECRAFT_SERVER_EXEC_PATH, [
@@ -35,15 +35,15 @@ const doWhitelist = async (
         logger.info(`server_exec stdout: ${stdout.toString().trimEnd()}`);
       }
 
-      logger.info(`Added account ${data.username} to whitelist`);
+      logger.info(`Finished: ${op} account ${data.username} to/from whitelist`);
 
       res.sendStatus(200);
     } catch (e) {
       logger.info(`stdout: ${e.stdout?.toString()?.trimEnd()}`);
-      throw new Error(`Error adding account to whitelist: ${e.stderr?.toString()?.trimEnd()}`);
+      throw new Error(`Error: ${op} account to/from whitelist: ${e.stderr?.toString()?.trimEnd()}`);
     }
   } else {
-    logger.warn('POST whitelist: Minecraft account does not exist');
+    logger.warn('Minecraft account does not exist');
     res.sendStatus(400);
   }
 };
