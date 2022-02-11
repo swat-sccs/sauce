@@ -38,7 +38,7 @@
   },
   "overrides": [
     {
-      "files": "views/**/*.js",
+      "files": "webStatic/src/**",
       "env": { "node": false, "browser": true }
     }
   ]

@@ -1,42 +1,30 @@
 include include/sauce-common
 
-doctype
-html(lang='en')
-  head
-    include include/head.pug
-    title SAUCE Account Recovery
-  body
-    +sauce-container('', null, false)
-      .row(style='max-width: 768px')
-        .col-md-8
-          if done
-            h1.mb-4 Check your email
-            p 
-              | If that username or email matched an account in our database, we've sent instructions to
-              | the associated email address.
-            p
-              a(href='/login') Back to login
-          else
-            h1.mb-4 Account Recovery
-            p
-              | Enter your username or email address. If it matches an account on file, you'll receive
-              | an email with your username and a link to reset your password. Or, you can go back to
-              | the #[a(href='/login') login page].
-            form#forgotForm.form-forgot.needs-validation(method='post', novalidate)
-              .form-group.mb-3
-                .form-floating
-                  input#idInput.form-control(
-                    type='text',
-                    name='id',
-                    placeholder='Username or email',
-                    pattern=inputRegex
-                  )
-                  label(for='idInput') Username or email
-                  .invalid-feedback
-                    p Please provide a valid username or email address.
-              button.btn.btn-large.btn-primary.mb-3(type='submit') Submit
-            script(type='text/javascript')
-              include js/forgot.js
-        .col
-
-    include include/body-scripts.pug
++sauce-layout('SAUCE account recovery')(hideNavbar)
+  if done
+    h1.mb-4 Check your email
+    p 
+      | If that username or email matched an account in our database, we've sent instructions to
+      | the associated email address.
+    p
+      a(href='/login') Back to sign-in
+  else
+    h1.mb-4 Account Recovery
+    p
+      | Enter your username or email address. If it matches an account on file, you'll receive
+      | an email with your username and a link to reset your password. Or, you can go back to
+      | the #[a(href='/login') sign-in page].
+    form#forgotForm.form-forgot.needs-validation(method='post', novalidate)
+      .form-group.mb-3
+        .form-floating
+          input#idInput.form-control(
+            type='text',
+            name='id',
+            placeholder='Username or email',
+            pattern=inputRegex
+          )
+          label(for='idInput') Username or email
+          .invalid-feedback
+            p Please provide a valid username or email address.
+      button.btn.btn-large.btn-primary.mb-3(type='submit') Submit
+    script(type='text/javascript', src='/dist/js/forgot.js')

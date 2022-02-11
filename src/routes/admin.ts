@@ -1,157 +1,135 @@
-import { Handler, Router } from 'express';
+import { Router } from 'express';
 import * as jf from 'joiful';
-import { isAdmin, isLoggedIn } from '../util/authUtils';
-import { ldapClient } from '../integration/ldap';
-import { searchAsync } from '../util/ldapUtils';
+import { URLSearchParams } from 'url';
+import * as controller from '../controllers/adminController';
+import * as dtUserSearchController from '../controllers/dtUserSearchController';
+import { HttpException } from '../error/httpException';
+import { catchErrors } from '../util/asyncCatch';
+import { isAdmin } from '../util/authUtils';
 import { logger } from '../util/logging';
-import { PendingOperationModel } from '../integration/models';
-import timeAgo from 'node-time-ago';
-import { functions } from '../functions/taskFunctionMap';
-
-/**
- */
-class AdminPageReq {
-  @jf
-    .number()
-    .not((joi) => joi.negative())
-    .default(0)
-  page: number;
-
-  @jf.number().positive().max(100).default(10)
-  perPage: number;
-
-  @jf
-    .array({ elementClass: String })
-    .single()
-    .items((joi) => joi.valid('pending', 'executed', 'rejected', 'failed'))
-    .default('pending')
-  status: string[];
-
-  // used to display status when page is re-rendered after task execution
-
-  @jf.string().valid('executed', 'failed', 'rejected').optional()
-  opStatus?: 'executed' | 'failed' | 'rejected';
-
-  @jf.string().guid().optional()
-  opTask?: string;
-}
-/**
- */
-class AdminModifyTaskReq {
-  @jf.string().guid({ version: 'uuidv4' }).required()
-  id: string;
-
-  @jf.boolean().default(false)
-  reject: boolean; // if true, reject, otherwise, execute
-
-  /**
-   * Query for the originating admin page. Used to preserve e.g. search
-   * parameters when redirecting.
-   */
-  @jf.string().default('')
-  query: string;
-}
+import { groupParamsByKey } from '../util/paramUtils';
 
 const router = Router(); // eslint-disable-line new-cap
 
-router.get('/', isAdmin, async (req: any, res, next) => {
-  try {
-    const { error, value } = jf.validateAsClass(req.query, AdminPageReq);
-    if (error) {
-      logger.warn(`AdminPageReq validation error: ${error.message}`);
-      return res.status(400).send(`Invalid request: ${error.message}`);
-    }
-
-    logger.debug(`Admin search query: ${JSON.stringify(req.query)}`);
-    const results = await PendingOperationModel.find()
-      .in('status', value.status)
-      .skip(value.perPage * value.page)
-      .limit(value.perPage)
-      .sort('-createdTimestamp')
-      .exec();
-    const numResults = await PendingOperationModel.count().in('status', value.status).exec();
-    const numPages = Math.ceil(numResults / value.perPage);
-    logger.debug(`Returning ${results.length} of ${numResults} results`);
+router.get(
+  '/',
+  isAdmin,
+  catchErrors((req: any, res, next) => {
     res.render('admin', {
       user: req.user,
-      results: results,
-      request: value,
-      // This would probably work fine if we provided the value instead, but
-      // providing the query lets us not supply params in links on the
-      // page (e.g. pagination) when they didn't need to be supplied (because
-      // they were default values).
-      query: req.query,
-      numPages: numPages,
-      timeAgo: timeAgo,
+      taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getTasks`,
+      userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getUsers`,
     });
-  } catch (err) {
-    next(err);
-  }
-});
+  }),
+);
 
-router.post('/modifyTask', isAdmin, async (req: any, res, next) => {
-  try {
-    const { error, value } = jf.validateAsClass(req.body, AdminModifyTaskReq);
+router.get(
+  '/tasks',
+  isAdmin,
+  catchErrors((req: any, res, next) => {
+    res.render('admin', {
+      user: req.user,
+      taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getTasks`,
+      userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getUsers`,
+      tab: 'tasksTab',
+    });
+  }),
+);
+
+router.get(
+  '/users',
+  isAdmin,
+  catchErrors((req: any, res, next) => {
+    res.render('admin', {
+      user: req.user,
+      taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getTasks`,
+      userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getUsers`,
+      tab: 'usersTab',
+    });
+  }),
+);
+
+router.post(
+  '/',
+  isAdmin,
+  catchErrors(async (req: any, res, next) => {
+    const { error, value } = jf.validateAsClass(req.body, controller.AdminModifyTaskReq);
 
     if (error) {
-      logger.warn(`AdminModifyTaskReq validation error: ${error.message}`);
-      return res.status(400).send(`Invalid request: ${error.message}`);
+      throw new HttpException(400, { message: `Invalid request: ${error.message}` });
     }
 
-    logger.debug(`${value.reject ? 'Rejecting' : 'Accepting'} task ${value.id}`);
+    const params = groupParamsByKey(new URLSearchParams(value.query));
+    const { error: pageErr, value: pageReq } = jf.validateAsClass(
+      params,
+      controller.AdminSearchReq,
+    );
 
-    const task = await PendingOperationModel.findById(value.id).exec();
-
-    if (!task) {
-      logger.warn(`Task ${value.id} not found`);
-      return res.status(404).send(`Task ${value.id} not found`);
+    if (pageErr) {
+      throw new HttpException(400, { message: `Invalid value for query: ${pageErr.message}` });
     }
 
-    if (task.status === 'executed' || task.status === 'rejected') {
-      logger.warn(`Task ${value.id} is ${task.status} and cannot be modified`);
-      return res.status(400).send(`Task ${value.id} is ${task.status} and cannot be modified`);
+    const status = await controller.modifyTask(value);
+
+    res.render('admin', {
+      user: req.user,
+      taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getTasks`,
+      userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getUsers`,
+      query: pageReq,
+      opTask: value.id,
+      opStatus: status,
+      tab: 'tasksTab',
+    });
+  }),
+);
+
+router.get(
+  '/getTasks',
+  isAdmin,
+  catchErrors(async (req, res, next) => {
+    const { error, value } = jf.validateAsClass(req.query, controller.AdminSearchReq);
+    if (error) {
+      // this is an API endpoint so no fancy page for you
+      logger.warn(`Bad tasks API request: ${error.message}`);
+      return res.status(400).send(error.message);
     }
 
-    const params = new URLSearchParams(value.query);
-    params.set('opTask', value.id);
+    return res.json({
+      data: await controller.searchTasks(value as unknown as controller.AdminSearchReq),
+    });
+  }),
+);
 
-    if (value.reject) {
-      logger.info(`Rejecting ${task.operation} task ${value.id}`);
-      task.status = 'rejected';
-      task.actionTimestamp = new Date();
-      await task.save();
+router.get(
+  '/tasks/:taskId',
+  isAdmin,
+  catchErrors(async (req: any, res, next) => {
+    res.render('admin', {
+      user: req.user,
+      taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getTasks`,
+      userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getUsers`,
+      taskData: await controller.getTask(req.params.taskId),
+    });
+  }),
+);
 
-      params.set('opStatus', 'rejected');
-      return res.redirect(`/admin?${params.toString()}`);
-    } else {
-      logger.debug(`Executing ${task.operation} task ${value.id}`);
-      try {
-        functions[task.operation](task.data);
-      } catch (err) {
-        logger.error(`Execution of ${task.operation} task ${value.id} failed`, err);
-        task.actionTimestamp = new Date();
-        task.data['error'] = err.toString();
-        task.markModified('data');
-        task.status = 'failed';
-        await task.save();
-        logger.debug('Saved failure record to database');
-
-        params.set('opStatus', 'failed');
-        return res.redirect(`/admin?${params.toString()}`);
-      }
-
-      task.actionTimestamp = new Date();
-      task.status = 'executed';
-
-      await task.save();
-      params.set('opStatus', 'executed');
-      logger.info(`Successfully executed ${task.operation} task ${value.id}`);
-
-      return res.redirect(`/admin?${params.toString()}`);
+router.get(
+  '/getUsers',
+  isAdmin,
+  catchErrors(async (req, res, next) => {
+    const { error, value } = jf.validateAsClass(req.query, dtUserSearchController.DtServerRequest);
+    if (error) {
+      // this is an API endpoint so no fancy page for you
+      logger.warn(`Bad users API request: ${error.message}`);
+      return res.status(400).json({ message: error.message });
     }
-  } catch (err) {
-    next(err);
-  }
-});
+
+    return res.json(
+      await dtUserSearchController.processUserSearch(
+        value as unknown as dtUserSearchController.DtServerRequest,
+      ),
+    );
+  }),
+);
 
 export const adminRouter = router;

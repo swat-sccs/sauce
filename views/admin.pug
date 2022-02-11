@@ -4,157 +4,98 @@ doctype
 html(lang='en')
   head
     include include/head.pug
-    title SAUCE
+
+    title SAUCE Admin: tasks
   body
-    +sauce-container('admin', user)
+    +sauce-container(pageId='admin', user=user)
       .row
         .col-lg-10
           h1 SAUCE Admin
           p.text-muted SCCS Account and User Control Engine
-          //- display alert for completed task
-          if request.opTask && request.opStatus
-            .alert.alert-dismissible.fade.show(
-              class={
-                'alert-success': request.opStatus === 'executed',
-                'alert-danger': request.opStatus === 'rejected',
-                'alert-warning': request.opStatus === 'failed',
-              },
-              role='alert'
-            )
-              - const taskTruncated = request.opTask.substring(0, 6) + '...';
-              if request.opStatus === 'executed'
-                div Task #[code= taskTruncated] executed.
-              else if request.opStatus === 'rejected'
-                div Task #[code= taskTruncated] rejected.
-              else if request.opStatus === 'failed'
-                div Task #[code= taskTruncated] failed! Check the task data and server logs for error details.
-              button.btn-close(type='button', data-bs-dismiss='alert', aria-label='Close')
-          form#filterForm(aria-label='Task status filter')
-            each status in ['pending', 'executed', 'rejected', 'failed']
-              .form-check.form-check-inline
-                input.form-check-input(
-                  id=`#${status}Check`,
-                  type='checkbox',
-                  name='status',
-                  value=status,
-                  checked=request.status.includes(status)
-                )
-                label.form-check-label(for=`${status}Check`)= status.charAt(0).toUpperCase() + status.slice(1)
-            if query.page
-              input(type='hidden', name='page', value=query.page)
-            if query.perPage
-              input(type='hidden', name='perPage', value=query.perPage)
-            button.btn.btn-sm.btn-primary(type='submit') Apply
-          table.table 
-            thead
-              tr 
-                th.w-10(scope='col') ID
-                th.w-10(scope='col') Operation
-                th.w-25(scope='col') Created
-                th.w-25(scope='col') Status
-                th.w-10(scope='col')
-                //- th(scope='col') Data
-            tbody
-              if results.length == 0
-                tr
-                  td(colspan=5)
-                    p.mb-0.text-center.fst-italic No tasks for this query
-              each task in results
-                tr(
+          ul#navTab.nav.nav-tabs(role='tablist')
+            mixin navTab(id, name, selected = false)
+              li.nav-item(role='presentation')
+                button.nav-link(
+                  class={ active: selected },
+                  id=`${id}Tab`,
+                  data-bs-toggle='tab',
+                  data-bs-target=`#${id}`,
+                  type='button',
+                  role='tab',
+                  aria-controls=id,
+                  aria-selected=selected
+                )= name
+            +navTab('tasks', 'Tasks', true)
+            +navTab('accounts', 'Accounts')
+          #tabContent.tab-content
+            mixin tabPane(id, selected = false)
+              .tab-pane.fade.border.border-top-0.rounded-bottom.p-3(
+                class={ show: selected, active: selected },
+                id=id,
+                role='tabpanel',
+                aria-labelledby=`${id}-tab`
+              )
+                block
+            +tabPane('tasks', true)
+              //- display alert for completed task
+              if opTask && opStatus
+                .alert.alert-dismissible.fade.show(
                   class={
-                    'table-success': task.status === 'executed',
-                    'table-danger': task.status === 'rejected',
-                    'table-warning': task.status === 'failed',
-                    'table-info': task.status === 'pending',
-                  }
-                ) 
-                  th(scope='row')
-                    code(data-bs-toggle='tooltip', data-bs-placement='left', title=task._id)= task._id.substring(0, 6) + '...'
-                  td= task.operation
-                  td
-                    //- TODO add timezones to these
-                    span(
-                      data-bs-toggle='tooltip',
-                      data-bs-placement='top',
-                      title=task.createdTimestamp.toLocaleString()
-                    )= timeAgo(task.createdTimestamp)
-                  td
-                    if task.actionTimestamp
-                      span(
-                        data-bs-toggle='tooltip',
-                        data-bs-placement='top',
-                        title=task.actionTimestamp.toLocaleString()
-                      )= `${task.status} ${timeAgo(task.actionTimestamp)}`
-                    else
-                      span= task.status
-                  td
-                    button.btn.btn-primary.btn-sm(
-                      type='button',
-                      data-bs-toggle='modal',
-                      data-bs-target='#editAccountModal',
-                      data-bs-task-json=JSON.stringify(task)
-                    ) Review
-                  //- td
-                  //-   code= JSON.stringify(task.data)
-          nav(aria-label='Results page navigation') 
-            -
-              function constructQuery(page) {
-                const params = new URLSearchParams();
-                for (const [key, value] of Object.entries(query)) {
-                  if (Array.isArray(value)) {
-                    for (item of value) params.append(key, item);
-                  } else {
-                    params.append(key, value);
-                  }
-                }
-                // remove any lingering task-status alert
-                params.delete('opTask')
-                params.delete('opStatus')
-
-                params.set('page', page)
-                return '?' + params.toString();
-              }
-            ul.pagination
-              - var i = 0;
-              - const prevDisabled = request.page === 0;
-              li.page-item(class={ disabled: prevDisabled })
-                a.page-link(
-                  href=constructQuery(request.page - 1),
-                  aria-disabled=prevDisabled,
-                  tabindex=prevDisabled ? '-1' : ''
-                ) Previous
-              while i < numPages
-                - i++;
-                li.page-item(
-                  class={ active: i === request.page + 1 },
-                  aria-current=i === request.page + 1 ? 'page' : 'false'
+                    'alert-success': opStatus === 'executed',
+                    'alert-danger': opStatus === 'rejected',
+                    'alert-warning': opStatus === 'failed',
+                  },
+                  role='alert'
                 )
-                  a.page-link(href=constructQuery(i - 1))= i
-              - const nextDisabled = request.page + 1 >= numPages;
-              li.page-item(class={ disabled: nextDisabled })
-                a.page-link(
-                  href=constructQuery(request.page + 1),
-                  aria-disabled=nextDisabled,
-                  tabindex=nextDisabled ? '-1' : ''
-                ) Next
-          //- TODO display timezone somewhere
-          p.text-muted Last updated: #{ new Date().toLocaleString() }
-          p
-            a(href='/logout') Log out
-        .col
+                  - const taskTruncated = opTask.substring(0, 6) + '...';
+                  if opStatus === 'executed'
+                    div Task #[code= taskTruncated] executed.
+                  else if opStatus === 'rejected'
+                    div Task #[code= taskTruncated] rejected.
+                  else if opStatus === 'failed'
+                    div Task #[code= taskTruncated] failed! Check the task data and server logs for error details.
+                  button.btn-close(type='button', data-bs-dismiss='alert', aria-label='Close')
+              .mb-2
+                each status in ['pending', 'executed', 'rejected', 'failed']
+                  .form-check.form-check-inline
+                    - const checked = (!query && status === 'pending') || (query && (typeof query.status === 'string' ? query.status === status : status in query.status));
+                    input.form-check-input(
+                      id=`${status}Check`,
+                      type='checkbox',
+                      name='status',
+                      value=status,
+                      checked=checked
+                    )
+                    label.form-check-label(for=`${status}Check`)= status.charAt(0).toUpperCase() + status.slice(1)
+              table#taskTable.table(width='100%', style='white-space: nowrap')
+                thead
+                  tr 
+                    th(scope='col')
+                    th(scope='col')
+                    th(scope='col') Operation
+                    th(scope='col') Created
+                    th(scope='col') Status
+                    th(scope='col') ID
+                    th.none(scope='col') Data
+              //- will be updated with the javascript
+              p#lastUpdated.text-muted.mb-0
+              .col
+            +tabPane('accounts')
+              table#userTable.table(width='100%', style='white-space: nowrap')
+                thead
+                  tr 
+                    th(scope='col')
+                    th(scope='col') Name
+                    th(scope='col') Email
     //- modal
-    #editAccountModal.modal.fade(
-      tabindex='-1',
-      aria-labelledby='editAccountModalTitle',
-      aria-hidden='true'
-    )
+    #taskModal.modal.fade(tabindex='-1', aria-labelledby='taskModalTitle', aria-hidden='true')
       .modal-dialog 
         .modal-content 
           .modal-header
-            h5#editAccountModal.modal-title Modal Title
+            h5#taskModalTitle.modal-title Modal Title
             button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
           .modal-body 
-            p Operation: #[code#editModalOperation]
+            p Operation: #[code#taskModalOperation]
             h5 Data
             .table-responsive 
               table.table
@@ -162,28 +103,26 @@ html(lang='en')
                   tr 
                     th(scope='col') Key
                     th(scope='col') Value
-                tbody#editModalData
-          form(action='/admin/modifyTask', method='post')
+                tbody#taskModalData
+          form#taskForm(action='/admin/', method='post')
             .modal-footer
               button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Close
-              -
-                function constructSubmitQuery() {
-                  const params = new URLSearchParams();
-                  for (const [key, value] of Object.entries(query)) {
-                    if (Array.isArray(value)) {
-                      for (item of value) params.append(key, item);
-                    } else {
-                      params.append(key, value);
-                    }
-                  }
-                  return '?' + params.toString();
-                }
-              input#editModalId(type='hidden', name='id')
-              input(type='hidden', name='query', value=constructSubmitQuery())
-              button#taskRejectButton.btn.btn-danger(type='submit', name='reject', value='true') Reject
-              button#taskApproveButton.btn.btn-success(type='submit', name='reject', value='false') Approve
-              button#taskRetryButton.btn.btn-success(type='submit', name='reject', value='false') Retry
-    include include/body-scripts.pug
-    //- Bootstrap tooltips, see https://getbootstrap.com/docs/5.0/components/tooltips/#example-enable-tooltips-everywhere 
-    script(type='text/javascript')
-      include js/admin.js
+              input#taskModalId(type='hidden', name='id')
+              input#rejectInput(type='hidden', name='reject', value='true')
+              button#taskRejectButton.btn.btn-danger(value='true') Reject
+              button#taskApproveButton.btn.btn-success(value='false') Approve
+              button#taskRetryButton.btn.btn-success(value='false') Retry
+              script#buttonLoader(type='text/html')
+                span.spinner-border.spinner-border-sm(role='status', aria-hidden='true')
+                | &nbsp;Processing...
+    //- defined here so I can access the rendery variables.
+    script(type='text/javascript').
+      const TASK_DATA_URL = '#{taskDataUrl}';
+      const USER_DATA_URL = '#{userDataUrl}';
+    if tab
+      script(type='text/javascript').
+        window.tabToJumpTo = '#{tab}';
+    if taskData
+      script(type='text/javascript').
+        window.taskToJumpTo = JSON.parse('!{JSON.stringify(taskData)}');
+    script(type='text/javascript', src='/dist/js/admin.js')

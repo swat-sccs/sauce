@@ -1,22 +1,22 @@
 import mongoose from 'mongoose';
 
-interface PendingOperation {
+export interface Task {
   _id: string;
-  operation: 'createAccount';
+  operation: 'createAccount' | 'createMailingList';
   createdTimestamp: Date;
   actionTimestamp?: Date;
   status: 'pending' | 'executed' | 'rejected' | 'failed';
   data: any;
 }
 
-const pendingOperationSchema = new mongoose.Schema<PendingOperation>({
+const taskSchema = new mongoose.Schema<Task>({
   _id: {
     type: String,
     required: true,
   },
   operation: {
     type: String,
-    enum: ['createAccount'],
+    enum: ['createAccount', 'createMailingList'],
     required: true,
   },
   createdTimestamp: {
@@ -41,20 +41,18 @@ const pendingOperationSchema = new mongoose.Schema<PendingOperation>({
   },
 });
 
-export const PendingOperationModel = mongoose.model<PendingOperation>(
-  'PendingOperation',
-  pendingOperationSchema,
-);
+export const TaskModel = mongoose.model<Task>('Task', taskSchema);
 
-interface PasswordResetRequest {
+export interface PasswordResetRequest {
   // password reset requests generate two keys: the ID, which is stored plain, and the key, which is
-  // hashed with bcrypt before being stored. Both are provided to the user and they make a request;
+  // hashed with argon2 before being stored. Both are provided to the user and they make a request;
   // then we look up the request for the ID and compare hashed keys, basically exactly like a normal
   // username/password login flow.
   _id: string;
   key: string;
   user: string;
   timestamp: Date;
+  suppressEmail?: boolean;
 }
 
 const passwordResetRequestSchema = new mongoose.Schema<PasswordResetRequest>({
@@ -73,11 +71,37 @@ const passwordResetRequestSchema = new mongoose.Schema<PasswordResetRequest>({
   },
   timestamp: {
     type: Date,
-    expires: 3600,
+    expires: 0,
+  },
+  suppressEmail: {
+    type: Boolean,
+    required: false,
   },
 });
 
 export const PasswordResetRequestModel = mongoose.model<PasswordResetRequest>(
   'PasswordReset',
   passwordResetRequestSchema,
+);
+
+export interface MinecraftWhitelist {
+  _id: string;
+  mcUuid: string;
+}
+
+// TODO probably better if this used account UUIDs in some way?
+const minecraftWhitelistSchema = new mongoose.Schema<MinecraftWhitelist>({
+  _id: {
+    type: String,
+    required: true,
+  },
+  mcUuid: {
+    type: String,
+    required: true,
+  },
+});
+
+export const MinecraftWhitelistModel = mongoose.model<MinecraftWhitelist>(
+  'MinecraftWhitelist',
+  minecraftWhitelistSchema,
 );

@@ -1,3 +1,11 @@
+import * as bootstrap from 'bootstrap';
+
+window.bootstrap = bootstrap;
+
+import { zxcvbn, ZxcvbnOptions } from '@zxcvbn-ts/core';
+import zxcvbnCommonPackage from '@zxcvbn-ts/language-common';
+import zxcvbnEnPackage from '@zxcvbn-ts/language-en';
+
 /* eslint-disable no-undef */
 (function () {
   'use strict';
@@ -28,15 +36,15 @@
   const strengthCard = document.getElementById('strengthCard');
 
   const options = {
-    translations: zxcvbnts['language-en'].translations,
-    graphs: zxcvbnts['language-common'].adjacencyGraphs,
+    translations: zxcvbnEnPackage.translations,
+    graphs: zxcvbnCommonPackage.adjacencyGraphs,
     dictionary: {
-      ...zxcvbnts['language-common'].dictionary,
-      ...zxcvbnts['language-en'].dictionary,
+      ...zxcvbnCommonPackage.dictionary,
+      ...zxcvbnEnPackage.dictionary,
       userInputs: [window.username, 'sccs', 'swarthmore', 'correcthorsebatterystaple'],
     },
   };
-  zxcvbnts.core.ZxcvbnOptions.setOptions(options);
+  ZxcvbnOptions.setOptions(options);
 
   const strengthBar = document.getElementById('strengthBar');
   const strengthText = document.getElementById('strengthText');
@@ -45,7 +53,7 @@
   const strengthClasses = ['bg-danger', 'bg-warning', 'bg-info', 'bg-primary', 'bg-success'];
 
   passwordInput.addEventListener('input', function (event) {
-    const results = zxcvbnts.core.zxcvbn(event.target.value);
+    const results = zxcvbn(event.target.value);
     console.log(results);
     const progress = results.score * 25;
     const crackTime = results.crackTimesDisplay.onlineNoThrottling10PerSecond;

@@ -1,8 +1,8 @@
 import { Handler } from 'express';
+import { HttpException } from '../error/httpException';
 import { ldapClient } from '../integration/ldap';
-
-import { logger } from './logging';
 import { searchAsync, searchAsyncUid } from './ldapUtils';
+import { logger } from './logging';
 
 export const isLoggedIn: Handler = (req: any, res, next) => {
   // if user is authenticated in the session, carry on
@@ -24,8 +24,9 @@ export const isAdmin: Handler = async (req: any, res, next) => {
           logger.debug(`${req.user.uid} is an admin`);
           next();
         } else {
-          logger.warn(`${req.user.uid} is not an admin and is unauthorized`);
-          res.status(403).render('403');
+          throw new HttpException(403, {
+            message: `${req.user.uid} is not an admin and is unauthorized`,
+          });
         }
       } else {
         throw Error("req.user didn't exist on an authenticated request");
@@ -57,7 +58,14 @@ export const getUserInfo = async (uid: string): Promise<Express.User | false> =>
   if (user) {
     user.admin = admins.includes(user.uid);
 
-    logger.debug(`Found LDAP entry for ${uid} ${user.admin ? '(admin)' : ''}`);
+    const classMatch = /^\/home\/(\d\d|faculty|staff)\//.exec(user.homeDirectory);
+    if (classMatch) {
+      user.classYear = classMatch[1];
+    } else {
+      logger.warn(`Could not get classYear for ${uid}! Home dir: ${user.homeDirectory}`);
+    }
+
+    logger.debug(`Found LDAP entry for ${uid} (${user.classYear})${user.admin ? ' (admin)' : ''}`);
 
     return user;
   } else {

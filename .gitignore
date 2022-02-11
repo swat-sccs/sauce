@@ -8,6 +8,7 @@
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
@@ -22,3 +23,8 @@ yarn-debug.log*
 yarn-error.log*
 
 *.icloud
+
+/fstest
+
+_posts
+_docs
