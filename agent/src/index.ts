@@ -37,6 +37,13 @@ app.use((err, req, res, next) => {
   res.status(500).send(err.toString());
 });
 
+const bindAddr = process.env.BIND_ADDR || null;
 const port = process.env.PORT || 3001;
-logger.info(`Listening on port ${port}`);
-app.listen(port);
+if (bindAddr) {
+  logger.info(`Listening on ${bindAddr}:${port}`);
+  app.listen(+port, bindAddr);
+} else {
+  logger.warn('Listening on all interfaces. This is a security risk!');
+  logger.info(`Listening on port ${port}`);
+  app.listen(+port);
+}
