@@ -10,7 +10,7 @@ const router = Router(); // eslint-disable-line new-cap
 export const forwardingRouter = router;
 
 forwardingRouter.get(
-  '/forwardFile/:classYear/:username',
+  '/:classYear/:username',
   passport.authenticate('bearer', { session: false }),
   catchErrors((req, res, next) => {
     const { error, value } = jf.validateAsClass(req.params, LocalUser);
@@ -30,7 +30,7 @@ forwardingRouter.get(
 );
 
 forwardingRouter.post(
-  '/forwardFile/:classYear/:username',
+  '/:classYear/:username',
   passport.authenticate('bearer', { session: false }),
   catchErrors((req, res, next) => {
     const { error, value } = jf.validateAsClass(req.params, LocalUser);

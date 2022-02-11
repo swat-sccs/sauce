@@ -7,6 +7,7 @@ import { userRouter } from './user';
 import argon2 from 'argon2';
 import { logger } from './util';
 import { forwardingRouter } from './forwardFile';
+import { minecraftRouter } from './minecraft';
 
 const app = express();
 
@@ -26,8 +27,9 @@ passport.use(
 
 app.use(passport.initialize());
 
-app.use(userRouter);
-app.use(forwardingRouter);
+app.use('/newUser', userRouter);
+app.use('/forwardFile', forwardingRouter);
+app.use('/mcWhitelist', minecraftRouter);
 
 app.use((err, req, res, next) => {
   logger.error(err);

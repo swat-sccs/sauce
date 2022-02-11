@@ -9,7 +9,7 @@ const router = Router(); // eslint-disable-line new-cap
 export const userRouter = router;
 
 userRouter.post(
-  '/newUser/:classYear/:username',
+  '/:classYear/:username',
   passport.authenticate('bearer', { session: false }),
   catchErrors(async (req, res, next) => {
     const { error, value } = jf.validateAsClass(req.params, LocalUser);
@@ -31,8 +31,8 @@ userRouter.post(
 
       res.sendStatus(201);
     } catch (e) {
-      logger.info(`stdout: ${e.stdout.toString().trimEnd()}`);
-      throw new Error(`Error creating user: ${e.stderr.toString().trimEnd()}`);
+      logger.info(`stdout: ${e.stdout?.toString()?.trimEnd()}`);
+      throw new Error(`Error creating user: ${e.stderr?.toString()?.trimEnd()}`);
     }
   }),
 );

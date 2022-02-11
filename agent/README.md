@@ -45,3 +45,19 @@ directory of the given user.
 Overwrites the `.forward` file in the home directory of the given user with the contents of the
 request body. The body should be sent in plaintext, and the request should have the
 `Content-Type: text/plain` header.
+
+#### POST `/mcWhitelist/<mc-uuid>`
+
+Whitelists the Minecraft account indicated by the provided UUID. Specifically, runs the command
+`[exec-script] command whitelist add [username]`, where `[exec-script]` is specified by the
+`MINECRAFT_SERVER_EXEC_PATH` environment variable (on SCCS's systems, this points to a specific
+Minecraft server management script) and `[username]` is the Minecraft username corresponding to the
+provided Minecraft UUID.
+
+#### DELETE `/mcWhitelist/<mc-uuid>`
+
+Un-whitelists the Minecraft account indicated by the provided UUID. Specifically, runs the command
+`[exec-script] command whitelist remove [username]`, where `[exec-script]` is specified by the
+`MINECRAFT_SERVER_EXEC_PATH` environment variable (on SCCS's systems, this points to a specific
+Minecraft server management script) and `[username]` is the Minecraft username corresponding to the
+provided Minecraft UUID.
