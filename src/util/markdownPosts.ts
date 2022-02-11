@@ -1,7 +1,7 @@
 import { existsSync, promises as fsPromises } from 'fs';
 import matter, { GrayMatterFile } from 'gray-matter';
 import path from 'path';
-import { logger } from '../../agent/src/api';
+import { logger } from './logging';
 import { marked } from 'marked';
 
 interface PostFile extends GrayMatterFile<Buffer> {

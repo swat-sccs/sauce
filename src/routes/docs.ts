@@ -1,9 +1,6 @@
 import { Router } from 'express';
-import { logger } from '../../agent/src/api';
+import { logger } from '../util/logging';
 import { catchErrors } from '../util/asyncCatch';
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
 import { marked } from 'marked';
 import { getDocsData } from '../util/markdownDocs';
 
