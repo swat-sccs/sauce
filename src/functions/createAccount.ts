@@ -61,10 +61,9 @@ export const createAccount = async (data: any) => {
       swatmail: data.email,
     };
 
-    // FIXME figure out file permissions
     await addLdap(ldapClient, `uid=${data.username},${process.env.LDAP_SEARCH_BASE}`, ldapAttrs);
 
-    createLocalUser(data);
+    await createLocalUser(data);
 
     const [resetId, resetKey] = await createPasswordResetRequest(data.username, 24 * 7);
 
