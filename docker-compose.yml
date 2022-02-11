@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  sauce:
+    image: sauce-img
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+      MONGO_URI: "mongodb://mongodb:27017/sauce?retryWrites=true&w=majority"
+      PORT: 3000
+    restart: always
+    ports:
+      - 3000:3000
+  mongodb:
+    image: mongo:5.0.5
+    restart: always
+    ports:
+      - 27017
