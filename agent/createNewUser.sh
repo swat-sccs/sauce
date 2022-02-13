@@ -36,13 +36,13 @@ ln -s "$homedir/.mail" "$homedir/.mailbox"
 ln -s $webdir "$homedir/web-docs"
 
 echo "Setting permissions"
-chown -R "$user:staff" $homedir
-chown "$user:staff" $webdir
+chown -R "$user:users" $homedir
+chown "$user:users" $webdir
 
 chmod -R 0700 $homedir
 
 chmod 660 $spool
-chown "$user:staff" $spool
+chown "$user:mail" $spool
 
 echo "Updating Postfix"
 /etc/postfix/make_vam.sh
