@@ -1,8 +1,12 @@
 mixin sauce-container
   .d-flex.flex-column.min-vh-100
-    header
+    if staffMessage
+      .bg-primary.text-light
+        .container.mx-auto.p-2.text-center
+          span!= staffMessage
+    header.sticky-top.mb-4
       if !attributes.hideNavbar
-        nav.navbar.navbar-expand-sm.navbar-light.fixed-top.bg-light
+        nav.navbar.navbar-expand-sm.navbar-light.bg-light
           -
             const PAGES = [
               {
@@ -101,7 +105,7 @@ mixin sauce-container
                         )= page.title
 
     main.flex-fill
-      .container.mb-4(style='padding-top: 75px')
+      .container.mb-4
         if block
           block
         else
