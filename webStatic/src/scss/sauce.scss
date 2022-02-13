@@ -28,6 +28,15 @@ footer {
     color: #fff;
 }
 
+$display-font-sizes: (
+  1: 4.5rem,
+  2: 4.5rem,
+  3: 4rem,
+  4: 3.5rem,
+  5: 3rem,
+  6: 2.5rem
+) !default;
+
 @import "~bootstrap/scss/bootstrap";
 :root {
     --bs-body-bg: #f1f1f1;
