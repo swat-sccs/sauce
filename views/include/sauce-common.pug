@@ -2,7 +2,9 @@ mixin sauce-container(pageId = '', user = null, showNavbar = true, showFooter = 
   .d-flex.flex-column.min-vh-100
     header
       if showNavbar
-        nav.navbar.navbar-expand-sm.navbar-light.fixed-top.bg-light
+        nav.navbar.navbar-expand-sm.navbar-dark.fixed-top.bg-primary(
+          style='background-color: #31425f'
+        )
           -
             const PAGES = [
               {
@@ -77,10 +79,10 @@ mixin sauce-container(pageId = '', user = null, showNavbar = true, showFooter = 
         else
           p No content
 
-    footer.footer.mt-auto.py-3(class={ 'bg-light': showFooter })
+    footer.footer.text-white.mt-auto.py-3(class={ 'bg-primary': showFooter }, style='color: #fff')
       if showFooter
         .container
-          span.small.text-muted
+          span.small.text-white
             | &copy; #{ new Date().getFullYear() } Swarthmore College Computer Society
             | | Problems with this website? Email&nbsp;#[a(href='mailto:staff@sccs.swarthmore.edu') staff@sccs.swarthmore.edu].
 

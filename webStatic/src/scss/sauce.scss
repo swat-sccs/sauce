@@ -1,12 +1,41 @@
-@import "~bootstrap/scss/bootstrap";
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400;0,500;0,600;1,400;1,600&display=swap');
+//$primary: #F46523;
 
-$primary: #F46523;
+$primary: #31425F;
+
+$navbar-dark-color: #fff;
+$navbar-dark-hover-color: #F46523;
+$navbar-dark-active-color: #F46523;
+$navbar-dark-brand-color: $navbar-dark-color;
 
 /*$theme-colors: (
   "primary": #F46523,
   "danger": $danger
 );*/
 //$body-bg: #f423d1;
-$body-color: #f423d1;
 
-$font-family-base: Raleway, !default;
+$font-family-base: "Raleway", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";//!default;
+$light: #d1d1d1;
+body {
+    background-color: #f1f1f1;
+}
+
+h1 {
+    color: $primary;
+}
+
+footer {
+    color: #fff;
+}
+
+@import "~bootstrap/scss/bootstrap";
+:root {
+    --bs-body-bg: #f1f1f1;
+}
+.btn.btn-primary {
+    color: #fff;//#FFFFFF;
+}
+
+code {
+    color: $primary
+}
