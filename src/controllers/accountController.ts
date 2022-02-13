@@ -301,12 +301,12 @@ export class EmailForwardingConfig {
 }
 
 export const configureEmailForwarding = async (
-  uid: string,
+  user: any,
   config: EmailForwardingConfig,
 ): Promise<void> => {
-  logger.debug(`Updating email forwarding for ${uid} to ${JSON.stringify(config)}`);
+  logger.debug(`Updating email forwarding for ${user.uid} to ${JSON.stringify(config)}`);
 
-  await modifyForwardFile(uid, config);
+  await modifyForwardFile(user, config);
 
-  logger.info(`Updated email forwarding for ${uid} to ${JSON.stringify(config)}`);
+  logger.info(`Updated email forwarding for ${user.uid} to ${JSON.stringify(config)}`);
 };

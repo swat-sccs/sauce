@@ -1,17 +1,40 @@
 # SAUCE
 
-The SCCS Account and User Control Engine, a replacement for GUTS (the Grand Unified Task System).
-Written mostly in TypeScript on top of Express.js and MongoDB. Uses Pug for rendering pages and
-Bootstrap for styling.
+The SCCS Account and User Control Engine, or SAUCE, is the central dashboard for SCCS services. The
+project replaces GUTS (the Grand Unified Task System) and SCCS's previous static homepage. Currently
+WIP.
 
-_Very_ WIP at the moment.
+## Features
+
+- Cool landing page
+- On-the-fly generation of newsfeed posts and public-facing documentation from Markdown files
+  (somewhat similar to Jekyll)
+- Login using our LDAP server
+- Integrations with our other services:
+  - Account creation
+  - Mailing lists
+  - Minecraft server
+- Secure password hashing with Argon2
+- Admin dashboard with request management and user database search
+- Seperate agent process to perform some tasks requiring root access
+- Notification emails for users and admins
 
 ## Development
+
+The backend is written in TypeScript on top of Express.js and MongoDB. Pages are rendered from Pug
+templates with some JavaScript logic, though since the frontend JS/CSS is prebuilt with Webpack and
+served statically, using other languages on the backend would be fairly trivial. It uses Bootstrap 5
+for most styling, with some customizations applied using SCSS.
 
 Installation:
 
 ```bash
 npm install
+# necessary for development; if you have prebuilt web static files (e.g. you are installing inside a
+# Docker container) you don't need this
+npm run install:webStatic
+# only necessary if you are using the agent
+npm run install:agent
 ```
 
 Build static web files and compile TypeScript:
@@ -32,13 +55,15 @@ Or in production:
 node build/src/index.js
 ```
 
-Requires a MongoDB instance and LDAP server; these can be configured in a `.env` file. An example
-`.env` is provided in `.env.example`.
+The app requires various credentials for other services (LDAP, Mailman, SMTP...) which can be
+configured in a `.env` file. An example `.env` is provided in `.env.example`.
 
-The repo is set up to run Prettier and ESLint before each commit.
+To install git hooks to run Prettier and ESLint before each commit, run `npm run installHooks`.
 
 ### Folder Structure
 
+- `/agent`: A seperate, self-contained service to run certain management tasks that require root
+  access to the server.
 - `/emailTemplates`: Basic plaintext templates for emails. Email templating uses
   [this one-liner](https://stackoverflow.com/a/41077811), so variable incorporation is just
   `${templateVariable}`.
@@ -47,7 +72,7 @@ The repo is set up to run Prettier and ESLint before each commit.
     footers)
 - `/src`: Server code; root folder contains `index.ts` with main configuration
   - `/src/controllers`: Business logic and controllers called from routes
-  - `/src/error/`: HTTP and application error handling
+  - `/src/error`: HTTP and application error handling
   - `/src/functions`: Functions that will be run on a delayed basis (e.g. `createUser`); contains
     business logic to actually do those tasks.
   - `/src/routes`: HTTP routing code for app functions

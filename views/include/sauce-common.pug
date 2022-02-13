@@ -1,39 +1,47 @@
-mixin sauce-container(pageId = '', user = null, showNavbar = true, showFooter = true)
+mixin sauce-container
   .d-flex.flex-column.min-vh-100
     header
-      if showNavbar
+      if !attributes.hideNavbar
         nav.navbar.navbar-expand-sm.navbar-dark.fixed-top.bg-primary(
           style='background-color: #31425f'
         )
           -
             const PAGES = [
               {
-                id: 'index',
-                title: 'Home',
-                href: '/',
+                id: 'docs',
+                title: 'Documentation',
+                href: '/docs',
                 needsAdmin: false,
                 needsUser: false,
               },
               {
-                id: 'mailing',
-                title: 'Mailing Lists',
-                href: '/lists',
-                needsAdmin: false,
-                needsUser: false,
-              },
-              {
-                id: 'minecraft',
-                title: 'Minecraft Server',
-                href: '/minecraft',
+                id: 'services',
+                title: 'Services',
                 needsAdmin: false,
                 needsUser: true,
-              },
-              {
-                id: 'account',
-                title: 'Account',
-                href: '/account',
-                needsAdmin: true,
-                needsUser: true,
+                children: [
+                  {
+                    id: 'account',
+                    title: 'Account Options',
+                    href: '/account',
+                    needsAdmin: false,
+                    needsUser: true,
+                  },
+                  {
+                    id: 'mailing',
+                    title: 'Mailing Lists',
+                    href: '/lists',
+                    needsAdmin: false,
+                    needsUser: true,
+                  },
+                  {
+                    id: 'minecraft',
+                    title: 'Minecraft Server',
+                    href: '/minecraft',
+                    needsAdmin: false,
+                    needsUser: true,
+                  },
+                ]
               },
               {
                 id: 'admin',
@@ -51,7 +59,7 @@ mixin sauce-container(pageId = '', user = null, showNavbar = true, showFooter = 
               }
             ]
           .container-fluid 
-            span.navbar-brand.mb-0.h1 SAUCE
+            a.navbar-brand.mb-0.h1(href='/') SCCS
             button.navbar-toggler(
               type='button',
               data-bs-toggle='collapse',
@@ -62,15 +70,37 @@ mixin sauce-container(pageId = '', user = null, showNavbar = true, showFooter = 
             )
               span.navbar-toggler-icon
             #navbarNavAltMarkup.collapse.navbar-collapse
-              .navbar-nav
-                each page in PAGES
+              ul.navbar-nav
+                mixin showPageIfAllowed(page, user)
                   if (user || !page.needsUser)
                     if ((user && user.admin) || !page.needsAdmin)
-                      a.nav-link(
-                        class={ active: page.id === pageId },
-                        aria-current=page.id === pageId ? 'page' : 'false',
-                        href=page.href
-                      )= page.title
+                      block
+                each page in PAGES
+                  +showPageIfAllowed(page, attributes.user, attributes.user)
+                    if page.children
+                      li.nav-item.dropdown 
+                        a.nav-link.dropdown-toggle(
+                          id=page.id + 'Dropdown',
+                          role='button',
+                          data-bs-toggle='dropdown',
+                          aria-expanded='false'
+                        )= page.title
+                        ul.dropdown-menu(aria-labelledby=page.id + 'Dropdown')
+                          each child in page.children
+                            +showPageIfAllowed(child, attributes.user)
+                              li
+                                a.dropdown-item(
+                                  class={ active: child.id === attributes.pageId },
+                                  aria-current=child.id === attributes.pageId ? 'page' : 'false',
+                                  href=child.href
+                                )= child.title
+                    else
+                      li.nav-item
+                        a.nav-link(
+                          class={ active: page.id === attributes.pageId },
+                          aria-current=page.id === attributes.pageId ? 'page' : 'false',
+                          href=page.href
+                        )= page.title
 
     main.flex-fill
       .container.mb-4(style='padding-top: 75px')
@@ -79,21 +109,23 @@ mixin sauce-container(pageId = '', user = null, showNavbar = true, showFooter = 
         else
           p No content
 
-    footer.footer.text-white.mt-auto.py-3(class={ 'bg-primary': showFooter }, style='color: #fff')
-      if showFooter
+    footer.footer.mt-auto.py-3(class={ 'bg-primary': !attributes.hideFooter })
+      if !attributes.hideFooter
         .container
           span.small.text-white
             | &copy; #{ new Date().getFullYear() } Swarthmore College Computer Society
             | | Problems with this website? Email&nbsp;#[a(href='mailto:staff@sccs.swarthmore.edu') staff@sccs.swarthmore.edu].
 
-mixin sauce-layout(title, pageId = '', user = null, showNavbar = true, showFooter = true)
+mixin sauce-layout(title)
   doctype
   html(lang='en')
     head
       include head.pug
       title= title
     body
-      +sauce-container(pageId, user, showNavbar, showFooter)
+      +sauce-container&attributes(attributes)
         .row(style='max-width: 768px')
           .col-md-8
             block
+      if attributes.includeBootstrapScripts
+        script(type='text/javascript', src='/dist/js/bootstrapScripts.js')

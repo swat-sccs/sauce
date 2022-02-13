@@ -1,0 +1,15 @@
+include include/sauce-common
+
++sauce-layout('SCCS Docs: ' + data.title)(pageId='docs', user=user, includeBootstrapScripts)
+  nav(aria-label='breadcrumb')
+    ol.breadcrumb
+      each page in data.parents.reverse()
+        li.breadcrumb-item
+          if page.hrefPath
+            - if (!page.hrefPath.startsWith('/docs')) page.hrefPath = '/docs/' + page.hrefPath;
+            a(href=page.hrefPath)= page.title
+          else
+            = page.title
+      li.breadcrumb-item.active(aria-current='page')= data.title
+  h1= data.title
+  div!= data.contents.content

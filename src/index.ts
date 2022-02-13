@@ -17,6 +17,7 @@ import { HttpException } from './error/httpException';
 import { errorHandler } from './error/errorHandler';
 import { mailingRouter } from './routes/mailingList';
 import { minecraftRouter } from './routes/minecraft';
+import { docRouter } from './routes/docs';
 
 const initExpress = (): void => {
   const port = process.env.PORT || 3000;
@@ -75,6 +76,7 @@ const initExpress = (): void => {
   app.use('/admin', adminRouter);
   app.use('/lists', mailingRouter);
   app.use('/minecraft', minecraftRouter);
+  app.use('/docs', docRouter);
 
   app.use('/static', express.static('public/'));
   app.use('/dist', express.static('dist/'));

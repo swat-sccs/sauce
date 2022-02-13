@@ -124,7 +124,7 @@ router.get(
   catchErrors(async (req: any, res, next) => {
     return res.render('account', {
       user: req.user,
-      forwardFileText: await getForwardFile(req.user.uid),
+      forwardFileText: await getForwardFile(req.user),
     });
   }),
 );
@@ -138,7 +138,7 @@ router.post(
       throw new HttpException(400, { message: `Invalid request: ${error.message}` });
     }
 
-    controller.configureEmailForwarding(req.user.uid, value);
+    controller.configureEmailForwarding(req.user, value);
 
     res.redirect('/account');
   }),

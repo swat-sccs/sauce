@@ -58,7 +58,14 @@ export const getUserInfo = async (uid: string): Promise<Express.User | false> =>
   if (user) {
     user.admin = admins.includes(user.uid);
 
-    logger.debug(`Found LDAP entry for ${uid} ${user.admin ? '(admin)' : ''}`);
+    const classMatch = /^\/home\/(\d\d|faculty|staff)\//.exec(user.homeDirectory);
+    if (classMatch) {
+      user.classYear = classMatch[1];
+    } else {
+      logger.warn(`Could not get classYear for ${uid}! Home dir: ${user.homeDirectory}`);
+    }
+
+    logger.debug(`Found LDAP entry for ${uid} (${user.classYear})${user.admin ? ' (admin)' : ''}`);
 
     return user;
   } else {

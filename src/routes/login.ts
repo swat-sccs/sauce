@@ -1,14 +1,19 @@
 import { Router } from 'express';
 import passport from 'passport';
-import { isLoggedIn } from '../util/authUtils';
+import { catchErrors } from '../util/asyncCatch';
 import { logger } from '../util/logging';
+import { getPosts } from '../util/markdownPosts';
 
 // eslint-disable-next-line new-cap
 export const loginRouter = Router();
 
-loginRouter.get('/', (req: any, res) => {
-  res.render('index', { user: req.user });
-});
+loginRouter.get(
+  '/',
+  catchErrors(async (req: any, res) => {
+    // parse markdown posts and pass them along to the pug renderer
+    res.render('index', { user: req.user, posts: await getPosts() });
+  }),
+);
 
 loginRouter.get('/login', (req: any, res) => {
   res.render('login', { nextUrl: req.query.next || '/' });

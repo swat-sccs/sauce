@@ -1,0 +1,36 @@
+{
+  "name": "sauce-agent",
+  "version": "0.1.0",
+  "author": "Swarthmore College Computer Society",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon --exec npx ts-node --files src/index.ts",
+    "build": "cd src && tsc"
+  },
+  "dependencies": {
+    "argon2": "^0.28.4",
+    "axios": "^0.25.0",
+    "dotenv": "^14.2.0",
+    "express": "^4.17.1",
+    "joi": "17.3.0",
+    "joiful": "^3.0.2",
+    "passport": "^0.5.0",
+    "passport-http-bearer": "^1.0.1",
+    "tslog": "^3.2.2",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.2",
+    "@types/node": "^12.12.11",
+    "@types/passport": "^1.0.7",
+    "@types/passport-http-bearer": "^1.0.37",
+    "cross-env": "^6.0.3",
+    "nodemon": "^2.0.0",
+    "ts-node": "^8.5.2",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^3.7.2"
+  },
+  "_moduleDirectories": [
+    "src"
+  ]
+}

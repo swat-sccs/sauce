@@ -35,6 +35,10 @@ export class AdminModifyTaskReq {
   query: string;
 }
 
+export const getTask = async (task: string): Promise<Task | null> => {
+  return await TaskModel.findById(task).exec();
+};
+
 export const searchTasks = async (query: AdminSearchReq): Promise<Task[]> => {
   const results = await TaskModel.find().in('status', query.status).exec();
   logger.debug(`Returning ${results.length} results`);

@@ -1,0 +1,22 @@
+.row
+  .col-12.col-lg-7
+    h1.display-1 Swarthmore College Computer Society
+    p.text-muted Digital services by and for Swarthmore students
+    p 
+      | Welcome! We're a collective of student volunteers who maintain digital services for the
+      | students, staff, and alumni of #[a(href='https://swarthmore.edu') Swarthmore College]. We
+      | offer club mailing lists, a campus directory, a daily digest, and much more. Most services
+      | require an SCCS account, available to anyone with an @swarthmore.edu email address.
+    div
+      a.btn.btn-primary.btn-lg.me-2.mb-4(href='/account/create') Get My SCCS Account
+      a.btn.btn-outline-primary.btn-lg.ms-2.mb-4(href='/login') Sign In
+  .col-12.col-lg
+    if posts
+      h2.mb-4 News and Updates
+      each post in posts
+        .card.w-100.mb-2.shadow-sm
+          .card-body 
+            h5.card-title= post.data.title
+            h6.card-subtitle.mb-2.text-muted= post.data.date.toLocaleDateString()
+            //- counteract the margin-bottom applied to <p> elements so the card bottom isn't weirdly long
+            div(style='margin-bottom: -1rem')!= post.content

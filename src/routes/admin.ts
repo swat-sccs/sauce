@@ -17,8 +17,34 @@ router.get(
   catchErrors((req: any, res, next) => {
     res.render('admin', {
       user: req.user,
-      taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/tasks`,
-      userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/users`,
+      taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getTasks`,
+      userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getUsers`,
+    });
+  }),
+);
+
+router.get(
+  '/tasks',
+  isAdmin,
+  catchErrors((req: any, res, next) => {
+    res.render('admin', {
+      user: req.user,
+      taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getTasks`,
+      userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getUsers`,
+      tab: 'tasksTab',
+    });
+  }),
+);
+
+router.get(
+  '/users',
+  isAdmin,
+  catchErrors((req: any, res, next) => {
+    res.render('admin', {
+      user: req.user,
+      taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getTasks`,
+      userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getUsers`,
+      tab: 'usersTab',
     });
   }),
 );
@@ -47,17 +73,18 @@ router.post(
 
     res.render('admin', {
       user: req.user,
-      taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/tasks`,
-      userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/users`,
+      taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getTasks`,
+      userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getUsers`,
       query: pageReq,
       opTask: value.id,
       opStatus: status,
+      tab: 'tasksTab',
     });
   }),
 );
 
 router.get(
-  '/tasks',
+  '/getTasks',
   isAdmin,
   catchErrors(async (req, res, next) => {
     const { error, value } = jf.validateAsClass(req.query, controller.AdminSearchReq);
@@ -74,7 +101,20 @@ router.get(
 );
 
 router.get(
-  '/users',
+  '/tasks/:taskId',
+  isAdmin,
+  catchErrors(async (req: any, res, next) => {
+    res.render('admin', {
+      user: req.user,
+      taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getTasks`,
+      userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getUsers`,
+      taskData: await controller.getTask(req.params.taskId),
+    });
+  }),
+);
+
+router.get(
+  '/getUsers',
   isAdmin,
   catchErrors(async (req, res, next) => {
     const { error, value } = jf.validateAsClass(req.query, dtUserSearchController.DtServerRequest);

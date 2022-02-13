@@ -12,6 +12,7 @@ module.exports = {
     mailingLists: './src/js/mailingLists.js',
     resetPassword: './src/js/resetPassword.js',
     style: './src/js/style.js',
+    bootstrapScripts: './src/js/bootstrapScripts.js',
   },
   resolve: {
     modules: [path.resolve('./node_modules')],
