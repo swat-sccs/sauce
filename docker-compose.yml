@@ -21,6 +21,8 @@ services:
       - ./_docs:/sauce-app/_docs
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    depends_on:
+      - "mongodb"
   mongodb:
     image: mongo:5.0.5
     restart: always
