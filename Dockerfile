@@ -26,9 +26,9 @@ COPY public/ ./public
 COPY dist/ ./dist
 COPY emailTemplates ./emailTemplates
 COPY views/ ./views
-COPY _docs/ ./_docs
-COPY _posts/ ./_posts
+# _docs and _posts will be docker-compose volumes
 
-COPY .env ./
+COPY *.env ./
 
 CMD node src/index.js
+
