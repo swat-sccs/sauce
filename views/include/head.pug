@@ -3,3 +3,9 @@
 meta(charset='utf-8')
 meta(name='viewport', content='width=device-width, initial-scale=1')
 script(type='text/javascript', src='/dist/js/style.js')
+if (process.env.PLAUSIBLE_DOMAIN && process.env.PLAUSIBLE_SERVER)
+  script(
+    defer,
+    data-domain=process.env.PLAUSIBLE_DOMAIN,
+    src=`https://${process.env.PLAUSIBLE_SERVER}/js/pls.js`
+  ) 
