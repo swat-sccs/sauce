@@ -6,6 +6,7 @@ import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
 import LdapStrategy from 'passport-ldapauth';
+import expressStaticGzip from 'express-static-gzip';
 import { LDAP_CONFIG } from './integration/ldap';
 import { doRequestId, logger, logRequest } from './util/logging';
 import { initMongo } from './integration/mongo';
@@ -79,7 +80,7 @@ const initExpress = (): void => {
   app.use('/docs', docRouter);
 
   app.use('/static', express.static('public/'));
-  app.use('/dist', express.static('dist/'));
+  app.use('/dist', expressStaticGzip('dist/', {}));
 
   app.use((req: any, res, next) => {
     next(new HttpException(404, { message: req.path }));
