@@ -95,7 +95,7 @@ html(lang='en')
                   data-bs-target='#messageModal'
                 ) New Staff Message
               hr
-              table#messageTable.table(width='100%', style='white-space: nowrap')
+              table#messageTable.table(width='100%')
                 thead
                   tr 
                     th(scope='col')
@@ -103,6 +103,7 @@ html(lang='en')
                     th(scope='col') Start
                     th(scope='col') End
                     th(scope='col') Message
+                    th(scope='col') 
 
     //- modal
     #taskModal.modal.fade(tabindex='-1', aria-labelledby='taskModalTitle', aria-hidden='true')

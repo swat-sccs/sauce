@@ -88,6 +88,7 @@ const initExpress = (): void => {
         .exec();
 
       if (msg) {
+        logger.debug(`Displaying staff message ${msg._id}`);
         res.locals.staffMessage = msg.message;
       }
 

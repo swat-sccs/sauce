@@ -6,6 +6,7 @@ import 'datatables.net-bs5/css/dataTables.bootstrap5.css';
 import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.css';
 import '../scss/adminStyle.scss';
 
+import { escape } from 'lodash';
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap; // makes responsive-bs5 not throw errors in the console
 import { Tooltip, Tab, Modal } from 'bootstrap';
@@ -357,7 +358,10 @@ $(document).ready(function () {
   // eslint-disable-next-line new-cap
   const staffMessageTable = $('#messageTable').DataTable({
     processing: true,
-    responsive: true,
+    responsive: {
+      details: { type: 'column', target: -1 },
+    },
+    autoWidth: false,
     ajax: MESSAGE_DATA_URL,
     order: [[2, 'desc']],
     columns: [
@@ -369,12 +373,15 @@ $(document).ready(function () {
       {
         data: null,
         orderable: false,
+        width: '32px',
         render: function (data, type, row) {
           if (type === 'display') {
             return `<button 
             class="btn btn-danger btn-sm" 
             type="button" 
-            onclick="window.deleteMessage('${data._id}')"><i class="bi bi-trash-fill" aria-label="delete message"></i></button>`;
+            onclick="window.deleteMessage('${data._id}')">
+            <i class="bi bi-trash-fill" aria-label="delete message"></i>
+            </button>`;
           } else {
             return '';
           }
@@ -383,6 +390,7 @@ $(document).ready(function () {
       {
         data: 'startDate',
         defaultContent: '',
+        className: 'dateCell',
         render: function (data, type, row) {
           const date = DateTime.fromISO(data);
           if (type === 'display') {
@@ -395,6 +403,7 @@ $(document).ready(function () {
       {
         data: 'endDate',
         defaultContent: '',
+        className: 'dateCell',
         render: function (data, type, row) {
           const date = DateTime.fromISO(data);
           if (type === 'display') {
@@ -406,7 +415,22 @@ $(document).ready(function () {
       },
       {
         data: 'message',
+        width: '700px',
         defaultContent: '',
+        className: 'messageCell',
+        render: function (data, type, row) {
+          return escape(data);
+        },
+      },
+      {
+        data: null,
+        className: 'dtr-control',
+        orderable: false,
+        targets: -1,
+        // stop it from showing 'object Object' in every row; not sure why this works
+        render: function (data, type, row) {
+          return '';
+        },
       },
     ],
   });

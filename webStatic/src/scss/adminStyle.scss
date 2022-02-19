@@ -1,1 +1,10 @@
 @import 'bootstrap-icons/font/bootstrap-icons.css';
+
+.messageCell {
+  overflow-wrap: break-word;
+}
+
+.dateCell {
+  white-space: nowrap;
+  width: 0px;
+}
