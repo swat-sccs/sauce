@@ -11,7 +11,7 @@ loginRouter.get(
   '/',
   catchErrors(async (req: any, res) => {
     // parse markdown posts and pass them along to the pug renderer
-    res.render('index', { user: req.user, posts: await getPosts() });
+    res.render('index', { posts: await getPosts() });
   }),
 );
 

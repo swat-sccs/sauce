@@ -71,6 +71,12 @@ const initExpress = (): void => {
     }
   });
 
+  app.use((req, res, next) => {
+    // set the user object so we don't have to pass it everywhere
+    res.locals.user = req.user;
+    next();
+  });
+
   // ROUTER CONFIG
   app.use('/', loginRouter);
   app.use('/account', accountRouter);

@@ -12,7 +12,6 @@ router.get(
   isLoggedIn,
   catchErrors(async (req: any, res, next) => {
     res.render('minecraft', {
-      user: req.user,
       mcInfo: await controller.getMcForLdapUser(req.user.uid),
     });
   }),
@@ -31,7 +30,6 @@ router.post(
     } catch (e) {
       if (e instanceof HttpException) {
         return res.render('minecraft', {
-          user: req.user,
           mcInfo: await controller.getMcForLdapUser(req.user.uid),
           err: e.friendlyMessage,
         });

@@ -16,7 +16,6 @@ router.get(
   isAdmin,
   catchErrors((req: any, res, next) => {
     res.render('admin', {
-      user: req.user,
       taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getTasks`,
       userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getUsers`,
     });
@@ -28,7 +27,6 @@ router.get(
   isAdmin,
   catchErrors((req: any, res, next) => {
     res.render('admin', {
-      user: req.user,
       taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getTasks`,
       userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getUsers`,
       tab: 'tasksTab',
@@ -41,7 +39,6 @@ router.get(
   isAdmin,
   catchErrors((req: any, res, next) => {
     res.render('admin', {
-      user: req.user,
       taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getTasks`,
       userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getUsers`,
       tab: 'usersTab',
@@ -72,7 +69,6 @@ router.post(
     const status = await controller.modifyTask(value);
 
     res.render('admin', {
-      user: req.user,
       taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getTasks`,
       userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getUsers`,
       query: pageReq,
@@ -105,7 +101,6 @@ router.get(
   isAdmin,
   catchErrors(async (req: any, res, next) => {
     res.render('admin', {
-      user: req.user,
       taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getTasks`,
       userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getUsers`,
       taskData: await controller.getTask(req.params.taskId),
