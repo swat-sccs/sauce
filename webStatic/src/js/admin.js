@@ -4,6 +4,7 @@
 
 import 'datatables.net-bs5/css/dataTables.bootstrap5.css';
 import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.css';
+import '../scss/adminStyle.scss';
 
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap; // makes responsive-bs5 not throw errors in the console
@@ -31,6 +32,38 @@ function refreshTaskTimestamp() {
     DateTime.TIME_24_WITH_SHORT_OFFSET,
   )}`;
 }
+
+window.deleteMessage = async function (id) {
+  await fetch(`/admin/deleteMessage/${id}`, {
+    method: 'post',
+  });
+
+  // eslint-disable-next-line new-cap
+  $('#messageTable').DataTable().ajax.reload();
+};
+
+window.submitMessage = async function () {
+  const startDate = document.getElementById('messageStartDate');
+  const endDate = document.getElementById('messageEndDate');
+  const messageArea = document.getElementById('messageArea');
+  await fetch('/admin/newMessage', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams(
+      `startDate=${startDate.value}&endDate=${endDate.value}&message=${messageArea.value}`,
+    ),
+  });
+
+  Modal.getOrCreateInstance(document.getElementById('messageModal')).hide();
+  startDate.value = '';
+  endDate.value = '';
+  messageArea.value = '';
+
+  // eslint-disable-next-line new-cap
+  $('#messageTable').DataTable().ajax.reload();
+};
 
 (function () {
   refreshTooltips();
@@ -121,6 +154,24 @@ function refreshTaskTimestamp() {
     window.history.replaceState({}, '', '/admin/tasks');
   });
 
+  // add stuff to history when switching tabs
+  document.getElementById('tasksTab').addEventListener('shown.bs.tab', function (event) {
+    document.title = 'SAUCE Admin: tasks';
+    window.history.replaceState({}, '', '/admin/tasks');
+  });
+
+  document.getElementById('accountsTab').addEventListener('shown.bs.tab', function (event) {
+    document.title = 'SAUCE Admin: accounts';
+    window.history.replaceState({}, '', '/admin/users');
+  });
+
+  document.getElementById('messagesTab').addEventListener('shown.bs.tab', function (event) {
+    document.title = 'SAUCE Admin: staff messagers';
+    window.history.replaceState({}, '', '/admin/messages');
+  });
+})();
+
+$(document).ready(function () {
   function handleTaskOrTab(task, tab) {
     if (task) {
       Modal.getOrCreateInstance(taskModal).show();
@@ -132,25 +183,14 @@ function refreshTaskTimestamp() {
         new Tab(document.getElementById('tasksTab')).show();
       } else if (tab === 'accounts') {
         new Tab(document.getElementById('accountsTab')).show();
+      } else if (tab === 'messages') {
+        new Tab(document.getElementById('messagesTab')).show();
       }
     }
   }
 
   handleTaskOrTab(window.taskToJumpTo, window.tabToJumpTo);
 
-  // add stuff to history when switching tabs
-  document.getElementById('tasksTab').addEventListener('shown.bs.tab', function (event) {
-    document.title = 'SAUCE Admin: tasks';
-    window.history.replaceState({}, '', '/admin/tasks');
-  });
-
-  document.getElementById('accountsTab').addEventListener('shown.bs.tab', function (event) {
-    document.title = 'SAUCE Admin: accounts';
-    window.history.replaceState({}, '', '/admin/users');
-  });
-})();
-
-$(document).ready(function () {
   let taskTableUid = 0;
   // eslint-disable-next-line new-cap
   const taskTable = $('#taskTable').DataTable({
@@ -309,6 +349,63 @@ $(document).ready(function () {
       },
       {
         data: 'swatmail',
+        defaultContent: '',
+      },
+    ],
+  });
+
+  // eslint-disable-next-line new-cap
+  const staffMessageTable = $('#messageTable').DataTable({
+    processing: true,
+    responsive: true,
+    ajax: MESSAGE_DATA_URL,
+    order: [[2, 'desc']],
+    columns: [
+      {
+        data: '_id',
+        visible: false,
+        orderable: false,
+      },
+      {
+        data: null,
+        orderable: false,
+        render: function (data, type, row) {
+          if (type === 'display') {
+            return `<button 
+            class="btn btn-danger btn-sm" 
+            type="button" 
+            onclick="window.deleteMessage('${data._id}')"><i class="bi bi-trash-fill" aria-label="delete message"></i></button>`;
+          } else {
+            return '';
+          }
+        },
+      },
+      {
+        data: 'startDate',
+        defaultContent: '',
+        render: function (data, type, row) {
+          const date = DateTime.fromISO(data);
+          if (type === 'display') {
+            return date.toLocal().toLocaleString(DateTime.DATETIME_MED);
+          } else {
+            return data;
+          }
+        },
+      },
+      {
+        data: 'endDate',
+        defaultContent: '',
+        render: function (data, type, row) {
+          const date = DateTime.fromISO(data);
+          if (type === 'display') {
+            return date.toLocal().toLocaleString(DateTime.DATETIME_MED);
+          } else {
+            return data;
+          }
+        },
+      },
+      {
+        data: 'message',
         defaultContent: '',
       },
     ],

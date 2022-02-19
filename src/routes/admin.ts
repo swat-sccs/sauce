@@ -8,6 +8,7 @@ import { catchErrors } from '../util/asyncCatch';
 import { isAdmin } from '../util/authUtils';
 import { logger } from '../util/logging';
 import { groupParamsByKey } from '../util/paramUtils';
+import { validate } from 'uuid';
 
 const router = Router(); // eslint-disable-line new-cap
 
@@ -16,9 +17,9 @@ router.get(
   isAdmin,
   catchErrors((req: any, res, next) => {
     res.render('admin', {
-      user: req.user,
       taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getTasks`,
       userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getUsers`,
+      messageDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getMessages`,
     });
   }),
 );
@@ -28,10 +29,10 @@ router.get(
   isAdmin,
   catchErrors((req: any, res, next) => {
     res.render('admin', {
-      user: req.user,
       taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getTasks`,
       userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getUsers`,
-      tab: 'tasksTab',
+      messageDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getMessages`,
+      tab: 'tasks',
     });
   }),
 );
@@ -41,10 +42,23 @@ router.get(
   isAdmin,
   catchErrors((req: any, res, next) => {
     res.render('admin', {
-      user: req.user,
       taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getTasks`,
       userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getUsers`,
-      tab: 'usersTab',
+      messageDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getMessages`,
+      tab: 'accounts',
+    });
+  }),
+);
+
+router.get(
+  '/messages',
+  isAdmin,
+  catchErrors((req: any, res, next) => {
+    res.render('admin', {
+      taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getTasks`,
+      userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getUsers`,
+      messageDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getMessages`,
+      tab: 'messages',
     });
   }),
 );
@@ -72,9 +86,9 @@ router.post(
     const status = await controller.modifyTask(value);
 
     res.render('admin', {
-      user: req.user,
       taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getTasks`,
       userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getUsers`,
+      messageDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getMessages`,
       query: pageReq,
       opTask: value.id,
       opStatus: status,
@@ -105,9 +119,9 @@ router.get(
   isAdmin,
   catchErrors(async (req: any, res, next) => {
     res.render('admin', {
-      user: req.user,
       taskDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getTasks`,
       userDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getUsers`,
+      messageDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getMessages`,
       taskData: await controller.getTask(req.params.taskId),
     });
   }),
@@ -129,6 +143,46 @@ router.get(
         value as unknown as dtUserSearchController.DtServerRequest,
       ),
     );
+  }),
+);
+
+router.get(
+  '/getMessages',
+  isAdmin,
+  catchErrors(async (req: any, res, next) => {
+    return res.json({ data: await controller.getStaffMessages() });
+  }),
+);
+
+router.post(
+  '/newMessage',
+  isAdmin,
+  catchErrors(async (req: any, res, next) => {
+    const { error, value } = jf.validateAsClass(req.body, controller.NewStaffMessage);
+
+    if (error) {
+      // this is an API endpoint so no fancy page for you
+      logger.warn(`Bad new-message API request: ${error.message}`);
+      return res.status(400).send(error.message);
+    }
+
+    await controller.addStaffMessage(value);
+
+    return res.sendStatus(200);
+  }),
+);
+
+router.post(
+  '/deleteMessage/:message',
+  isAdmin,
+  catchErrors(async (req: any, res, next) => {
+    if (!validate(req.params.message)) {
+      res.sendStatus(400);
+    }
+
+    await controller.deleteStaffMessage(req.params.message);
+
+    return res.sendStatus(200);
   }),
 );
 

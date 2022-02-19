@@ -123,7 +123,6 @@ router.get(
   isLoggedIn,
   catchErrors(async (req: any, res, next) => {
     return res.render('account', {
-      user: req.user,
       forwardFileText: await getForwardFile(req.user),
     });
   }),

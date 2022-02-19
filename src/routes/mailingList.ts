@@ -13,7 +13,7 @@ mailingRouter.get(
   '/',
   isLoggedIn,
   catchErrors(async (req, res, next) => {
-    res.render('mailingLists', { user: req.user, nameRegex: NAME_REGEX.source });
+    res.render('mailingLists', { nameRegex: NAME_REGEX.source });
   }),
 );
 

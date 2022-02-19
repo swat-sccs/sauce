@@ -24,7 +24,6 @@ router.get(
     }
 
     return res.render('docPage', {
-      user: req.user,
       data: docOrIndex,
     });
   }),
