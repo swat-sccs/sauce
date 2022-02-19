@@ -6,7 +6,7 @@ mixin sauce-container
           span!= staffMessage
     header.sticky-top.mb-4
       if !attributes.hideNavbar
-        nav.navbar.navbar-expand-sm.navbar-light.bg-light
+        nav.navbar.navbar-expand-sm.navbar-dark.bg-primary(style='background-color: #31425f')
           -
             const PAGES = [
               {
@@ -113,12 +113,12 @@ mixin sauce-container
         else
           p No content
 
-    footer.footer.mt-auto.py-3(class={ 'bg-light': !attributes.hideFooter })
+    footer.footer.mt-auto.py-3(class={ 'bg-primary': !attributes.hideFooter })
       if !attributes.hideFooter
         .container
-          span.small.text-muted
+          span.small.text-white
             | &copy; #{ new Date().getFullYear() } Swarthmore College Computer Society
-            | | Problems with this website? Email&nbsp;#[a(href='mailto:staff@sccs.swarthmore.edu') staff@sccs.swarthmore.edu].
+            | | Problems with this website? Email&nbsp;#[a(href='mailto:staff@sccs.swarthmore.edu', style='color: #fff') staff@sccs.swarthmore.edu].
 
 mixin sauce-layout(title)
   doctype
