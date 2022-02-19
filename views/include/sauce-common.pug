@@ -103,7 +103,9 @@ mixin sauce-container
                           aria-current=page.id === attributes.pageId ? 'page' : 'false',
                           href=page.href
                         )= page.title
-
+      else
+        //- dummy spacer replacing navbar
+        div(style='height: 56px')
     main.flex-fill
       .container.mb-4
         if block
