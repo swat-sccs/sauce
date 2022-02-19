@@ -5,11 +5,13 @@ import express from 'express';
 import { Strategy as BearerStrategy } from 'passport-http-bearer';
 import { userRouter } from './user';
 import argon2 from 'argon2';
-import { logger } from './util';
+import { limitRequestRate, logger } from './util';
 import { forwardingRouter } from './forwardFile';
 import { minecraftRouter } from './minecraft';
 
 const app = express();
+
+app.use(limitRequestRate);
 
 app.use(express.json());
 app.use(express.raw({ type: 'text/plain' }));
