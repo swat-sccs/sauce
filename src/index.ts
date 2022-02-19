@@ -19,6 +19,8 @@ import { errorHandler } from './error/errorHandler';
 import { mailingRouter } from './routes/mailingList';
 import { minecraftRouter } from './routes/minecraft';
 import { docRouter } from './routes/docs';
+import { StaffMessageModel } from './integration/models';
+import { catchErrors } from '../agent/src/util';
 
 const initExpress = (): void => {
   const port = process.env.PORT || 3000;
@@ -71,11 +73,27 @@ const initExpress = (): void => {
     }
   });
 
-  app.use((req, res, next) => {
-    // set the user object so we don't have to pass it everywhere
-    res.locals.user = req.user;
-    next();
-  });
+  app.use(
+    catchErrors(async (req, res, next) => {
+      // set the user object so we don't have to pass it everywhere
+      res.locals.user = req.user;
+
+      const time = Date.now();
+
+      const msg = await StaffMessageModel.findOne()
+        .where('startDate')
+        .lte(time)
+        .where('endDate')
+        .gte(time)
+        .exec();
+
+      if (msg) {
+        res.locals.staffMessage = msg.message;
+      }
+
+      next();
+    }),
+  );
 
   // ROUTER CONFIG
   app.use('/', loginRouter);

@@ -105,3 +105,31 @@ export const MinecraftWhitelistModel = mongoose.model<MinecraftWhitelist>(
   'MinecraftWhitelist',
   minecraftWhitelistSchema,
 );
+
+export interface StaffMessage {
+  _id: string;
+  startDate: Date;
+  endDate: Date;
+  message: string;
+}
+
+const staffMessageSchema = new mongoose.Schema<StaffMessage>({
+  _id: {
+    type: String,
+    required: true,
+  },
+  startDate: {
+    type: Date,
+    required: true,
+  },
+  endDate: {
+    type: Date,
+    required: true,
+  },
+  message: {
+    type: String,
+    required: true,
+  },
+});
+
+export const StaffMessageModel = mongoose.model<StaffMessage>('StaffMessage', staffMessageSchema);

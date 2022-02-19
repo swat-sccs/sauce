@@ -27,6 +27,7 @@ html(lang='en')
                 )= name
             +navTab('tasks', 'Tasks', true)
             +navTab('accounts', 'Accounts')
+            +navTab('messages', 'Staff Message')
           #tabContent.tab-content
             mixin tabPane(id, selected = false)
               .tab-pane.fade.border.border-top-0.rounded-bottom.p-3(
@@ -87,6 +88,22 @@ html(lang='en')
                     th(scope='col')
                     th(scope='col') Name
                     th(scope='col') Email
+            +tabPane('messages')
+              .mb-2
+                button#newMessageButton.btn.btn-success(
+                  data-bs-toggle='modal',
+                  data-bs-target='#messageModal'
+                ) New Staff Message
+              hr
+              table#messageTable.table(width='100%', style='white-space: nowrap')
+                thead
+                  tr 
+                    th(scope='col')
+                    th(scope='col')
+                    th(scope='col') Start
+                    th(scope='col') End
+                    th(scope='col') Message
+
     //- modal
     #taskModal.modal.fade(tabindex='-1', aria-labelledby='taskModalTitle', aria-hidden='true')
       .modal-dialog 
@@ -115,10 +132,52 @@ html(lang='en')
               script#buttonLoader(type='text/html')
                 span.spinner-border.spinner-border-sm(role='status', aria-hidden='true')
                 | &nbsp;Processing...
+    #messageModal.modal.fade(
+      tabindex='-1',
+      aria-labelledby='messageModalTitle',
+      aria-hidden='true'
+    )
+      .modal-dialog 
+        .modal-content 
+          .modal-header
+            h5#messageModalTitle.modal-title New Staff Message
+            button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+          form#messageForm(onsubmit='window.submitMessage(); return false;', autocomplete='off')
+            .modal-body
+              .row.mb-3
+                label.form-label.col-2.col-form-label(for='messageStartDate') Start
+                .col
+                  input#messageStartDate.form-control(
+                    type='datetime-local',
+                    name='startDate',
+                    placeholder='Start date',
+                    required
+                  )
+              .row.mb-3
+                label.form-label.col-2.col-form-label(for='messageEndDate') End
+                .col
+                  input#messageEndDate.form-control(
+                    type='datetime-local',
+                    name='endDate',
+                    placeholder='End date',
+                    required
+                  )
+              textarea#messageArea.form-control(
+                rows='3',
+                name='message',
+                placeholder='Message',
+                aria-describedby='messageDescription',
+                required
+              )
+              #messageDescription.form-text This text (including any HTML) will be included verbatim on each page.
+            .modal-footer
+              button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Close
+              button#newMessageButton.btn.btn-success Create
     //- defined here so I can access the rendery variables.
     script(type='text/javascript').
       const TASK_DATA_URL = '#{taskDataUrl}';
       const USER_DATA_URL = '#{userDataUrl}';
+      const MESSAGE_DATA_URL = '#{messageDataUrl}';
     if tab
       script(type='text/javascript').
         window.tabToJumpTo = '#{tab}';

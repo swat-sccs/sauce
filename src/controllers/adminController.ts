@@ -1,8 +1,9 @@
 import * as jf from 'joiful';
 import { HttpException } from '../error/httpException';
 import * as taskFunctionMap from '../functions/taskFunctionMap';
-import { Task, TaskModel } from '../integration/models';
+import { StaffMessageModel, Task, TaskModel } from '../integration/models';
 import { logger } from '../util/logging';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  */
@@ -95,4 +96,37 @@ export const modifyTask = async (
 
     return 'executed';
   }
+};
+
+/**
+ */
+export class NewStaffMessage {
+  @jf.date().required()
+  startDate: Date;
+
+  @jf.date().required()
+  endDate: Date;
+
+  @jf.string().required()
+  message: string;
+}
+
+export const getStaffMessages = async () => {
+  return await StaffMessageModel.find().exec();
+};
+
+export const addStaffMessage = async (msg: NewStaffMessage) => {
+  const uuid = uuidv4();
+  logger.info(`Creating new staff message ${uuid}`);
+  await new StaffMessageModel({
+    _id: uuid,
+    startDate: msg.startDate,
+    endDate: msg.endDate,
+    message: msg.message,
+  }).save();
+};
+
+export const deleteStaffMessage = async (id: string) => {
+  logger.info(`Deleting staff message ${id}`);
+  await StaffMessageModel.findByIdAndDelete(id).exec();
 };
