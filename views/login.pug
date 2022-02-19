@@ -18,7 +18,7 @@ include include/sauce-common
         label(for='passwordInput') Password
 
     button.btn.btn-large.btn-primary.mb-3(type='submit') Sign in
-    if failedAlready
-      p.text-danger That username and password combination doesn't match any SCCS account on file.
+    if failMessage
+      p.text-danger= failMessage
     p#userPasswordHelp.small
       a(href='/account/forgot') Forgot username or password?

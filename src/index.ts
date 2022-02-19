@@ -21,13 +21,36 @@ import { minecraftRouter } from './routes/minecraft';
 import { docRouter } from './routes/docs';
 import { StaffMessageModel } from './integration/models';
 import { catchErrors } from '../agent/src/util';
+import helmet from 'helmet';
+import { limitRequestRate } from './util/rateLimits';
 
 const initExpress = (): void => {
   const port = process.env.PORT || 3000;
   logger.info('Initializing Express');
   const app = express();
 
-  app.use(cors());
+  // security
+  app.use(limitRequestRate);
+  if (process.env.NODE_ENV === 'production') {
+    app.use(
+      helmet({
+        hsts: false,
+        contentSecurityPolicy: {
+          directives: {
+            // allow analytics too
+            'script-src': ["'self'", "'unsafe-inline'"].concat(
+              process.env.PLAUSIBLE_SERVER ? [process.env.PLAUSIBLE_SERVER] : [],
+            ),
+          },
+        },
+      }),
+    );
+  }
+
+  app.use(cors({ origin: process.env.EXTERNAL_ADDRESS }));
+  app.disable('x-powered-by');
+
+  // parsing and stuff
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(doRequestId);
@@ -50,8 +73,11 @@ const initExpress = (): void => {
       store: MongoStore.create({ clientPromise: mongoPromise }),
       cookie: {
         httpOnly: true,
-        maxAge: 60 * 60 * 1000,
+        secure: process.env.NODE_ENV == 'production',
+        // don't persist to disk but keep until you quit and reopen the browser; MongoStore also
+        // expires sessions after two weeks of inactivity
       },
+      name: 'sauce',
       resave: false,
     }),
   );
