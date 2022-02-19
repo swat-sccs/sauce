@@ -1,5 +1,4 @@
 import { RateLimiterMemory, RateLimiterRes } from 'rate-limiter-flexible';
-import mongoose from 'mongoose';
 import { RequestHandler } from 'express';
 import { Response } from 'express';
 import { catchErrors } from './asyncCatch';

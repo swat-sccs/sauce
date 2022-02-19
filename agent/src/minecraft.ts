@@ -50,7 +50,6 @@ const doWhitelist = async (
 
 router.post(
   '/:uuid',
-  passport.authenticate('bearer', { session: false }),
   catchErrors(async (req, res, next) => {
     await doWhitelist('add', req.params.uuid, res);
   }),
@@ -58,7 +57,6 @@ router.post(
 
 router.delete(
   '/:uuid',
-  passport.authenticate('bearer', { session: false }),
   catchErrors(async (req, res, next) => {
     await doWhitelist('remove', req.params.uuid, res);
   }),

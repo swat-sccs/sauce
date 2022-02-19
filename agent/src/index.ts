@@ -5,13 +5,13 @@ import express from 'express';
 import { Strategy as BearerStrategy } from 'passport-http-bearer';
 import { userRouter } from './user';
 import argon2 from 'argon2';
-import { limitRequestRate, logger } from './util';
+import { denyRateLimited, penalizeLimiter, logger } from './util';
 import { forwardingRouter } from './forwardFile';
 import { minecraftRouter } from './minecraft';
 
 const app = express();
 
-app.use(limitRequestRate);
+app.use(denyRateLimited);
 
 app.use(express.json());
 app.use(express.raw({ type: 'text/plain' }));
@@ -28,7 +28,14 @@ passport.use(
 );
 
 app.use(passport.initialize());
-
+app.use(
+  passport.authenticate('bearer', { session: false, failWithError: true }),
+  (err, req, res, next) => {
+    logger.warn(`Invalid token provided from ${req.ip}`);
+    penalizeLimiter(req, res, next);
+    res.sendStatus(401);
+  },
+);
 app.use('/newUser', userRouter);
 app.use('/forwardFile', forwardingRouter);
 app.use('/mcWhitelist', minecraftRouter);

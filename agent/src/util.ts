@@ -29,31 +29,40 @@ export class LocalUser {
 
 export const logger: Logger = new Logger();
 
-const setRateLimitHeaders = (limiterRes: RateLimiterRes, res: Response) => {
-  res.setHeader(
-    'X-RateLimit-Limit',
-    (limiterRes.remainingPoints || 0) + (limiterRes.consumedPoints || 0),
-  );
-  res.setHeader('X-RateLimit-Remaining', limiterRes.remainingPoints || 0);
-  res.setHeader(
-    'X-RateLimit-Reset',
-    Math.ceil(new Date(Date.now() + limiterRes.msBeforeNext).getTime() / 1000),
-  );
+const setRateLimitHeaders = (limiterRes: RateLimiterRes | null, res: Response) => {
+  if (limiterRes) {
+    res.setHeader(
+      'X-RateLimit-Limit',
+      (limiterRes.remainingPoints || 0) + (limiterRes.consumedPoints || 0),
+    );
+    res.setHeader('X-RateLimit-Remaining', limiterRes.remainingPoints || 0);
+    res.setHeader(
+      'X-RateLimit-Reset',
+      Math.ceil(new Date(Date.now() + limiterRes.msBeforeNext).getTime() / 1000),
+    );
+  }
 };
 
-// dumb rate limiter to handle requests
-// I would use a MongoDB backend here but there's a weird bug where it dies on the first request
+// paranoid, only allows one failed key per IP every five seconds
+// this thing should only be getting requests from the SAUCE frontend server, which should have the
+// key configured statically - we aren't locking out people for typos
 const requestRateLimiter = new RateLimiterMemory({
-  keyPrefix: 'ratelimit_requests_per_id',
-  points: 10, // 10 requests
-  duration: 1, // per 1 second by IP
+  keyPrefix: 'ratelimit_auth_failures',
+  points: 1, // 1 requests
+  duration: 5, // per 5 seconds
 });
 
-export const limitRequestRate: RequestHandler = catchErrors(async (req, res, next) => {
+export const denyRateLimited: RequestHandler = catchErrors(async (req, res, next) => {
   try {
-    const limiterRes = await requestRateLimiter.consume(req.ip);
+    const limiterRes = await requestRateLimiter.get(req.ip);
     setRateLimitHeaders(limiterRes, res);
-    next();
+
+    if (limiterRes && (limiterRes.remainingPoints || 0) <= 0) {
+      res.setHeader('Retry-After', Math.ceil(limiterRes.msBeforeNext / 1000));
+      res.sendStatus(429);
+    } else {
+      next();
+    }
   } catch (e) {
     if (e instanceof Error) {
       throw e;
@@ -63,4 +72,9 @@ export const limitRequestRate: RequestHandler = catchErrors(async (req, res, nex
       res.sendStatus(429);
     }
   }
+});
+
+// penalize for incorrect attempts
+export const penalizeLimiter: RequestHandler = catchErrors(async (req, res, next) => {
+  await requestRateLimiter.penalty(req.ip);
 });

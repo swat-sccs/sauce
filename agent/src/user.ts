@@ -10,7 +10,6 @@ export const userRouter = router;
 
 userRouter.post(
   '/:classYear/:username',
-  passport.authenticate('bearer', { session: false }),
   catchErrors(async (req, res, next) => {
     const { error, value } = jf.validateAsClass(req.params, LocalUser);
     if (error) {

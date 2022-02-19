@@ -11,7 +11,6 @@ export const forwardingRouter = router;
 
 forwardingRouter.get(
   '/:classYear/:username',
-  passport.authenticate('bearer', { session: false }),
   catchErrors((req, res, next) => {
     const { error, value } = jf.validateAsClass(req.params, LocalUser);
     if (error) {
@@ -31,7 +30,6 @@ forwardingRouter.get(
 
 forwardingRouter.post(
   '/:classYear/:username',
-  passport.authenticate('bearer', { session: false }),
   catchErrors((req, res, next) => {
     const { error, value } = jf.validateAsClass(req.params, LocalUser);
     if (error) {
