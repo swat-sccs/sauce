@@ -44,6 +44,7 @@ const initExpress = (): void => {
             'connect-src': ["'self'"].concat(
               process.env.PLAUSIBLE_SERVER ? [process.env.PLAUSIBLE_SERVER] : [],
             ),
+            'script-src-attr': ["'self'", "'unsafe-inline'"],
           },
         },
       }),
