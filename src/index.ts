@@ -74,9 +74,10 @@ const initExpress = (): void => {
       secret: process.env.SESSION_SECRET,
       saveUninitialized: false,
       store: MongoStore.create({ clientPromise: mongoPromise }),
+      proxy: true,
       cookie: {
         httpOnly: true,
-        secure: process.env.NODE_ENV == 'production',
+        secure: process.env.NODE_ENV === 'production',
         // don't persist to disk but keep until you quit and reopen the browser; MongoStore also
         // expires sessions after two weeks of inactivity
       },
