@@ -40,7 +40,14 @@ const initExpress = (): void => {
     );
   }
 
-  app.use(cors({ origin: process.env.EXTERNAL_ADDRESS }));
+  app.use(
+    cors({
+      origin: [
+        process.env.EXTERNAL_ADDRESS,
+        process.env.EXTERNAL_ADDRESS.replace('https://', 'https://www.'),
+      ],
+    }),
+  );
   app.disable('x-powered-by');
 
   // parsing and stuff
