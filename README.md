@@ -1,8 +1,7 @@
 # SAUCE
 
 The SCCS Account and User Control Engine, or SAUCE, is the central dashboard for SCCS services. The
-project replaces GUTS (the Grand Unified Task System) and SCCS's previous static homepage. Currently
-WIP.
+project replaces GUTS (the Grand Unified Task System) and SCCS's previous static homepage.
 
 ## Features
 
