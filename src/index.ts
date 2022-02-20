@@ -35,18 +35,7 @@ const initExpress = (): void => {
     app.use(
       helmet({
         hsts: false,
-        contentSecurityPolicy: {
-          directives: {
-            // allow analytics too
-            'script-src': ["'self'", "'unsafe-inline'"].concat(
-              process.env.PLAUSIBLE_SERVER ? [process.env.PLAUSIBLE_SERVER] : [],
-            ),
-            'connect-src': ["'self'"].concat(
-              process.env.PLAUSIBLE_SERVER ? [process.env.PLAUSIBLE_SERVER] : [],
-            ),
-            'script-src-attr': ["'self'", "'unsafe-inline'"],
-          },
-        },
+        contentSecurityPolicy: false,
       }),
     );
   }
