@@ -50,7 +50,7 @@ function doFormSubmit() {
           nameInput.value = '';
           nameInput.setCustomValidity('');
         } else {
-          nameFeedback.innerHTML = 'List already exists';
+          nameFeedback.innerHTML = 'List name is already taken';
           nameInput.setCustomValidity('err');
           form.classList.add('was-validated');
         }

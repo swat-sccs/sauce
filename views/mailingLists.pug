@@ -26,7 +26,8 @@ include include/sauce-common
           button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
         form#mailingForm.form-mailing.needs-validation(
           novalidate,
-          onsubmit='window.doFormSubmit(); return false;'
+          onsubmit='window.doFormSubmit(); return false;',
+          autocomplete='off'
         )
           .modal-body
             p.
