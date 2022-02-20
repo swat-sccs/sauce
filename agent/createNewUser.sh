@@ -45,5 +45,4 @@ chmod 660 $spool
 chown "$user:mail" $spool
 
 echo "Updating Postfix"
-/etc/postfix/make_vam.sh
 /usr/sbin/postfix reload

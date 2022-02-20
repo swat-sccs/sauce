@@ -35,9 +35,9 @@ export const createAccount = async (data: any) => {
   if (isCreateAccountData(data)) {
     logger.info(`Creating account for ${data.username}`);
 
-    const homedir = `${process.env.BASE_DIR}/home/${data.classYear}/${data.username}`;
-    const webdir = `${process.env.BASE_DIR}/srv/users/${data.classYear}/${data.username}`;
-    const spool = `${process.env.BASE_DIR}/var/spool/mail/${data.username}`;
+    const homedir = `/home/${data.classYear}/${data.username}`;
+    const webdir = `/srv/users/${data.classYear}/${data.username}`;
+    const spool = `/var/spool/mail/${data.username}`;
 
     // create a new UID by finding the highest existing UID and adding 1
     const uids = (await searchAsyncMultiple(ldapClient, 'objectClass=posixAccount', ['uidNumber']))
