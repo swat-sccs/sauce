@@ -1,7 +1,7 @@
 mixin sauce-container
   .d-flex.flex-column.min-vh-100
     if staffMessage
-      .bg-primary.text-light
+      .bg-light
         .container.mx-auto.p-2.text-center
           span!= staffMessage
     header.sticky-top.mb-4
@@ -87,7 +87,9 @@ mixin sauce-container
                           data-bs-toggle='dropdown',
                           aria-expanded='false'
                         )= page.title
-                        ul.dropdown-menu(aria-labelledby=page.id + 'Dropdown')
+                        ul.dropdown-menu.dropdown-menu-dark.bg-primary(
+                          aria-labelledby=page.id + 'Dropdown'
+                        )
                           each child in page.children
                             +showPageIfAllowed(child, attributes.user)
                               li
@@ -118,7 +120,7 @@ mixin sauce-container
         .container
           span.small.text-white
             | &copy; #{ new Date().getFullYear() } Swarthmore College Computer Society
-            | | Problems with this website? Email&nbsp;#[a(href='mailto:staff@sccs.swarthmore.edu', style='color: #fff') staff@sccs.swarthmore.edu].
+            | | Problems with this website? Email&nbsp;#[a(href='mailto:staff@sccs.swarthmore.edu') staff@sccs.swarthmore.edu].
 
 mixin sauce-layout(title)
   doctype

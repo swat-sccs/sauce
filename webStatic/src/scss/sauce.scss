@@ -1,31 +1,36 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400;0,500;0,600;1,400;1,600&display=swap');
-//$primary: #F46523;
 
-$primary: #31425F;
+$primary: #31425f;
+$danger: #86001A;
+$sccs-accent: #f46523;
+
+$body-bg: #f1f1f1;
 
 $navbar-dark-color: #fff;
-$navbar-dark-hover-color: #F46523;
-$navbar-dark-active-color: #F46523;
+$navbar-dark-hover-color: $sccs-accent;
+$navbar-dark-active-color: $sccs-accent;
 $navbar-dark-brand-color: $navbar-dark-color;
 
-/*$theme-colors: (
-  "primary": #F46523,
-  "danger": $danger
-);*/
-//$body-bg: #f423d1;
+$dropdown-dark-link-hover-color: $sccs-accent;
+$dropdown-dark-link-hover-bg: $primary;
+$dropdown-dark-link-active-color: $sccs-accent;
 
-$font-family-base: "Raleway", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";//!default;
+$form-text-color: #495057;
+
+$input-bg: white;
+
+$font-family-base: 'Raleway', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+  'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+  'Segoe UI Symbol', 'Noto Color Emoji';
+
 $light: #d1d1d1;
-body {
-    background-color: #f1f1f1;
-}
 
 h1 {
-    color: $primary;
+  color: $primary;
 }
 
-footer {
-    color: #fff;
+td.dtr-control:before {
+  background-color: $primary !important; // override responsive-datatables
 }
 
 $display-font-sizes: (
@@ -34,17 +39,20 @@ $display-font-sizes: (
   3: 4rem,
   4: 3.5rem,
   5: 3rem,
-  6: 2.5rem
+  6: 2.5rem,
 ) !default;
 
-@import "~bootstrap/scss/bootstrap";
-:root {
-    --bs-body-bg: #f1f1f1;
-}
+@import '~bootstrap/scss/bootstrap';
+
 .btn.btn-primary {
-    color: #fff;//#FFFFFF;
+  color: #fff;
 }
 
 code {
-    color: $primary
+  color: $primary;
+}
+
+// links in footer
+.bg-primary a {
+  color: white;
 }

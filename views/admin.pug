@@ -90,7 +90,7 @@ html(lang='en')
                     th(scope='col') Email
             +tabPane('messages')
               .mb-2
-                button#newMessageButton.btn.btn-success(
+                button#newMessageButton.btn.btn-primary(
                   data-bs-toggle='modal',
                   data-bs-target='#messageModal'
                 ) New Staff Message
@@ -128,8 +128,8 @@ html(lang='en')
               input#taskModalId(type='hidden', name='id')
               input#rejectInput(type='hidden', name='reject', value='true')
               button#taskRejectButton.btn.btn-danger(value='true') Reject
-              button#taskApproveButton.btn.btn-success(value='false') Approve
-              button#taskRetryButton.btn.btn-success(value='false') Retry
+              button#taskApproveButton.btn.btn-primary(value='false') Approve
+              button#taskRetryButton.btn.btn-primary(value='false') Retry
               script#buttonLoader(type='text/html')
                 span.spinner-border.spinner-border-sm(role='status', aria-hidden='true')
                 | &nbsp;Processing...
@@ -173,7 +173,7 @@ html(lang='en')
               #messageDescription.form-text This text (including any HTML) will be included verbatim on each page.
             .modal-footer
               button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Close
-              button#newMessageButton.btn.btn-success Create
+              button#newMessageButton.btn.btn-primary Create
     //- defined here so I can access the rendery variables.
     script(type='text/javascript').
       const TASK_DATA_URL = '#{taskDataUrl}';

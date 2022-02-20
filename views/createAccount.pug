@@ -58,6 +58,6 @@ include include/sauce-common
           )
           label.form-check-label(for='classYear1' + val, style='text-transform: capitalize')= /^\d+$/.test(val) ? '\u2019' + val : val
     button#submitButton.btn.btn-large.btn-primary.mb-3(type='submit') Request Your Account
-    p.text-muted Already have an account? #[a(href='/login') Sign in].
+    p.text-muted.mb-0 Already have an account? #[a(href='/login') Sign in].
   script(type='text/javascript', src='/dist/js/createAccount.js')
   //- .col
