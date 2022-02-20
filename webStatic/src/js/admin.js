@@ -66,54 +66,56 @@ window.submitMessage = async function () {
   $('#messageTable').DataTable().ajax.reload();
 };
 
+function renderTaskInModal(taskData) {
+  // passing data to modals
+  const taskModal = document.getElementById('taskModal');
+  const title = taskModal.querySelector('.modal-title');
+  title.textContent = `${taskData._id} (${taskData.status})`;
+
+  const operation = document.getElementById('taskModalOperation');
+  operation.textContent = taskData.operation;
+
+  const taskModalIdField = document.getElementById('taskModalId');
+  taskModalIdField.value = taskData._id;
+
+  const modalData = document.getElementById('taskModalData');
+
+  const dataPairs = [];
+  modalData.replaceChildren();
+  for (const [key, value] of Object.entries(taskData.data)) {
+    const row = document.createElement('tr');
+    const keyElement = document.createElement('th');
+    keyElement.innerText = key;
+
+    row.appendChild(keyElement);
+
+    const valElement = document.createElement('td');
+    const valInner = document.createElement('code');
+    valInner.innerText = value;
+    valInner.style = 'white-space: nowrap;';
+    valElement.appendChild(valInner);
+
+    row.appendChild(valElement);
+
+    modalData.appendChild(row);
+  }
+
+  const pending = taskData.status === 'pending';
+  const failed = taskData.status === 'failed';
+  const reject = document.getElementById('taskRejectButton');
+  reject.style.display = pending || failed ? '' : 'none';
+  const approve = document.getElementById('taskApproveButton');
+  approve.style.display = pending ? '' : 'none';
+  const retry = document.getElementById('taskRetryButton');
+  retry.style.display = failed ? '' : 'none';
+}
+
 (function () {
   refreshTooltips();
   refreshTaskTimestamp();
 
   // passing data to modals
   const taskModal = document.getElementById('taskModal');
-
-  function renderTaskInModal(taskData) {
-    const title = taskModal.querySelector('.modal-title');
-    title.textContent = `${taskData._id} (${taskData.status})`;
-
-    const operation = document.getElementById('taskModalOperation');
-    operation.textContent = taskData.operation;
-
-    const taskModalIdField = document.getElementById('taskModalId');
-    taskModalIdField.value = taskData._id;
-
-    const modalData = document.getElementById('taskModalData');
-
-    const dataPairs = [];
-    modalData.replaceChildren();
-    for (const [key, value] of Object.entries(taskData.data)) {
-      const row = document.createElement('tr');
-      const keyElement = document.createElement('th');
-      keyElement.innerText = key;
-
-      row.appendChild(keyElement);
-
-      const valElement = document.createElement('td');
-      const valInner = document.createElement('code');
-      valInner.innerText = value;
-      valInner.style = 'white-space: nowrap;';
-      valElement.appendChild(valInner);
-
-      row.appendChild(valElement);
-
-      modalData.appendChild(row);
-    }
-
-    const pending = taskData.status === 'pending';
-    const failed = taskData.status === 'failed';
-    const reject = document.getElementById('taskRejectButton');
-    reject.style.display = pending || failed ? '' : 'none';
-    const approve = document.getElementById('taskApproveButton');
-    approve.style.display = pending ? '' : 'none';
-    const retry = document.getElementById('taskRetryButton');
-    retry.style.display = failed ? '' : 'none';
-  }
 
   // modal button hackiness
   const approve = document.getElementById('taskApproveButton');
