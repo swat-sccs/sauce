@@ -9,8 +9,6 @@ export const logger: Logger = new Logger({
   requestId: (): string => {
     return asyncLocalStorage.getStore()?.requestId;
   },
-  colorizePrettyLogs: process.env.NODE_ENV === 'production',
-  displayDateTime: process.env.NODE_ENV === 'production',
 });
 
 export const doRequestId: RequestHandler = async (_req, res, next) => {

@@ -146,11 +146,16 @@ const initExpress = (): void => {
 };
 
 const init = async (): Promise<void> => {
-  logger.info('Starting SAUCE server');
-
   if (process.env.NODE_ENV === 'production') {
+    logger.setSettings({
+      displayDateTime: false,
+      colorizePrettyLogs: false,
+    });
     logger.info('Configured for production environment');
   }
+
+  logger.info('Starting SAUCE server');
+
   initExpress();
 };
 
