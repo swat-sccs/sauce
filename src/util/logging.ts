@@ -9,6 +9,7 @@ export const logger: Logger = new Logger({
   requestId: (): string => {
     return asyncLocalStorage.getStore()?.requestId;
   },
+  colorizePrettyLogs: false,
 });
 
 export const doRequestId: RequestHandler = async (_req, res, next) => {
