@@ -29,6 +29,10 @@ const initExpress = (): void => {
   logger.info('Initializing Express');
   const app = express();
 
+  if (process.env.TRUST_PROXY) {
+    app.set('trust proxy', process.env.TRUST_PROXY);
+  }
+
   // security
   app.use(limitRequestRate);
   if (process.env.NODE_ENV === 'production') {
