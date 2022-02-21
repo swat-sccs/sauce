@@ -5,7 +5,18 @@ html(lang='en')
   head
     include include/head.pug
     title= title
-  body
+    meta(property='og:title', content=`Error ${status}`)
+    meta(property='og:type', content='website')
+    meta(property='og:image', content=`${process.env.EXTERNAL_ADDRESS}/static/sccs-logo.png`)
+    meta(property='og:url', content=process.env.EXTERNAL_ADDRESS + path)
+    meta(property='og:site_name', content='Swarthmore College Computer Society')
+    meta(property='twitter:card', content='summary')
+    meta(property='twitter:domain', content='sccs.swarthmore.edu')
+    meta(property='twitter:url', content=process.env.EXTERNAL_ADDRESS + path)
+    meta(property='twitter:title', content=title)
+    meta(property='twitter:image', content=`${process.env.EXTERNAL_ADDRESS}/static/sccs-logo.png`)
+    meta(property='twitter:image:alt', content='SCCS logo')
+  body 
     +sauce-container(hideNavbar=!showNavbar, hideFooter=!showFooter)
       h1.mb-4.display-1= title
       div(style='max-width: 600px')

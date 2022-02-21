@@ -6,6 +6,7 @@ html(lang='en')
     include include/head.pug
 
     title SAUCE Admin: tasks
+    // no meta tags since you need login to view this page anyway
   body
     +sauce-container(pageId='admin', user=user)
       .row

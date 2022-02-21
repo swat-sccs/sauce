@@ -97,6 +97,7 @@ const initExpress = (): void => {
     catchErrors(async (req, res, next) => {
       // set the user object so we don't have to pass it everywhere
       res.locals.user = req.user;
+      res.locals.path = req.path;
 
       const time = Date.now();
 
