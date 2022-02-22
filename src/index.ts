@@ -129,9 +129,12 @@ const initExpress = (): void => {
   app.use('/minecraft', minecraftRouter);
   app.use('/docs', docRouter);
 
-  app.use('/favicon.ico', express.static('public/favicon.ico'));
   app.use('/static', express.static('public/'));
   app.use('/dist', expressStaticGzip('dist/', {}));
+
+  // stupid canonical redirects
+  app.use('/favicon.ico', express.static('public/favicon.ico'));
+  app.use('/index.html', (req, res) => res.redirect(301, '/'));
 
   app.use((req: any, res, next) => {
     next(new HttpException(404, { message: req.path }));
