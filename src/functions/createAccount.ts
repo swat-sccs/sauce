@@ -65,7 +65,7 @@ export const createAccount = async (data: any) => {
 
     await createLocalUser(data);
 
-    const [resetId, resetKey] = await createPasswordResetRequest(data.username, 24 * 7);
+    const [resetId, resetKey] = await createPasswordResetRequest(data.username, 24 * 7, true);
 
     const [emailText, transporter] = await Promise.all([
       generateEmail('newAccount.html', {
