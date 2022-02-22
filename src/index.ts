@@ -129,6 +129,7 @@ const initExpress = (): void => {
   app.use('/minecraft', minecraftRouter);
   app.use('/docs', docRouter);
 
+  app.use('/favicon.ico', express.static('public/favicon.ico'));
   app.use('/static', express.static('public/'));
   app.use('/dist', expressStaticGzip('dist/', {}));
 
