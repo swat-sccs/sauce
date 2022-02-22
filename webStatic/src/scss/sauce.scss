@@ -64,3 +64,8 @@ code {
 .bg-primary a:hover {
   color: $sccs-accent;
 }
+
+// fix scrolling with navbar
+html {
+  scroll-padding-top: 70px;
+}
