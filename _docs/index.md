@@ -30,24 +30,23 @@ accept new members at the beginning of each fall semester.
 ### Current Members
 
 - [Zachary Robinson](https://robinsonz.me) '24 (Co-President)
-- Yatin Lala '24 (Co-President, Treasurer)
+- [Yatin Lala](https://yatin.cc) '24 (Co-President, Treasurer)
+- Adin Aberbach '25
+- Belle Romea '24
 - Bill Dengler '22
-- Theo Schrader '22
-- Seth Keim '23
-- Vipul Periwal '23
-- Paige Looney '23
-- Patrick Wheeler '23
-- Orlando Azuara '24
-- SaengMoung (Jacob) Park '24
+- Emmy Stavis '24
 - Ere Oh '24
 - Kenneth Barkdoll '24
-- Emmy Stavis '24
-- Sasha Casada '24
-- Belle Romea '24
-- Lindsey Turner '25
-- Adin Aberbach '25
 - Leo Douhovnikoff '25
+- Lindsey Turner '25
+- Orlando Azuara '24
+- Paige Looney '23
+- Patrick Wheeler '23
+- Sasha Casada '24
+- Seth Keim '23
+- Theo Schrader '22
 - [Thomas Makin](https://thomasmak.in/) '25
+- Vipul Periwal '23
 
 ### History
 
