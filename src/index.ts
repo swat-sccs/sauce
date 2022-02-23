@@ -53,6 +53,17 @@ const initExpress = (): void => {
   app.use(doRequestId);
   app.use(logRequest);
 
+  // STATIC FILES
+  // placed before all the passportjs and session stuff so that we don't ping LDAP, etc. on every
+  // request for a stylesheet
+
+  app.use('/static', express.static('public/'));
+  app.use('/dist', expressStaticGzip('dist/', {}));
+
+  // stupid canonical redirects
+  app.use('/favicon.ico', express.static('public/favicon.ico'));
+  app.use('/index.html', (req, res) => res.redirect(301, '/'));
+
   // DB CONFIG
   const mongoPromise = initMongo(process.env.MONGO_URI);
 
@@ -128,13 +139,6 @@ const initExpress = (): void => {
   app.use('/lists', mailingRouter);
   app.use('/minecraft', minecraftRouter);
   app.use('/docs', docRouter);
-
-  app.use('/static', express.static('public/'));
-  app.use('/dist', expressStaticGzip('dist/', {}));
-
-  // stupid canonical redirects
-  app.use('/favicon.ico', express.static('public/favicon.ico'));
-  app.use('/index.html', (req, res) => res.redirect(301, '/'));
 
   app.use((req: any, res, next) => {
     next(new HttpException(404, { message: req.path }));
