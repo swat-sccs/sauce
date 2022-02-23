@@ -46,6 +46,10 @@ $display-font-sizes: (
   6: 2.5rem,
 ) !default;
 
+// needed for some button spacings on the homepage 
+// see https://getbootstrap.com/docs/5.1/utilities/spacing/#negative-margin
+$enable-negative-margins: true;
+
 @import '~bootstrap/scss/bootstrap';
 
 .btn.btn-primary {
