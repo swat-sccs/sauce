@@ -1,8 +1,7 @@
-import * as jf from 'joiful';
-
 import { RequestHandler, Response } from 'express';
-import { Logger } from 'tslog';
+import * as jf from 'joiful';
 import { RateLimiterMemory, RateLimiterRes } from 'rate-limiter-flexible';
+import { Logger } from 'tslog';
 
 export const catchErrors = (action: RequestHandler): RequestHandler => {
   return async (req, res, next): Promise<any> => {

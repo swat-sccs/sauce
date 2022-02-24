@@ -1,4 +1,5 @@
 import { Handler } from 'express';
+
 import { HttpException } from '../error/httpException';
 import { ldapClient } from '../integration/ldap';
 import { searchAsync, searchAsyncUid } from './ldapUtils';

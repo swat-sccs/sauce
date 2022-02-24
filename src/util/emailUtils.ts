@@ -1,7 +1,8 @@
+import nodemailer from 'nodemailer';
+
 import { mailTransporter } from '../integration/email';
 import { Task } from '../integration/models';
 import { generateEmail } from './emailTemplates';
-import nodemailer from 'nodemailer';
 import { logger } from './logging';
 
 export const sendTaskNotification = async (task: Task) => {

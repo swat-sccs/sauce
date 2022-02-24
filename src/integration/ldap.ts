@@ -1,5 +1,6 @@
 import LdapAuth from 'ldapauth-fork';
 import ldap from 'ldapjs';
+
 import { logger } from '../util/logging';
 
 export const LDAP_CONFIG: LdapAuth.Options = {

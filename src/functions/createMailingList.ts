@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+
 import { mailTransporter } from '../integration/email';
 import { ldapClient } from '../integration/ldap';
 import { addMailingList } from '../integration/mailman';

@@ -1,7 +1,7 @@
 import { execFileSync } from 'child_process';
 import { Router } from 'express';
 import * as jf from 'joiful';
-import passport from 'passport';
+
 import { catchErrors, LocalUser, logger } from './util';
 
 const router = Router(); // eslint-disable-line new-cap

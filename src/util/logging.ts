@@ -1,7 +1,7 @@
 import { AsyncLocalStorage } from 'async_hooks';
 import { RequestHandler } from 'express';
-import { Logger } from 'tslog';
 import { customAlphabet } from 'nanoid';
+import { Logger } from 'tslog';
 
 const asyncLocalStorage: AsyncLocalStorage<{ requestId: string }> = new AsyncLocalStorage();
 

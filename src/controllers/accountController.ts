@@ -4,6 +4,7 @@ import * as jf from 'joiful';
 import { Change } from 'ldapjs';
 import nodemailer from 'nodemailer';
 import { v4 as uuidv4 } from 'uuid';
+
 import { HttpException } from '../error/httpException';
 import { mailTransporter } from '../integration/email';
 import { ldapClient } from '../integration/ldap';

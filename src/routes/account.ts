@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as jf from 'joiful';
+
 import * as controller from '../controllers/accountController';
 import { HttpException } from '../error/httpException';
 import { getForwardFile } from '../integration/localAgent';

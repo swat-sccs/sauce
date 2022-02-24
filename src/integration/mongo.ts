@@ -1,6 +1,7 @@
 import { MongoClient } from 'mongodb';
-import { logger } from '../util/logging';
 import mongoose from 'mongoose';
+
+import { logger } from '../util/logging';
 
 export const initMongo = async (
   mongoUri: string,

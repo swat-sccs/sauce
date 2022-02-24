@@ -2,13 +2,14 @@ import argon2 from 'argon2';
 import { nanoid } from 'nanoid';
 import nodemailer from 'nodemailer';
 import unidecode from 'unidecode';
+
 import { mailTransporter } from '../integration/email';
 import { ldapClient } from '../integration/ldap';
+import { createLocalUser } from '../integration/localAgent';
 import { generateEmail } from '../util/emailTemplates';
 import { addLdap, searchAsyncMultiple } from '../util/ldapUtils';
 import { logger } from '../util/logging';
 import { createPasswordResetRequest } from '../util/passwordReset';
-import { createLocalUser } from '../integration/localAgent';
 
 export interface CreateAccountData {
   username: string;

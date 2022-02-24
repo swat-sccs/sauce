@@ -1,14 +1,7 @@
 import * as jf from 'joiful';
-import {
-  AndFilter,
-  EqualityFilter,
-  Filter,
-  OrFilter,
-  PresenceFilter,
-  SubstringFilter,
-} from 'ldapjs';
+import { AndFilter, Filter, OrFilter, PresenceFilter, SubstringFilter } from 'ldapjs';
+
 import { ldapClient } from '../integration/ldap';
-import { MinecraftWhitelistModel } from '../integration/models';
 import { searchAsyncMultiple } from '../util/ldapUtils';
 import { logger } from '../util/logging';
 

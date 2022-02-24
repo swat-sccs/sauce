@@ -1,10 +1,9 @@
-import { Router } from 'express';
-import passport from 'passport';
-import { catchErrors, logger } from './util';
-import { validate } from 'uuid';
-import { getMinecraftUser } from './minecraftApi';
 import { execFileSync } from 'child_process';
-import { Response } from 'express';
+import { Response, Router } from 'express';
+import { validate } from 'uuid';
+
+import { getMinecraftUser } from './minecraftApi';
+import { catchErrors, logger } from './util';
 
 // eslint-disable-next-line new-cap
 const router = Router();

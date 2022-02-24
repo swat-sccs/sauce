@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import * as jf from 'joiful';
 import { URLSearchParams } from 'url';
+import { validate } from 'uuid';
+
 import * as controller from '../controllers/adminController';
 import * as dtUserSearchController from '../controllers/dtUserSearchController';
 import { HttpException } from '../error/httpException';
@@ -8,7 +10,6 @@ import { catchErrors } from '../util/asyncCatch';
 import { isAdmin } from '../util/authUtils';
 import { logger } from '../util/logging';
 import { groupParamsByKey } from '../util/paramUtils';
-import { validate } from 'uuid';
 
 const router = Router(); // eslint-disable-line new-cap
 

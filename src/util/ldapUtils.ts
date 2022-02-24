@@ -1,4 +1,5 @@
 import ldap, { Filter } from 'ldapjs';
+
 import { ldapClient } from '../integration/ldap';
 import { logger } from './logging';
 

@@ -1,9 +1,9 @@
-import * as jf from 'joiful';
-import passport from 'passport';
-import { existsSync, readFileSync, writeFileSync } from 'fs';
-import path from 'path';
-import { catchErrors, LocalUser, logger } from './util';
 import { Router } from 'express';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
+import * as jf from 'joiful';
+import path from 'path';
+
+import { catchErrors, LocalUser, logger } from './util';
 
 const router = Router(); // eslint-disable-line new-cap
 

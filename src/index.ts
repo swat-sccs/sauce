@@ -1,27 +1,29 @@
 import 'dotenv/config';
 import 'reflect-metadata'; // needed for joiful to work
+
 import MongoStore from 'connect-mongo';
 import cors from 'cors';
 import express from 'express';
 import session from 'express-session';
+import expressStaticGzip from 'express-static-gzip';
+import helmet from 'helmet';
 import passport from 'passport';
 import LdapStrategy from 'passport-ldapauth';
-import expressStaticGzip from 'express-static-gzip';
+
+import { catchErrors } from '../agent/src/util';
+import { errorHandler } from './error/errorHandler';
+import { HttpException } from './error/httpException';
 import { LDAP_CONFIG } from './integration/ldap';
-import { doRequestId, logger, logRequest } from './util/logging';
+import { StaffMessageModel } from './integration/models';
 import { initMongo } from './integration/mongo';
 import { accountRouter } from './routes/account';
 import { adminRouter } from './routes/admin';
+import { docRouter } from './routes/docs';
 import { loginRouter } from './routes/login';
-import { getUserInfo } from './util/authUtils';
-import { HttpException } from './error/httpException';
-import { errorHandler } from './error/errorHandler';
 import { mailingRouter } from './routes/mailingList';
 import { minecraftRouter } from './routes/minecraft';
-import { docRouter } from './routes/docs';
-import { StaffMessageModel } from './integration/models';
-import { catchErrors } from '../agent/src/util';
-import helmet from 'helmet';
+import { getUserInfo } from './util/authUtils';
+import { doRequestId, logger, logRequest } from './util/logging';
 import { limitRequestRate } from './util/rateLimits';
 
 const initExpress = (): void => {
