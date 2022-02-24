@@ -44,6 +44,7 @@
     "pug": "^3.0.2",
     "rate-limiter-flexible": "^2.3.6",
     "tslog": "^3.2.2",
+    "unidecode": "^0.1.8",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -60,6 +61,7 @@
     "@types/node": "^12.12.11",
     "@types/nodemailer": "^6.4.4",
     "@types/passport": "^1.0.7",
+    "@types/unidecode": "^0.1.1",
     "@types/uuid": "^8.3.3",
     "@types/zxcvbn": "^4.4.1",
     "@typescript-eslint/eslint-plugin": "^5.4.0",

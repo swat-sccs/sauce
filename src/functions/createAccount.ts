@@ -1,16 +1,13 @@
 import argon2 from 'argon2';
-import { promises as fs } from 'fs';
 import { nanoid } from 'nanoid';
 import nodemailer from 'nodemailer';
+import unidecode from 'unidecode';
 import { mailTransporter } from '../integration/email';
 import { ldapClient } from '../integration/ldap';
 import { generateEmail } from '../util/emailTemplates';
 import { addLdap, searchAsyncMultiple } from '../util/ldapUtils';
 import { logger } from '../util/logging';
 import { createPasswordResetRequest } from '../util/passwordReset';
-import chownr from 'chownr';
-import chmodr from 'chmodr';
-import { exec } from 'child_process';
 import { createLocalUser } from '../integration/localAgent';
 
 export interface CreateAccountData {
@@ -56,7 +53,9 @@ export const createAccount = async (data: any) => {
       uidNumber: newUid,
       homeDirectory: homedir,
       loginShell: '/bin/bash',
-      gecos: data.name,
+      // gecos field doesn't accept non-ASCII characters, although cn does, so we run the name
+      // through transliteration for this bit. See https://github.com/swat-sccs/sauce/issues/4
+      gecos: unidecode(data.name),
       userPassword: `{ARGON2}${pw}`,
       swatmail: data.email,
     };
