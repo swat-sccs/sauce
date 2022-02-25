@@ -9,7 +9,7 @@ still might be useful to you. As always, feel free to contact
 
 ## SSH
 
-We operate a SSH server at `ssh.swarthmore.edu`. You can sign in to the server with your SCCS
+We operate a SSH server at `ssh.sccs.swarthmore.edu`. You can sign in to the server with your SCCS
 account and do anything that you can normally do on a remote server, including long-running
 processes like web servers and file storage. The SSH server (currently a machine named Heron) runs
 Ubuntu with a variety of packages installed; if you'd like something else installed, just let us
