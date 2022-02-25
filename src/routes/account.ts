@@ -52,7 +52,6 @@ router.get(
   catchErrors((req, res, next) => {
     res.render('forgot', {
       done: false,
-      inputRegex: controller.USERNAME_OR_EMAIL_REGEX.source,
     });
   }),
 );
@@ -65,11 +64,10 @@ router.post(
       throw new HttpException(400, { message: 'Missing request parameter: id' });
     }
 
-    if (!controller.USERNAME_OR_EMAIL_REGEX.test(identifier)) {
-      throw new HttpException(400, {
-        message: `ID "${identifier}" isn't a valid username or email`,
-      });
-    }
+    // we previously checked whether the value could possibly be a username or email address, but
+    // code scanning didn't like it as the regex used could potentially be exploited to run in
+    // exponential time and thus cause a DoS attack. Since we'll check everything against the LDAP
+    // database anyway it's not a super big deal if someone passes a weird-ass input in here.
 
     // this runs asynchronously after we reply, so we get super-quick page returns and also prevent
     // enumeration attacks.

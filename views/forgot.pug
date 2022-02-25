@@ -1,6 +1,6 @@
 include include/sauce-common
 
-+sauce-layout('SAUCE account recovery')(hideNavbar)
++sauce-layout('SAUCE account recovery')(hideNavbar, includeBootstrapScripts)
   if done
     h1.mb-4 Check your email
     p 
@@ -17,14 +17,6 @@ include include/sauce-common
     form#forgotForm.form-forgot.needs-validation(method='post', novalidate)
       .form-group.mb-3
         .form-floating
-          input#idInput.form-control(
-            type='text',
-            name='id',
-            placeholder='Username or email',
-            pattern=inputRegex
-          )
+          input#idInput.form-control(type='text', name='id', placeholder='Username or email')
           label(for='idInput') Username or email
-          .invalid-feedback
-            p Please provide a valid username or email address.
       button.btn.btn-large.btn-primary.mb-3(type='submit') Submit
-    script(type='text/javascript', src='/dist/js/forgot.js')

@@ -8,7 +8,6 @@ module.exports = {
     account: './src/js/account.js',
     admin: './src/js/admin.js',
     createAccount: './src/js/createAccount.js',
-    forgot: './src/js/forgot.js',
     mailingLists: './src/js/mailingLists.js',
     resetPassword: './src/js/resetPassword.js',
     style: './src/js/style.js',
