@@ -1,6 +1,7 @@
 import argon2 from 'argon2';
 import Joi from 'joi';
 import * as jf from 'joiful';
+import ldapEscape from 'ldap-escape';
 import { Change } from 'ldapjs';
 import nodemailer from 'nodemailer';
 import { v4 as uuidv4 } from 'uuid';
@@ -88,7 +89,10 @@ export const doPasswordResetRequest = async (identifier: string) => {
     } else {
       // it's an email; do we have an account for it?
       logger.debug(`Searching for account with email ${identifier}`);
-      account = await searchAsync(ldapClient, `(|(email=${identifier})(swatmail=${identifier}))`);
+      account = await searchAsync(
+        ldapClient,
+        ldapEscape.filter`(|(email=${identifier})(swatmail=${identifier}))`,
+      );
     }
 
     if (account) {
@@ -269,7 +273,7 @@ export const isUsernameAvailable = async (username: string): Promise<boolean> =>
 
 export const isEmailAvailable = async (email: string): Promise<boolean> => {
   const [inDatabase, inPending] = await Promise.all([
-    searchAsync(ldapClient, `(swatmail=${email})`),
+    searchAsync(ldapClient, ldapEscape.filter`(swatmail=${email})`),
     TaskModel.exists({ 'data.email': email, status: 'pending' }),
   ]);
 

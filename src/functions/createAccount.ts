@@ -1,4 +1,5 @@
 import argon2 from 'argon2';
+import ldapEscape from 'ldap-escape';
 import { nanoid } from 'nanoid';
 import nodemailer from 'nodemailer';
 import unidecode from 'unidecode';
@@ -61,7 +62,11 @@ export const createAccount = async (data: any) => {
       swatmail: data.email,
     };
 
-    await addLdap(ldapClient, `uid=${data.username},${process.env.LDAP_SEARCH_BASE}`, ldapAttrs);
+    await addLdap(
+      ldapClient,
+      ldapEscape.filter`uid=${data.username},${process.env.LDAP_SEARCH_BASE}`,
+      ldapAttrs,
+    );
 
     await createLocalUser(data);
 

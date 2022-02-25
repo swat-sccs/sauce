@@ -33,6 +33,7 @@
     "http-status-codes": "^2.1.4",
     "joi": "17.3.0",
     "joiful": "^3.0.2",
+    "ldap-escape": "^2.0.5",
     "ldapjs": "^2.3.1",
     "marked": "^4.0.12",
     "mongodb": "4.1.4",

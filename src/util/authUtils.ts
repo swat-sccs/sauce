@@ -1,4 +1,5 @@
 import { Handler } from 'express';
+import ldapEscape from 'ldap-escape';
 
 import { HttpException } from '../error/httpException';
 import { ldapClient } from '../integration/ldap';
@@ -45,7 +46,7 @@ export const getUserInfo = async (uid: string): Promise<Express.User | false> =>
     // and if there isn't, can we cache this or something
     searchAsync(
       ldapClient,
-      `(&(cn=${process.env.LDAP_ADMIN_GROUP}))`,
+      ldapEscape.filter`(&(cn=${process.env.LDAP_ADMIN_GROUP}))`,
       process.env.LDAP_SEARCH_BASE_GROUP,
     )
       .then((value) => value.memberUid)
