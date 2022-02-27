@@ -1,7 +1,8 @@
 import { Router } from 'express';
-import { logger } from '../util/logging';
-import { catchErrors } from '../util/asyncCatch';
 import { marked } from 'marked';
+
+import { catchErrors } from '../util/asyncCatch';
+import { logger } from '../util/logging';
 import { getDocsData } from '../util/markdownDocs';
 
 const router = Router(); // eslint-disable-line new-cap

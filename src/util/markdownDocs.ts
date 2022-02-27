@@ -1,7 +1,8 @@
-import { logger } from './logging';
 import fs from 'fs';
-import path, { dirname } from 'path';
 import matter, { GrayMatterFile } from 'gray-matter';
+import path from 'path';
+
+import { logger } from './logging';
 
 /**
  * Metadata for a markdown docs document or a docs index folder.

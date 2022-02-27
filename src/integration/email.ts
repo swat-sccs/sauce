@@ -1,4 +1,5 @@
 import nodemailer, { TestAccount, Transporter } from 'nodemailer';
+
 import { logger } from '../util/logging';
 
 export const mailTransporter = new Promise<Transporter>((resolve, reject) => {

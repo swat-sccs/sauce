@@ -1,4 +1,5 @@
 import fs from 'fs';
+
 import { logger } from './logging';
 
 // one-line template engine from https://stackoverflow.com/a/41077811

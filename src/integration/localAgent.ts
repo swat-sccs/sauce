@@ -1,7 +1,7 @@
 import axios from 'axios';
+
 import { EmailForwardingConfig } from '../controllers/accountController';
 import { CreateAccountData } from '../functions/createAccount';
-import { logger } from '../util/logging';
 
 const localAgent = axios.create({
   baseURL: process.env.LOCAL_AGENT_URL,

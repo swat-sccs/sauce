@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import passport from 'passport';
+
 import { catchErrors } from '../util/asyncCatch';
 import { logger } from '../util/logging';
 import { getPosts } from '../util/markdownPosts';
@@ -58,7 +59,33 @@ loginRouter.post(
     if (res.locals.usernameIpLimit && res.locals.usernameIpLimit.consumedPoints > 0) {
       await usernameIpBruteLimiter.delete(`${req.body.username}_${req.ip}`);
     }
-    res.redirect(req.body.next || '/');
+
+    // prevent open redirect attack by parsing req.body.next into a URL object
+    let nextUrl = '/';
+    if (req.body.next) {
+      try {
+        const urlObj = new URL(req.body.next, process.env.EXTERNAL_ADDRESS);
+        if (urlObj.origin === process.env.EXTERNAL_ADDRESS) {
+          nextUrl = urlObj.pathname;
+          logger.debug(`Redirecting to ${nextUrl}`);
+        } else {
+          logger.warn(
+            `POST to login endpoint attempted redirect to ${req.body.next}, redirecting to / instead`,
+          );
+          nextUrl = '/';
+        }
+      } catch (e) {
+        if (e instanceof TypeError) {
+          logger.warn(
+            `Invalid redirect URL '${req.body.next}' given to login endpoint, redirecting to / instead`,
+          );
+          nextUrl = '/';
+        } else {
+          throw e;
+        }
+      }
+    }
+    res.redirect(nextUrl);
   }),
   async (err, req, res, next) => {
     try {

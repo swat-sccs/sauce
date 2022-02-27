@@ -1,4 +1,6 @@
 import { Handler } from 'express';
+import ldapEscape from 'ldap-escape';
+
 import { HttpException } from '../error/httpException';
 import { ldapClient } from '../integration/ldap';
 import { searchAsync, searchAsyncUid } from './ldapUtils';
@@ -26,6 +28,7 @@ export const isAdmin: Handler = async (req: any, res, next) => {
         } else {
           throw new HttpException(403, {
             message: `${req.user.uid} is not an admin and is unauthorized`,
+            friendlyMessage: '', // set in error.pug
           });
         }
       } else {
@@ -44,7 +47,7 @@ export const getUserInfo = async (uid: string): Promise<Express.User | false> =>
     // and if there isn't, can we cache this or something
     searchAsync(
       ldapClient,
-      `(&(cn=${process.env.LDAP_ADMIN_GROUP}))`,
+      ldapEscape.filter`(&(cn=${process.env.LDAP_ADMIN_GROUP}))`,
       process.env.LDAP_SEARCH_BASE_GROUP,
     )
       .then((value) => value.memberUid)

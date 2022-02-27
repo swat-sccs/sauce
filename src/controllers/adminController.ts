@@ -1,9 +1,10 @@
 import * as jf from 'joiful';
+import { v4 as uuidv4 } from 'uuid';
+
 import { HttpException } from '../error/httpException';
 import * as taskFunctionMap from '../functions/taskFunctionMap';
 import { StaffMessageModel, Task, TaskModel } from '../integration/models';
 import { logger } from '../util/logging';
-import { v4 as uuidv4 } from 'uuid';
 
 /**
  */

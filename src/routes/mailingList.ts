@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import * as controller from '../controllers/mailingController';
 import { HttpException } from '../error/httpException';
 import { catchErrors } from '../util/asyncCatch';

@@ -124,6 +124,7 @@ html(lang='en')
                     th(scope='col') Value
                 tbody#taskModalData
           form#taskForm(action='/admin/', method='post')
+            input(type='hidden', name='_csrf', value=csrfToken)
             .modal-footer
               button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Close
               input#taskModalId(type='hidden', name='id')

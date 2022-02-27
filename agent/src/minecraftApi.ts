@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 import { logger } from './util';
 
 // this currently uses some guy's Cloudflare Workers proxy to the Mojang API to get around rate

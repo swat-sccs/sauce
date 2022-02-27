@@ -1,5 +1,6 @@
 import * as jf from 'joiful';
 import { v4 as uuidv4 } from 'uuid';
+
 import { ldapClient } from '../integration/ldap';
 import { getMailingList } from '../integration/mailman';
 import { TaskModel } from '../integration/models';

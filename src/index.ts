@@ -1,27 +1,30 @@
 import 'dotenv/config';
 import 'reflect-metadata'; // needed for joiful to work
+
 import MongoStore from 'connect-mongo';
 import cors from 'cors';
+import csrf from 'csurf';
 import express from 'express';
 import session from 'express-session';
+import expressStaticGzip from 'express-static-gzip';
+import helmet from 'helmet';
 import passport from 'passport';
 import LdapStrategy from 'passport-ldapauth';
-import expressStaticGzip from 'express-static-gzip';
+
+import { catchErrors } from '../agent/src/util';
+import { errorHandler } from './error/errorHandler';
+import { HttpException } from './error/httpException';
 import { LDAP_CONFIG } from './integration/ldap';
-import { doRequestId, logger, logRequest } from './util/logging';
+import { StaffMessageModel } from './integration/models';
 import { initMongo } from './integration/mongo';
 import { accountRouter } from './routes/account';
 import { adminRouter } from './routes/admin';
+import { docRouter } from './routes/docs';
 import { loginRouter } from './routes/login';
-import { getUserInfo } from './util/authUtils';
-import { HttpException } from './error/httpException';
-import { errorHandler } from './error/errorHandler';
 import { mailingRouter } from './routes/mailingList';
 import { minecraftRouter } from './routes/minecraft';
-import { docRouter } from './routes/docs';
-import { StaffMessageModel } from './integration/models';
-import { catchErrors } from '../agent/src/util';
-import helmet from 'helmet';
+import { getUserInfo } from './util/authUtils';
+import { doRequestId, logger, logRequest } from './util/logging';
 import { limitRequestRate } from './util/rateLimits';
 
 const initExpress = (): void => {
@@ -108,8 +111,35 @@ const initExpress = (): void => {
     }
   });
 
+  app.use(csrf());
+  app.use((err, req, res, next) => {
+    if (err.code === 'EBADCSRFTOKEN') {
+      next(
+        new HttpException(403, {
+          message: 'CSRF token was invalid or missing',
+          friendlyMessage:
+            "Your computer made a request with an invalid CSRF token! It's possible that a malicious" +
+            ' actor was attempting to do a phishing attack, or it could be a problem with our website.' +
+            " We've blocked the request, but you should " +
+            '<a href="mailto:staff@sccs.swarthmore.edu">contact us</a> and let us know.',
+        }),
+      );
+    } else {
+      next(err);
+    }
+  });
+
   app.use(
-    catchErrors(async (req, res, next) => {
+    catchErrors(async (req: any, res, next) => {
+      // generate a csrf token so we can access it in views
+      // this needs to be passed in any authenticated POST or DELETE request as a header, body param,
+      // query param, etc. See https://www.npmjs.com/package/csurf#value.
+      res.locals.csrfToken = req.csrfToken();
+
+      // also, strip any incoming csrf token in the body so it doesn't annoy schema checkers or get
+      // printed in logs
+      delete req.body._csrf;
+
       // set the user object so we don't have to pass it everywhere
       res.locals.user = req.user;
       res.locals.path = req.path;

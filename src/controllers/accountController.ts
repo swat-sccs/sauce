@@ -1,9 +1,11 @@
 import argon2 from 'argon2';
 import Joi from 'joi';
 import * as jf from 'joiful';
+import ldapEscape from 'ldap-escape';
 import { Change } from 'ldapjs';
 import nodemailer from 'nodemailer';
 import { v4 as uuidv4 } from 'uuid';
+
 import { HttpException } from '../error/httpException';
 import { mailTransporter } from '../integration/email';
 import { ldapClient } from '../integration/ldap';
@@ -18,9 +20,6 @@ import { testPassword } from '../util/passwordStrength';
 
 export const VALID_CLASSES = ['22', '23', '24', '25', 'faculty', 'staff'];
 // TODO: do we have accounts in the system that don't match this username pattern?
-export const USERNAME_OR_EMAIL_REGEX =
-  /^[a-z][-a-z0-9]*$|^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/;
-
 const USERNAME_REGEX = /^[a-z][-a-z0-9]*$/;
 
 /**
@@ -54,11 +53,11 @@ export const submitCreateAccountRequest = async (req: CreateAccountReq) => {
   // TODO how do we handle someone going to create an account if they're
   // already logged in?
 
-  if (!isUsernameAvailable(req.username)) {
+  if (!(await isUsernameAvailable(req.username))) {
     throw new HttpException(400, { message: `Username ${req.username} already exists` });
   }
 
-  if (!isEmailAvailable(req.email)) {
+  if (!(await isEmailAvailable(req.email))) {
     throw new HttpException(400, {
       message: `Email ${req.email} is  already associated with an account`,
     });
@@ -80,19 +79,18 @@ export const submitCreateAccountRequest = async (req: CreateAccountReq) => {
 export const doPasswordResetRequest = async (identifier: string) => {
   try {
     let account: any = null;
-    if (USERNAME_REGEX.test(identifier)) {
-      // it's a username
-      logger.debug(`Searching for uid ${identifier}`);
-      account = await searchAsyncUid(ldapClient, identifier);
-    } else {
-      // it's an email; do we have an account for it?
-      logger.debug(`Searching for account with email ${identifier}`);
-      account = await searchAsync(ldapClient, `(|(email=${identifier})(swatmail=${identifier}))`);
-    }
+
+    logger.debug(`Searching for account associated with ${identifier}`);
+    account = await searchAsync(
+      ldapClient,
+      ldapEscape.filter`(|(uid=${identifier})(email=${identifier})(swatmail=${identifier}))`,
+    );
 
     if (account) {
       const uid = account.uid;
       const email = account.email || account.swatmail;
+
+      logger.debug(`Found account ${uid}`);
 
       const [resetId, resetKey] = await createPasswordResetRequest(uid);
 
@@ -268,7 +266,7 @@ export const isUsernameAvailable = async (username: string): Promise<boolean> =>
 
 export const isEmailAvailable = async (email: string): Promise<boolean> => {
   const [inDatabase, inPending] = await Promise.all([
-    searchAsync(ldapClient, `(swatmail=${email})`),
+    searchAsync(ldapClient, ldapEscape.filter`(swatmail=${email})`),
     TaskModel.exists({ 'data.email': email, status: 'pending' }),
   ]);
 

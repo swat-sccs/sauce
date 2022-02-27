@@ -1,13 +1,15 @@
 import 'dotenv/config';
-import 'reflect-metadata'; // needed for joiful to work
-import passport from 'passport';
-import express from 'express';
-import { Strategy as BearerStrategy } from 'passport-http-bearer';
-import { userRouter } from './user';
+import 'reflect-metadata';
+
 import argon2 from 'argon2';
-import { denyRateLimited, penalizeLimiter, logger } from './util';
+import express from 'express';
+import passport from 'passport';
+import { Strategy as BearerStrategy } from 'passport-http-bearer';
+
 import { forwardingRouter } from './forwardFile';
 import { minecraftRouter } from './minecraft';
+import { userRouter } from './user';
+import { denyRateLimited, logger, penalizeLimiter } from './util';
 
 const app = express();
 

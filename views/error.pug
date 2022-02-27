@@ -36,9 +36,12 @@ html(lang='en')
               | SCCS website, please let us know at
               |                  #[a(href='mailto:staff@sccs.swarthmore.edu') staff@sccs.swarthmore.edu].
           when 403
-            p
-              | You don't have permission to access this page. If you think this is in
-              | error, contact SCCS leadership.
+            if friendlyMessage
+              p !{ friendlyMessage }
+            else
+              p
+                | You don't have permission to access this page. If you think this is in
+                | error, contact SCCS leadership.
           default
             p !{ friendlyMessage }
 

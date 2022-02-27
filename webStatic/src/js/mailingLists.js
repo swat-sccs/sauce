@@ -2,6 +2,8 @@ import * as bootstrap from 'bootstrap';
 
 window.bootstrap = bootstrap;
 
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
 // eslint-disable-next-line require-jsdoc
 function openModal() {
   window.bootstrap.Modal.getOrCreateInstance(document.getElementById('newMailingModal')).show();
@@ -37,6 +39,7 @@ function doFormSubmit() {
       method: 'post',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
+        'CSRF-Token': csrfToken,
       },
       body: new URLSearchParams(`name=${nameInput.value}`),
     })

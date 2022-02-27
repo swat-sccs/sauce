@@ -1,9 +1,10 @@
+import ldapEscape from 'ldap-escape';
 import ldap, { Filter } from 'ldapjs';
-import { ldapClient } from '../integration/ldap';
+
 import { logger } from './logging';
 
 export const searchAsyncUid = (ldapClient: ldap.Client, uid: string) => {
-  return searchAsync(ldapClient, `(uid=${uid})`);
+  return searchAsync(ldapClient, ldapEscape.filter`(uid=${uid})`);
 };
 
 export const searchAsync = async (

@@ -16,6 +16,8 @@ meta(name='msapplication-TileColor', content='#2b5797')
 meta(name='msapplication-config', content='/static/browserconfig.xml')
 meta(name='theme-color', content='#31425f')
 
+meta(name='csrf-token', content=csrfToken)
+
 if (process.env.PLAUSIBLE_DOMAIN && process.env.PLAUSIBLE_SERVER)
   script(
     defer,
