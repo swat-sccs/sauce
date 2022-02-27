@@ -28,6 +28,7 @@ export const isAdmin: Handler = async (req: any, res, next) => {
         } else {
           throw new HttpException(403, {
             message: `${req.user.uid} is not an admin and is unauthorized`,
+            friendlyMessage: '', // set in error.pug
           });
         }
       } else {

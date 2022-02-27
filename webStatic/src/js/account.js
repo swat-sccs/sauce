@@ -4,6 +4,8 @@ import * as bootstrap from 'bootstrap';
 
 window.bootstrap = bootstrap;
 
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
 document.getElementById('changePasswordButton').addEventListener('click', function () {
   const container = document.getElementById('alertContainer');
   const success = document.getElementById('passwordResetSuccess');
@@ -16,6 +18,7 @@ document.getElementById('changePasswordButton').addEventListener('click', functi
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
+      'CSRF-Token': csrfToken,
     },
     body: JSON.stringify({
       // constant set in the pug template

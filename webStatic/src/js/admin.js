@@ -20,6 +20,8 @@ responsive(window, $);
 
 const DateTime = _DateTime;
 
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
 function refreshTooltips() {
   // tooltips, see https://getbootstrap.com/docs/5.0/components/tooltips/#example-enable-tooltips-everywhere
   const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -37,6 +39,7 @@ function refreshTaskTimestamp() {
 window.deleteMessage = async function (id) {
   await fetch(`/admin/deleteMessage/${id}`, {
     method: 'post',
+    'CSRF-Token': csrfToken,
   });
 
   // eslint-disable-next-line new-cap
@@ -51,6 +54,7 @@ window.submitMessage = async function () {
     method: 'post',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
+      'CSRF-Token': csrfToken,
     },
     body: new URLSearchParams(
       `startDate=${startDate.value}&endDate=${endDate.value}&message=${messageArea.value}`,

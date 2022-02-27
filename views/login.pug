@@ -7,6 +7,7 @@ include include/sauce-common
     | Don't have a SCCS account? #[a(href='/account/create') Create&nbsp;one].
   form.form-signin(action='/login', method='post')
     input(type='hidden', name='next', value=nextUrl)
+    input(type='hidden', name='_csrf', value=csrfToken)
     .form-group.mb-3
       .form-floating
         input#usernameInput.form-control(type='text', name='username', placeholder='Username')
