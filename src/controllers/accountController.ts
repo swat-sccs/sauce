@@ -53,11 +53,11 @@ export const submitCreateAccountRequest = async (req: CreateAccountReq) => {
   // TODO how do we handle someone going to create an account if they're
   // already logged in?
 
-  if (!isUsernameAvailable(req.username)) {
+  if (!(await isUsernameAvailable(req.username))) {
     throw new HttpException(400, { message: `Username ${req.username} already exists` });
   }
 
-  if (!isEmailAvailable(req.email)) {
+  if (!(await isEmailAvailable(req.email))) {
     throw new HttpException(400, {
       message: `Email ${req.email} is  already associated with an account`,
     });
