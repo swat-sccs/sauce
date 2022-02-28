@@ -111,7 +111,18 @@ const initExpress = (): void => {
     }
   });
 
-  app.use(csrf());
+  // don't do CSRF on the login path, so we don't have to make and store CSRF tokens for non-authed
+  // users; this is ugly because csrf doesn't give an "ignore" option
+  // see https://github.com/expressjs/csurf/issues/64
+  const csrfHandler = csrf();
+
+  app.use((req, res, next) => {
+    if (/^\/(login|account\/forgot)\/?$/.test(req.path)) {
+      return next();
+    } else {
+      return csrfHandler(req, res, next);
+    }
+  });
   app.use((err, req, res, next) => {
     if (err.code === 'EBADCSRFTOKEN') {
       next(
@@ -131,10 +142,10 @@ const initExpress = (): void => {
 
   app.use(
     catchErrors(async (req: any, res, next) => {
-      // generate a csrf token so we can access it in views
+      // give all views the function to generate a csrf token
       // this needs to be passed in any authenticated POST or DELETE request as a header, body param,
       // query param, etc. See https://www.npmjs.com/package/csurf#value.
-      res.locals.csrfToken = req.csrfToken();
+      res.locals.csrfToken = req.csrfToken;
 
       // also, strip any incoming csrf token in the body so it doesn't annoy schema checkers or get
       // printed in logs

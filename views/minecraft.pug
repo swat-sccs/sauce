@@ -29,13 +29,13 @@ include include/sauce-common
           | If you'd like to whitelist more than one account, contact the server administrator.
         p.small
           form(action='/minecraft/remove', method='post')
-            input(type='hidden', name='_csrf', value=csrfToken)
+            input(type='hidden', name='_csrf', value=csrfToken())
             button.btn.btn-link.btn-sm.text-danger.p-0(type='submit') Unlink account
 
   else
     p You haven't added a Minecraft account yet.
     form#addAccountForm.container.form-inline.px-0(action='/minecraft/', method='post')
-      input(type='hidden', name='_csrf', value=csrfToken)
+      input(type='hidden', name='_csrf', value=csrfToken())
       .form-group.mb-3
         .form-floating
           input#usernameInput.form-control(

@@ -68,7 +68,7 @@ include include/sauce-common
             method='post',
             novalidate
           )
-            input(type='hidden', name='_csrf', value=csrfToken)
+            input(type='hidden', name='_csrf', value=csrfToken())
             .row
               .col
                 .form-check

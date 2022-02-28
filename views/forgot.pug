@@ -18,8 +18,5 @@ include include/sauce-common
       .form-group.mb-3
         .form-floating
           input#idInput.form-control(type='text', name='id', placeholder='Username or email')
-          //- Technically, we don't need this for this request, but it's easier to just pass it
-          //- instead of putting a carve-out in the server-side CSRF stuff.
-          input(type='hidden', name='_csrf', value=csrfToken)
           label(for='idInput') Username or email
       button.btn.btn-large.btn-primary.mb-3(type='submit') Submit
