@@ -48,6 +48,7 @@ accept new members at the beginning of each fall semester.
 - Theo Schrader '22
 - [Thomas Makin](https://thomasmak.in/) '25
 - Vipul Periwal '23
+- Yael Borger '24
 
 ### History
 
