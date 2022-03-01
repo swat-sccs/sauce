@@ -121,6 +121,6 @@ loginRouter.post(
 );
 
 loginRouter.get('/logout', (req: any, res) => {
-  req.logout();
+  req.session.destroy();
   res.redirect('/');
 });
