@@ -117,10 +117,10 @@ const initExpress = (): void => {
   const csrfHandler = csrf();
 
   app.use((req, res, next) => {
-    if (/^\/(login|account\/forgot)\/?$/.test(req.path)) {
-      return next();
-    } else {
+    if (req.user) {
       return csrfHandler(req, res, next);
+    } else {
+      return next();
     }
   });
   app.use((err, req, res, next) => {
@@ -145,7 +145,9 @@ const initExpress = (): void => {
       // give all views the function to generate a csrf token
       // this needs to be passed in any authenticated POST or DELETE request as a header, body param,
       // query param, etc. See https://www.npmjs.com/package/csurf#value.
-      res.locals.csrfToken = req.csrfToken;
+      if (req.csrfToken) {
+        res.locals.csrfToken = req.csrfToken;
+      }
 
       // also, strip any incoming csrf token in the body so it doesn't annoy schema checkers or get
       // printed in logs
