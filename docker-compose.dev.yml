@@ -1,0 +1,39 @@
+version: '3.4'
+
+# a set of overrides for the original docker-compose file
+services:
+  sauce:
+    environment:
+      NODE_ENV: development
+      MONGO_URI: "mongodb://mongodb:27017/sauce?retryWrites=true&w=majority"
+      MAILMAN_URL: "http://mockserver:1080/mailman"
+      MAILMAN_USER: "dev"
+      MAILMAN_PW: "test"
+      LOCAL_AGENT_URL: "http://mockserver:1080/agent"
+      LOCAL_AGENT_TOKEN: "test-token"
+      ADMIN_EMAIL: "staff@sccs.swarthmore.edu"
+      EXTERNAL_ADDRESS: "http://localhost:7567"
+      EMAIL_FROM: SAUCE <noreply@sccs.swarthmore.edu>
+      SESSION_SECRET: "spooky secret"
+      PORT: 7567
+    env_file: 
+      - sauce.env
+    restart: "no"
+    volumes:
+      - ./dist:/sauce-app/dist
+    depends_on:
+      - "mockserver"
+  # fake version of the Mailman and local-agent APIs
+  mockserver:
+    image: mockserver/mockserver:latest
+    environment:
+      MOCKSERVER_PROPERTY_FILE: /config/mockserver.properties
+      MOCKSERVER_INITIALIZATION_JSON_PATH: /config/initializer.json
+    ports:
+      - 1080:1080
+    volumes:
+      - type: bind
+        source: dev/mockserverConfig
+        target: /config
+  
+
