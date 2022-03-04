@@ -12,7 +12,7 @@ import passport from 'passport';
 import LdapStrategy from 'passport-ldapauth';
 import ldap from 'ldapjs';
 
-import { catchErrors } from '../agent/src/util';
+import { catchErrors } from './util/asyncCatch';
 import { errorHandler } from './error/errorHandler';
 import { HttpException } from './error/httpException';
 import { LDAP_CONFIG } from './integration/ldap';
