@@ -1,0 +1,6 @@
+dn: cn=sccs-staff,ou=Group,dc=sccs,dc=swarthmore,dc=edu
+cn: sccs-staff
+objectClass: posixGroup
+objectClass: top
+memberUid: testadmin
+gidNumber: 998

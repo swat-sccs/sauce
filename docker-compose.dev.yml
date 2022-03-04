@@ -5,6 +5,12 @@ services:
   sauce:
     environment:
       NODE_ENV: development
+      LDAP_URL: "ldap://ldap:389"
+      LDAP_SEARCH_BASE: "ou=People,dc=sccs,dc=swarthmore,dc=edu"
+      LDAP_SEARCH_BASE_GROUP: "ou=Group,dc=sccs,dc=swarthmore,dc=edu"
+      LDAP_ADMIN_GROUP: "sccs-staff"
+      LDAP_BIND_DN: "cn=admin,dc=sccs,dc=swarthmore,dc=edu"
+      LDAP_BIND_SECRET: "admin"
       MONGO_URI: "mongodb://mongodb:27017/sauce?retryWrites=true&w=majority"
       MAILMAN_URL: "http://mockserver:1080/mailman"
       MAILMAN_USER: "dev"
@@ -16,13 +22,12 @@ services:
       EMAIL_FROM: SAUCE <noreply@sccs.swarthmore.edu>
       SESSION_SECRET: "spooky secret"
       PORT: 7567
-    env_file: 
-      - sauce.env
     restart: "no"
     volumes:
       - ./dist:/sauce-app/dist
     depends_on:
       - "mockserver"
+      - "ldap"
   # fake version of the Mailman and local-agent APIs
   mockserver:
     image: mockserver/mockserver:latest
@@ -35,5 +40,19 @@ services:
       - type: bind
         source: dev/mockserverConfig
         target: /config
+  # mock ldap server
+  ldap:
+    image: osixia/openldap:1.5.0
+    environment:
+      LDAP_ORGANISATION: SCCS
+      LDAP_DOMAIN: sccs.swarthmore.edu
+    volumes:
+      - ./dev/ldapDb:/var/lib/ldap
+      - ./dev/ldapConfig:/etc/ldap/slapd.d
+      - ./dev/ldapInitLdif:/container/service/slapd/assets/config/bootstrap/ldif/custom
+    ports:
+      - 389
+    command: --copy-service # don't overwrite startup ldifs
+  
   
 
