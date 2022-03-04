@@ -25,14 +25,32 @@ templates with some JavaScript logic, though since the frontend JS/CSS is prebui
 served statically, using other languages on the backend would be fairly trivial. It uses Bootstrap 5
 for most styling, with some customizations applied using SCSS.
 
+### Docker
+
+Start containers for development:
+
+```
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+```
+
+A mock LDAP server is included with two users: `testadmin` and `testuser` (both with password
+`test`). For development the `src` and `webStatic` directories are mounted to their local
+counterparts, so code changes will be reflected in the container without rebuilds.
+
+For production, certain secrets and config should be specified in a `docker-compose.override.yml`
+file. Then, the backend can be launched:
+
+```
+docker-compose up
+```
+
+### Local Development
+
 Installation:
 
 ```bash
 npm install
-# necessary for development; if you have prebuilt web static files (e.g. you are installing inside a
-# Docker container) you don't need this
-npm run install:webStatic
-# only necessary if you are using the agent
+# only necessary if you are using the local agent
 npm run install:agent
 ```
 
