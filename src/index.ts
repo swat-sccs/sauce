@@ -10,6 +10,7 @@ import expressStaticGzip from 'express-static-gzip';
 import helmet from 'helmet';
 import passport from 'passport';
 import LdapStrategy from 'passport-ldapauth';
+import ldap from 'ldapjs';
 
 import { catchErrors } from '../agent/src/util';
 import { errorHandler } from './error/errorHandler';
@@ -106,8 +107,13 @@ const initExpress = (): void => {
     try {
       done(null, await getUserInfo(uid));
     } catch (err) {
-      logger.error('Error deserializing user', err);
-      done(err);
+      if (err instanceof ldap.NoSuchObjectError) {
+        logger.warn(`User ${uid} not present in LDAP`);
+        done(null, false);
+      } else {
+        logger.error('Error deserializing user', err);
+        done(err);
+      }
     }
   });
 
