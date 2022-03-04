@@ -117,7 +117,7 @@ const initExpress = (): void => {
   const csrfHandler = csrf();
 
   app.use((req, res, next) => {
-    if (req.user) {
+    if (req.user && req.path !== '/login') {
       return csrfHandler(req, res, next);
     } else {
       return next();
