@@ -30,12 +30,9 @@ RUN npm run build:sauce
 
 # static files
 COPY public/ ./public
-COPY dist/ ./dist
 COPY emailTemplates ./emailTemplates
 COPY views/ ./views
 COPY _docs/ ./_docs
 COPY _posts/ ./_posts
-
-COPY *.env ./
 
 CMD node build/src/index.js
