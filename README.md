@@ -81,6 +81,7 @@ To install git hooks to run Prettier and ESLint before each commit, run `npm run
 
 - `/agent`: A seperate, self-contained service to run certain management tasks that require root
   access to the server.
+- `/browserTests`: Selenium WebDriver tests that are run through Docker.
 - `/emailTemplates`: Basic plaintext templates for emails. Email templating uses
   [this one-liner](https://stackoverflow.com/a/41077811), so variable incorporation is just
   `${templateVariable}`.
