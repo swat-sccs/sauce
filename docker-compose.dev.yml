@@ -22,6 +22,7 @@ services:
       EMAIL_FROM: SAUCE <noreply@sccs.swarthmore.edu>
       SESSION_SECRET: "spooky secret"
       PORT: 7567
+      SMTP_CONN: "smtp://mail:25/"
     restart: "no"
     volumes:
       - ./src:/sauce-app/src
@@ -29,6 +30,7 @@ services:
     depends_on:
       - "mockserver"
       - "ldap"
+      - "mail"
     command: npm run startWithWatch
   # fake version of the Mailman and local-agent APIs
   mockserver:
@@ -53,6 +55,9 @@ services:
     ports:
       - 389
     command: --copy-service # don't overwrite startup ldifs
+  mail:
+    image: bytemark/smtp
+    restart: always
   
   
 
