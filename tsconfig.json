@@ -7,6 +7,7 @@
     "rootDir": "./",
     "esModuleInterop": true,
     "sourceMap": true,
-    "outDir": "./build"
-  }
+    "outDir": "./build",
+  },
+  "include": ["src/**/*"],
 }
