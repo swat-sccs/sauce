@@ -5,6 +5,8 @@ FROM node:16.5.0
 ENV PORT=3001
 EXPOSE 3001
 
+HEALTHCHECK --interval=5s --timeout=30s --start-period=5s --retries=3 CMD [ "curl http://localhost/" ]
+
 WORKDIR /sauce-app
 
 ENV NODE_ENV=production

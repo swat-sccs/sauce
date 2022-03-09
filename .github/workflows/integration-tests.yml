@@ -1,0 +1,20 @@
+name: Run Integration Tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build and launch backend
+        run: docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.test.yml up -d --build sauce selenium-chrome
+      - name: Wait for services to come up
+        run: sleep 30
+      - name: Run tests
+        run: docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.test.yml up webdriver-tests --build --exit-code-from=webdriver-tests
