@@ -15,6 +15,7 @@ services:
     environment:
       SELENIUM_SERVER: "http://selenium-chrome:4444/"
       SAUCE_APP_URL: "http://sauce:7567/"
+      MAILHOG_API: "http://mail:8025/"
     depends_on:
       - selenium-chrome
       - sauce

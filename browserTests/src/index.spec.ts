@@ -1,13 +1,19 @@
 /* eslint-disable no-invalid-this */
 import 'dotenv/config';
+import axios from 'axios';
 import chai from 'chai';
-import { Builder, Capabilities, By, ThenableWebDriver } from 'selenium-webdriver';
+import { Builder, Capabilities, By, ThenableWebDriver, until } from 'selenium-webdriver';
 import chaiAsPromised from 'chai-as-promised';
 import { hasContainerElements } from './common-page-tests';
+import { fail } from 'assert';
 
 const baseUrl = process.env.SAUCE_APP_URL.replace(/\/$/, '');
 
 const capabilities = Capabilities.chrome();
+
+const mailhog = axios.create({ baseURL: `${process.env.MAILHOG_API}/api` });
+
+const snooze = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 describe('SAUCE', () => {
   let expect: Chai.ExpectStatic;
@@ -96,6 +102,65 @@ describe('SAUCE', () => {
     });
 
     hasContainerElements('user');
+
+    describe('account page', function () {
+      beforeEach(async function () {
+        await driver.get(`${baseUrl}/account`);
+      });
+
+      describe('password reset flow', function () {
+        beforeEach(async function () {
+          await mailhog.delete('/v1/messages');
+          const passwordButton = await driver.findElement(By.id('changePasswordButton'));
+          await passwordButton.click();
+          driver.wait(until.elementIsEnabled(passwordButton)); // wait until loading animation stopped
+        });
+
+        it('displays a confirmation alert', async function () {
+          expect(driver.findElement(By.id('alertContainer')).getText()).to.eventually.match(
+            /A link to reset your password/,
+          );
+        });
+
+        describe('reset email flow', function () {
+          let mail: any;
+
+          beforeEach(async function () {
+            mail = (await mailhog.get('/v2/messages')).data;
+
+            let tries = 0;
+            while (mail['items'].length == 0) {
+              mail = (await mailhog.get('/v2/messages')).data;
+              await snooze(100);
+              tries++;
+              if (tries > 20) fail();
+            }
+          });
+
+          it('sends a reset email', async function () {
+            expect(mail['items'][0]['Content']['Body']).to.match(/\/account\/reset\?id=/);
+          });
+
+          describe('password reset page', async function () {
+            beforeEach(async function () {
+              const text = mail['items'][0]['Content']['Body'];
+
+              const [str, id, key] = /id=([A-Za-z0-9_-]{23})&key=([A-Za-z0-9_-]{23})/.exec(text);
+
+              await driver.get(`${baseUrl}/account/reset?id=${id}&key=${key}`);
+            });
+
+            it('can be reached from reset email', async function () {
+              expect(driver.findElement(By.linkText('Password Reset')).isDisplayed()).to.become(
+                true,
+              );
+            });
+            // TODO figure out how to test password reset without potentially breaking all the other
+            // tests because the login credentials don't work anymore
+          });
+        });
+      });
+    });
   });
 
   describe('logged in as admin', function () {
