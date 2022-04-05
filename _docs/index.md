@@ -25,14 +25,13 @@ CS lecture.
 ## Who We Are
 
 The SCCS is run entirely by student volunteers. We're not affiliated with Swarthmore ITS nor the
-Computer Science department (although our staff tend to be CS majors, for obvious reasons). We
+Computer Science department (although our staff are sometimes CS majors, for obvious reasons). We
 accept new members at the beginning of each fall semester.
 
 ### Current Members
 
 - [Zachary Robinson](https://robinsonz.me) '24 (Co-President)
 - [Yatin Lala](https://yatin.cc) '24 (Co-President, Treasurer)
-- Adin Aberbach '25
 - Belle Romea '24
 - Bill Dengler '22
 - Emmy Stavis '24
@@ -41,7 +40,6 @@ accept new members at the beginning of each fall semester.
 - Leo Douhovnikoff '25
 - Lindsey Turner '25
 - Orlando Azuara '24
-- Paige Looney '23
 - Patrick Wheeler '23
 - Sasha Casada '24
 - Seth Keim '23
