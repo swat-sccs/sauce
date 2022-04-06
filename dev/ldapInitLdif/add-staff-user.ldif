@@ -1,0 +1,13 @@
+dn: uid=testadmin,ou=People,dc=sccs,dc=swarthmore,dc=edu
+objectClass: account
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: testadmin
+gidNumber: 100
+uidNumber: 11801
+homeDirectory: /home/24/testadmin
+loginShell: /bin/bash
+gecos: Test Admin
+swatmail: testadmin@swarthmore.edu
+cn: Test Admin
+userPassword: test

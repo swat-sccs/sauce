@@ -1,0 +1,32 @@
+dn: cn=module{0},cn=config
+changetype: modify
+add: olcModuleLoad
+olcModuleLoad: {0}pw-argon2.so
+
+dn: olcDatabase={-1}frontend,cn=config
+changetype: modify
+add: olcPasswordHash
+olcPasswordHash: {ARGON2}
+
+dn: cn={2}nis,cn=schema,cn=config
+changetype: modify
+add: olcAttributeTypes
+olcAttributeTypes: ( 1.3.6.1.4.1.63.1000.1.1.1.1.18 NAME 'apple-user-passwordpolicy' DESC 'password policy options' EQUALITY caseExactMatch SUBSTR caseExactSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE )
+olcAttributeTypes: ( 1.3.6.1.1.1.1.30 NAME 'swatmail' DESC 'Swatmail address provided when registering' EQUALITY caseIgnoreIA5Match SUBSTR caseIgnoreIA5SubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 SINGLE-VALUE )
+-
+delete: olcObjectClasses
+olcObjectClasses: ( 1.3.6.1.1.1.2.0 NAME 'posixAccount' DESC 'Abstraction of an account with POSIX attributes' SUP top AUXILIARY MUST ( cn $ uid $ uidNumber $ gidNumber $ homeDirectory ) MAY ( userPassword $ loginShell $ gecos $ description ) )
+-
+add: olcObjectClasses
+olcObjectClasses: ( 1.3.6.1.1.1.2.0 NAME 'posixAccount' DESC 'Abstraction of an account with POSIX attributes' SUP top AUXILIARY MUST ( cn $ uid $ uidNumber $ gidNumber $ homeDirectory ) MAY ( userPassword $ loginShell $ gecos $ description $ apple-user-passwordpolicy $ swatmail $ email ) )
+
+dn: olcDatabase={1}mdb,cn=config
+changetype: modify
+replace: olcSuffix
+olcSuffix: dc=sccs,dc=swarthmore,dc=edu
+-
+replace: olcAccess
+olcAccess: {0}to attrs=userPassword,shadowLastChange by dn.base="cn=admin,dc=sccs,dc=swarthmore,dc=edu" write  by anonymous auth by self write by * none
+olcAccess: {1}to attrs=loginShell,apple-user-passwordpolicy,swatmail by dn.base="cn=admin,dc=sccs,dc=swarthmore,dc=edu" write by self write by * read
+olcAccess: {2}to dn.base="" by * read
+olcAccess: {3}to * by dn.base="cn=admin,dc=sccs,dc=swarthmore,dc=edu" write by * read

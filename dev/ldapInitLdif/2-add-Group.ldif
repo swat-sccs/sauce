@@ -1,0 +1,5 @@
+
+dn: ou=Group,dc=sccs,dc=swarthmore,dc=edu
+ou: Group
+objectClass: top
+objectClass: organizationalUnit
