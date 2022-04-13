@@ -28,3 +28,5 @@ services:
     restart: always
     ports:
       - 27017
+    volumes:
+      - './mongodata:/data/db'
