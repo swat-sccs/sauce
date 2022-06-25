@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400;0,500;0,600;1,400;1,600&display=swap');
+
+$primary: #31425f;
+$danger: #86001A;
+$sccs-accent: #f46523;
+
+$body-bg: #f1f1f1;
+
+$navbar-dark-color: #fff;
+$navbar-dark-hover-color: $sccs-accent;
+$navbar-dark-active-color: $sccs-accent;
+$navbar-dark-brand-color: $navbar-dark-color;
+
+$dropdown-dark-link-hover-color: $sccs-accent;
+$dropdown-dark-link-hover-bg: $primary;
+$dropdown-dark-link-active-color: $sccs-accent;
+
+$form-text-color: #495057;
+
+$input-bg: white;
+
+$font-family-base: 'Raleway', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+  'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+  'Segoe UI Symbol', 'Noto Color Emoji';
+
+$light: #d1d1d1;
+
+$border-radius: .05rem;
+$border-radius-sm: .04rem;
+$border-radius-lg: .06rem;
+
+h1 {
+  color: $primary;
+}
+
+td.dtr-control:before {
+  background-color: $primary !important; // override responsive-datatables
+}
+
+$display-font-sizes: (
+  1: 4.5rem,
+  2: 4.5rem,
+  3: 4rem,
+  4: 3.5rem,
+  5: 3rem,
+  6: 2.5rem,
+) !default;
+
+// needed for some button spacings on the homepage 
+// see https://getbootstrap.com/docs/5.1/utilities/spacing/#negative-margin
+$enable-negative-margins: true;
+
+@import '~bootstrap/scss/bootstrap';
+
+.btn.btn-primary {
+  color: #fff;
+}
+
+code {
+  color: $primary;
+}
+
+// links in staff message and footer
+.bg-primary a {
+  color: inherit;
+}
+
+.bg-primary a:hover {
+  color: $sccs-accent;
+}
+
+// fix scrolling with navbar
+html {
+  scroll-padding-top: 70px;
+}
