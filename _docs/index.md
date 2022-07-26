@@ -33,8 +33,6 @@ accept new members at the beginning of each fall semester.
 - [Zachary Robinson](https://robinsonz.me) '24 (Co-President)
 - [Yatin Lala](https://yatin.cc) '24 (Co-President, Treasurer)
 - Belle Romea '24
-- Bill Dengler '22
-- Christian Galo '22
 - Emmy Stavis '24
 - Ere Oh '24
 - Kenneth Barkdoll '24
@@ -44,7 +42,6 @@ accept new members at the beginning of each fall semester.
 - Patrick Wheeler '23
 - Sasha Casada '24
 - Seth Keim '23
-- Theo Schrader '22
 - [Thomas Makin](https://thomasmak.in/) '25
 - Vipul Periwal '23
 - Yael Borger '24
