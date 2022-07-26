@@ -38,6 +38,7 @@ accept new members at the beginning of each fall semester.
 - Kenneth Barkdoll '24
 - Leo Douhovnikoff '25
 - Lindsey Turner '25
+- Noor Ali '25
 - Orlando Azuara '24
 - Patrick Wheeler '23
 - Sasha Casada '24
