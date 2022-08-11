@@ -15,7 +15,7 @@ services:
       - sauce.env
     restart: always
     ports:
-      - 7567:7567
+      - 127.0.0.1:7567:7567
     volumes:
       - ./_posts:/sauce-app/_posts
       - ./_docs:/sauce-app/_docs
@@ -26,7 +26,5 @@ services:
   mongodb:
     image: mongo:5.0.5
     restart: always
-    ports:
-      - 27017
     volumes:
       - './mongodata:/data/db'
