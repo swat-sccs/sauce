@@ -1,10 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400;0,500;0,600;1,400;1,600&display=swap');
 
 $primary: #31425f;
+$primary-dark-theme: #a6bcd1;
 $danger: #86001A;
+$danger-dark-theme: #d1a6a6;
 $sccs-accent: #f46523;
+$sccs-accent-dark-theme: #d0b2a4;
 
 $body-bg: #f1f1f1;
+$body-bg-dark-theme: #121212;
 
 $navbar-dark-color: #fff;
 $navbar-dark-hover-color: $sccs-accent;
@@ -31,6 +35,9 @@ $border-radius-lg: .06rem;
 
 h1 {
   color: $primary;
+}
+body.dark-theme h1 {
+  color: $primary-dark-theme;
 }
 
 td.dtr-control:before {
@@ -59,6 +66,9 @@ $enable-negative-margins: true;
 code {
   color: $primary;
 }
+code.dark-theme {
+  color: $primary-dark-theme;
+}
 
 // links in staff message and footer
 .bg-primary a {
@@ -67,6 +77,9 @@ code {
 
 .bg-primary a:hover {
   color: $sccs-accent;
+}
+.bg-primary.dark-theme a:hover {
+  color: $sccs-accent-dark-theme;
 }
 
 // fix scrolling with navbar
