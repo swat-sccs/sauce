@@ -26,7 +26,7 @@ CS lecture.
 
 The SCCS is run entirely by student volunteers. We're not affiliated with Swarthmore ITS nor the
 Computer Science department (although our staff are sometimes CS majors, for obvious reasons). We
-accept new members at the beginning of each fall semester.
+accept new members in the first few weeks of each semester.
 
 ### Current Members
 
@@ -37,6 +37,7 @@ accept new members at the beginning of each fall semester.
 - Leo Douhovnikoff '25 (Project Lead)
 - Patrick Wheeler '23 (Project Lead)
 - [Thomas Makin](https://thomasmak.in/) '25 (Project Lead)
+- Ere Oh '24 (Marketing Lead)
 - Abhi Das '26
 - Aishi Debroy '26
 - Alex Skeldon '25
@@ -50,7 +51,6 @@ accept new members at the beginning of each fall semester.
 - DongGyu Kim '25
 - Elliot Kim '23
 - Emily Smith '24
-- Ere Oh '24
 - [George Fang](https://spazzinq.org/) '26
 - Hojune Kim '25
 - Jhovani Gallardo Moreno '25
