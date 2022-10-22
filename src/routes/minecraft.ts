@@ -22,9 +22,12 @@ router.post(
   isLoggedIn,
   catchErrors(async (req: any, res, next) => {
     if (!req.body.mcUser) {
-      throw new HttpException(400, { message: 'Missing required parameter: mcUser' });
+      return res.render('minecraft', {
+        mcInfo: await controller.getMcForLdapUser(req.user.uid),
+        err: 'Please provide a username.'
+      });
     }
-
+    
     try {
       await controller.associateMcWithLdap(req.user.uid, req.body.mcUser);
     } catch (e) {
