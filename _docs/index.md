@@ -74,6 +74,7 @@ accept new members in the first few weeks of each semester.
 - Tony Cao '25
 - Vladmir Soto-Avina '24
 - William Le '23
+- William Huang '23
 - Xinxin Li '25
 - Zachary Gillette '25
 - Ziming Yuan '24
