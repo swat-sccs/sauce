@@ -18,7 +18,7 @@ import { logger } from '../util/logging';
 import { createPasswordResetRequest } from '../util/passwordReset';
 import { testPassword } from '../util/passwordStrength';
 
-export const VALID_CLASSES = ['22', '23', '24', '25', 'faculty', 'staff'];
+export const VALID_CLASSES = ['23', '24', '25', '26', 'faculty', 'staff'];
 // TODO: do we have accounts in the system that don't match this username pattern?
 const USERNAME_REGEX = /^[a-z][-a-z0-9]*$/;
 

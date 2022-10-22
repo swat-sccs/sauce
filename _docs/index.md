@@ -26,27 +26,57 @@ CS lecture.
 
 The SCCS is run entirely by student volunteers. We're not affiliated with Swarthmore ITS nor the
 Computer Science department (although our staff are sometimes CS majors, for obvious reasons). We
-accept new members at the beginning of each fall semester.
+accept new members in the first few weeks of each semester.
 
 ### Current Members
 
 - [Zachary Robinson](https://robinsonz.me) '24 (Co-President)
-- [Yatin Lala](https://yatin.cc) '24 (Co-President, Treasurer)
-- Belle Romea '24
-- Bill Dengler '22
-- Emmy Stavis '24
-- Ere Oh '24
+- [Yatin Lala](https://yatin.cc) '24 (Co-President)
+- Yael Borger '24 (Treasurer)
+- Alex Le '24 (Project Lead)
+- Leo Douhovnikoff '25 (Project Lead)
+- Patrick Wheeler '23 (Project Lead)
+- [Thomas Makin](https://thomasmak.in/) '25 (Project Lead)
+- Ere Oh '24 (Marketing Lead)
+- Abhi Das '26
+- Aishi Debroy '26
+- Alex Skeldon '25
+- Alex You '26
+- [Alyssa Zhang](https://www.alyssamzhang.com/)  '24
+- Anhad Singh '26
+- Ark Lu '24
+- Brandon Xu '25
+- Caroline Yao '26
+- Cisco Velasco '23
+- DongGyu Kim '25
+- Elliot Kim '23
+- Emily Smith '24
+- [George Fang](https://spazzinq.org/) '26
+- Hojune Kim '25
+- Jhovani Gallardo Moreno '25
+- Jialun Ben '25
+- Katelynn Swaim '25
+- Kenan Yu '26
 - Kenneth Barkdoll '24
-- Leo Douhovnikoff '25
-- Lindsey Turner '25
-- Orlando Azuara '24
-- Patrick Wheeler '23
+- Koyo Asakawa '25
+- Lisa Messier '26
+- Magnus Miller '25
+- Mehtap Yercel '24
+- Michael Lu '26
+- Nathan Le '25
+- Nicholas Fu '25
+- Nikoloz Khmaladze '25
+- Noor Ali '25
+- Omar Khan '25
+- Rachel Sun '24
+- Roman Hinds '25
 - Sasha Casada '24
-- Seth Keim '23
-- Theo Schrader '22
-- [Thomas Makin](https://thomasmak.in/) '25
-- Vipul Periwal '23
-- Yael Borger '24
+- Tony Cao '25
+- Vladmir Soto-Avina '24
+- William Le '23
+- Xinxin Li '25
+- Zachary Gillette '25
+- Ziming Yuan '24
 
 ### History
 
