@@ -161,6 +161,19 @@ describe('SAUCE', () => {
         });
       });
     });
+
+    describe('minecraft page', function () {
+      beforeEach(async function () {
+        await driver.get(`${baseUrl}/minecraft`);
+      });
+
+      it('rejects empty input field', async function () {
+        const addAccountButton = await driver.findElement(By.linkText('Add Account'));
+        await addAccountButton.click();
+        const errorFeedback = await driver.wait(until.elementLocated(By.id('errorFeedback')));
+        expect(errorFeedback.getText()).to.eventually.match(/Please provide a username./);
+      });
+    });
   });
 
   describe('logged in as admin', function () {
