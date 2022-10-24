@@ -175,6 +175,34 @@ describe('SAUCE', () => {
         const errorFeedback = await driver.wait(until.elementLocated(By.id('errorFeedback')));
         expect(errorFeedback.getText()).to.eventually.match(/Please provide a username./);
       });
+
+      it('rejects non-existing player', async function () {
+        // apparently this username genuinely doesn't exist, and hopefully is protected from creation
+        // or something? it was very hard to find docs on this
+        await driver.findElement(By.id('usernameInput')).sendKeys('nonExistingPlayer');
+
+        const addAccountButton = await driver.findElement(
+          By.xpath('//*[@id="addAccountForm"]/button'),
+        );
+        await addAccountButton.click();
+        const errorFeedback = await driver.wait(until.elementLocated(By.id('errorFeedback')));
+        expect(errorFeedback.getText()).to.eventually.match(
+          /That Minecraft account is invalid or doesn't exist./,
+        );
+      });
+
+      it('succesfully adds existing player', async function () {
+        await driver.findElement(By.id('usernameInput')).sendKeys('jeb');
+
+        const addAccountButton = await driver.findElement(
+          By.xpath('//*[@id="addAccountForm"]/button'),
+        );
+        await addAccountButton.click();
+        const unlinkAccount = await driver.wait(
+          until.elementLocated(By.partialLinkText('Unlink account')),
+        );
+        expect(unlinkAccount.isDisplayed()).to.eventually.be.true;
+      });
     });
   });
 
