@@ -168,7 +168,9 @@ describe('SAUCE', () => {
       });
 
       it('rejects empty input field', async function () {
-        const addAccountButton = await driver.findElement(By.linkText('Add Account'));
+        const addAccountButton = await driver.findElement(
+          By.xpath('//*[@id="addAccountForm"]/button'),
+        );
         await addAccountButton.click();
         const errorFeedback = await driver.wait(until.elementLocated(By.id('errorFeedback')));
         expect(errorFeedback.getText()).to.eventually.match(/Please provide a username./);
