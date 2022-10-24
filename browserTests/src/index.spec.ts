@@ -190,19 +190,6 @@ describe('SAUCE', () => {
           /That Minecraft account is invalid or doesn't exist./,
         );
       });
-
-      it('succesfully adds existing player', async function () {
-        await driver.findElement(By.id('usernameInput')).sendKeys('jeb');
-
-        const addAccountButton = await driver.findElement(
-          By.xpath('//*[@id="addAccountForm"]/button'),
-        );
-        await addAccountButton.click();
-        const unlinkAccount = await driver.wait(
-          until.elementLocated(By.partialLinkText('Unlink account')),
-        );
-        expect(unlinkAccount.isDisplayed()).to.eventually.be.true;
-      });
     });
   });
 
