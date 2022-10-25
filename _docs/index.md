@@ -86,7 +86,7 @@ from the Budget Committee for the Spring 1992 semester. We were founded, in part
 activities of students in Dana and Hallowell who had decided to create an Appletalk network by
 stringing phone cable between rooms. Approximately 32 Macintoshes on 4 floors (3 in Hallowell, 1 in
 Dana) were on the network, as was one heavy-duty laser printer&mdash;two years before the College
-network came into being. Gobs of time was spent diagnosing the many network outages that occurred on
+network came into being. Gobs of time were spent diagnosing the many network outages that occurred on
 an almost-daily basis (usually due to cables being clamped by window frames). 30 years later, we're
-no longer stringing phone cable through dorms, but we're still having fun and providing useful stuff
-for our fellow students.
+no longer stringing phone cable through dorms, but we're still having fun and providing useful facilities
+and services for our fellow students.
