@@ -11,6 +11,8 @@ CS lecture.
 
 [Frequently Asked Questions](/docs/faq)
 
+[Usage & Data Policy](/docs/policy)
+
 ## Our Services
 
 - [The Cygnet](https://cygnet.sccs.swarthmore.edu): the Swarthmore College student directory
