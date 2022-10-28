@@ -109,7 +109,7 @@ export function hasContainerElements(
           const footerText = driver.findElement(By.className('footer')).getText();
           const year = new Date().getFullYear();
           return expect(footerText).to.eventually.equal(
-            `© ${year} Swarthmore College Computer Society | Problems with this website? Email staff@sccs.swarthmore.edu.`,
+            `© ${year} Swarthmore College Computer Society | Usage & Data Policy | Problems with this website? Email staff@sccs.swarthmore.edu.`,
           );
         });
       });
