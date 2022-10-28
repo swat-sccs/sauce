@@ -161,6 +161,36 @@ describe('SAUCE', () => {
         });
       });
     });
+
+    describe('minecraft page', function () {
+      beforeEach(async function () {
+        await driver.get(`${baseUrl}/minecraft`);
+      });
+
+      it('rejects empty input field', async function () {
+        const addAccountButton = await driver.findElement(
+          By.xpath('//*[@id="addAccountForm"]/button'),
+        );
+        await addAccountButton.click();
+        const errorFeedback = await driver.wait(until.elementLocated(By.id('errorFeedback')));
+        expect(errorFeedback.getText()).to.eventually.match(/Please provide a username./);
+      });
+
+      it('rejects non-existing player', async function () {
+        // apparently this username genuinely doesn't exist, and hopefully is protected from creation
+        // or something? it was very hard to find docs on this
+        await driver.findElement(By.id('usernameInput')).sendKeys('nonExistingPlayer');
+
+        const addAccountButton = await driver.findElement(
+          By.xpath('//*[@id="addAccountForm"]/button'),
+        );
+        await addAccountButton.click();
+        const errorFeedback = await driver.wait(until.elementLocated(By.id('errorFeedback')));
+        expect(errorFeedback.getText()).to.eventually.match(
+          /That Minecraft account is invalid or doesn't exist./,
+        );
+      });
+    });
   });
 
   describe('logged in as admin', function () {
