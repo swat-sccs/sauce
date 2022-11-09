@@ -59,7 +59,7 @@ window.submitMessage = async function () {
       'CSRF-Token': csrfToken,
     },
     body: new URLSearchParams(
-      `startDate=${startDate.value}&endDate=${endDate.value}&message=${messageArea.value}`,
+      `startDate=${startDate.value}&endDate=${endDate.value}&message=${messageArea.value}&tzOffset=${new Date().getTimezoneOffset()}`,
     ),
   });
 
