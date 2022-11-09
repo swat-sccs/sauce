@@ -39,7 +39,9 @@ function refreshTaskTimestamp() {
 window.deleteMessage = async function (id) {
   await fetch(`/admin/deleteMessage/${id}`, {
     method: 'post',
-    'CSRF-Token': csrfToken,
+    headers: {
+      'CSRF-Token': csrfToken,
+    }
   });
 
   // eslint-disable-next-line new-cap
