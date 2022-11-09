@@ -156,7 +156,7 @@ html(lang='en')
                     placeholder='Start date',
                     required
                   )
-              .row.mb-3
+              .row.mb-2
                 label.form-label.col-2.col-form-label(for='messageEndDate') End
                 .col
                   input#messageEndDate.form-control(
@@ -165,6 +165,10 @@ html(lang='en')
                     placeholder='End date',
                     required
                   )
+              .row.mb-3
+                label.form-label.col-2.col-form-label
+                .col
+                  .form-text Times are in your local timezone.
               textarea#messageArea.form-control(
                 rows='3',
                 name='message',

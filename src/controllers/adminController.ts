@@ -110,6 +110,9 @@ export class NewStaffMessage {
 
   @jf.string().required()
   message: string;
+
+  @jf.number().required()
+  tzOffset: number;
 }
 
 export const getStaffMessages = async () => {
@@ -119,10 +122,11 @@ export const getStaffMessages = async () => {
 export const addStaffMessage = async (msg: NewStaffMessage) => {
   const uuid = uuidv4();
   logger.info(`Creating new staff message ${uuid}`);
+
   await new StaffMessageModel({
     _id: uuid,
-    startDate: msg.startDate,
-    endDate: msg.endDate,
+    startDate: new Date(msg.startDate.getTime() + msg.tzOffset*60000),
+    endDate: new Date(msg.endDate.getTime() + msg.tzOffset*60000),
     message: msg.message,
   }).save();
 };
