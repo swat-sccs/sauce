@@ -59,7 +59,7 @@ export const submitCreateAccountRequest = async (req: CreateAccountReq) => {
 
   if (!(await isEmailAvailable(req.email))) {
     throw new HttpException(400, {
-      message: `Email ${req.email} is  already associated with an account`,
+      message: `Email ${req.email} is already associated with an account`,
     });
   }
 
