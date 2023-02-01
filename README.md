@@ -25,6 +25,8 @@ templates with some JavaScript logic, though since the frontend JS/CSS is prebui
 served statically, using other languages on the backend would be fairly trivial. It uses Bootstrap 5
 for most styling, with some customizations applied using SCSS.
 
+To install git hooks to run Prettier and ESLint before each commit, run `npm run installHooks`.
+
 ### Docker
 
 Start containers for development:
@@ -45,14 +47,17 @@ bin/test.sh
 ```
 
 For production, certain secrets and config should be specified in a `docker-compose.override.yml`
-file. Also, the agent needs to be running somewhere on the system (see its README in `agent/`).
-Then, launch the backend:
+file. An example file is provided in `docker-compose.override.yml.example`. Also, the agent needs to
+be running somewhere on the system (see its README in `agent/`). Then, launch the backend:
 
 ```
 docker-compose up
 ```
 
 ### Local Development
+
+This is _not recommended_ as it requires spinning up your own instance of Mongo, LDAP, the agent,
+etc. However, it's provided here for completeness.
 
 Installation:
 
@@ -80,10 +85,10 @@ Or in production:
 node build/src/index.js
 ```
 
-The app requires various credentials for other services (LDAP, Mailman, SMTP...) which can be
-configured in a `.env` file. An example `.env` is provided in `.env.example`.
-
-To install git hooks to run Prettier and ESLint before each commit, run `npm run installHooks`.
+When running locally, the app requires various credentials for other services (LDAP, Mailman,
+SMTP...) which can be configured in a `.env` file. An example `.env` is provided in `.env.example`.
+When running Dockerized, the environment variables are provided through the
+`docker-compose.override.yml`.
 
 ### Folder Structure
 
