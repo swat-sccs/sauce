@@ -30,15 +30,23 @@ for most styling, with some customizations applied using SCSS.
 Start containers for development:
 
 ```
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+bin/dev.sh
 ```
 
 A mock LDAP server is included with two users: `testadmin` and `testuser` (both with password
-`test`). For development the `src` and `webStatic` directories are mounted to their local
-counterparts, so code changes will be reflected in the container without rebuilds.
+`test`). For development, the source directories in the container are mounted to their local
+counterparts, so code changes will be reflected in the container without rebuilds. (You will need to
+wait for webpack, etc. to finish building in the container when changing static assets.)
+
+To run automated integration tests:
+
+```
+bin/test.sh
+```
 
 For production, certain secrets and config should be specified in a `docker-compose.override.yml`
-file. Then, the backend can be launched:
+file. Also, the agent needs to be running somewhere on the system (see its README in `agent/`).
+Then, launch the backend:
 
 ```
 docker-compose up
