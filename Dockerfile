@@ -36,5 +36,6 @@ COPY emailTemplates ./emailTemplates
 COPY views/ ./views
 COPY _docs/ ./_docs
 COPY _posts/ ./_posts
+COPY *.env ./
 
 CMD node build/src/index.js
