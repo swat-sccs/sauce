@@ -32,6 +32,6 @@
     "datatables.net-responsive-bs5": "^2.2.9",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
-    "luxon": "^2.3.0"
+    "luxon": "^2.5.2"
   }
 }
