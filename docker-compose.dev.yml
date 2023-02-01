@@ -26,6 +26,7 @@ services:
     restart: "no"
     volumes:
       - ./src:/sauce-app/src
+      - ./views:/sauce-app/views
       - ./webStatic:/sauce-app/webStatic
     depends_on:
       - "mockserver"

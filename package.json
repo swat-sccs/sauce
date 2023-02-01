@@ -4,7 +4,7 @@
   "author": "Swarthmore College Computer Society",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon --exec npx ts-node --files src/index.ts --ignore 'webStatic/**'",
+    "start": "nodemon --ignore 'webStatic/**' --exec npx ts-node --files src/index.ts",
     "postinstall": "npm run install:webStatic",
     "install:webStatic": "cd webStatic && npm install",
     "install:agent": "cd agent && npm install",
@@ -14,7 +14,7 @@
     "packageWebStatic": "npx copyfiles -E -u 1 \"webStatic/dist/**\" . && npx gzipper compress dist",
     "pre-commit": "lint-staged",
     "installHooks": "npx husky install",
-    "watchWebStatic": "nodemon --exec npm run build --watch webStatic --",
+    "watchWebStatic": "nodemon --watch webStatic -e js,scss,json --exec npm run build",
     "startWithWatch": "run-p start watchWebStatic"
   },
   "dependencies": {
