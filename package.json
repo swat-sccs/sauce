@@ -41,7 +41,7 @@
     "ldapjs": "^2.3.1",
     "marked": "^4.0.12",
     "mongodb": "4.1.4",
-    "mongoose": "6.0.13",
+    "mongoose": "6.4.6",
     "nanoid": "^3.1.31",
     "nodemailer": "^6.7.2",
     "passport": "^0.6.0",
