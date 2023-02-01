@@ -25,14 +25,40 @@ templates with some JavaScript logic, though since the frontend JS/CSS is prebui
 served statically, using other languages on the backend would be fairly trivial. It uses Bootstrap 5
 for most styling, with some customizations applied using SCSS.
 
+### Docker
+
+Start containers for development:
+
+```
+bin/dev.sh
+```
+
+A mock LDAP server is included with two users: `testadmin` and `testuser` (both with password
+`test`). For development, the source directories in the container are mounted to their local
+counterparts, so code changes will be reflected in the container without rebuilds. (You will need to
+wait for webpack, etc. to finish building in the container when changing static assets.)
+
+To run automated integration tests:
+
+```
+bin/test.sh
+```
+
+For production, certain secrets and config should be specified in a `docker-compose.override.yml`
+file. Also, the agent needs to be running somewhere on the system (see its README in `agent/`).
+Then, launch the backend:
+
+```
+docker-compose up
+```
+
+### Local Development
+
 Installation:
 
 ```bash
 npm install
-# necessary for development; if you have prebuilt web static files (e.g. you are installing inside a
-# Docker container) you don't need this
-npm run install:webStatic
-# only necessary if you are using the agent
+# only necessary if you are using the local agent
 npm run install:agent
 ```
 
@@ -63,6 +89,7 @@ To install git hooks to run Prettier and ESLint before each commit, run `npm run
 
 - `/agent`: A seperate, self-contained service to run certain management tasks that require root
   access to the server.
+- `/browserTests`: Selenium WebDriver tests that are run through Docker.
 - `/emailTemplates`: Basic plaintext templates for emails. Email templating uses
   [this one-liner](https://stackoverflow.com/a/41077811), so variable incorporation is just
   `${templateVariable}`.

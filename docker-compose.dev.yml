@@ -1,0 +1,67 @@
+version: '3.4'
+
+# a set of overrides for the original docker-compose file
+services:
+  sauce:
+    environment:
+      NODE_ENV: development
+      LDAP_URL: "ldap://ldap:389"
+      LDAP_SEARCH_BASE: "ou=People,dc=sccs,dc=swarthmore,dc=edu"
+      LDAP_SEARCH_BASE_GROUP: "ou=Group,dc=sccs,dc=swarthmore,dc=edu"
+      LDAP_ADMIN_GROUP: "sccs-staff"
+      LDAP_BIND_DN: "cn=admin,dc=sccs,dc=swarthmore,dc=edu"
+      LDAP_BIND_SECRET: "admin"
+      MONGO_URI: "mongodb://mongodb:27017/sauce?retryWrites=true&w=majority"
+      MAILMAN_URL: "http://mockserver:1080/mailman"
+      MAILMAN_USER: "dev"
+      MAILMAN_PW: "test"
+      LOCAL_AGENT_URL: "http://mockserver:1080/agent"
+      LOCAL_AGENT_TOKEN: "test-token"
+      ADMIN_EMAIL: "staff@sccs.swarthmore.edu"
+      EXTERNAL_ADDRESS: "http://localhost:7567"
+      EMAIL_FROM: SAUCE <noreply@sccs.swarthmore.edu>
+      SESSION_SECRET: "spooky secret"
+      PORT: 7567
+      SMTP_CONN: "smtp://mail:1025/"
+    restart: "no"
+    volumes:
+      - ./src:/sauce-app/src
+      - ./views:/sauce-app/views
+      - ./webStatic:/sauce-app/webStatic
+    depends_on:
+      - "mockserver"
+      - "ldap"
+      - "mail"
+    command: npm run startWithWatch
+  # fake version of the Mailman and local-agent APIs
+  mockserver:
+    image: mockserver/mockserver:latest
+    environment:
+      MOCKSERVER_PROPERTY_FILE: /config/mockserver.properties
+      MOCKSERVER_INITIALIZATION_JSON_PATH: /config/initializer.json
+    ports:
+      - 1080:1080
+    volumes:
+      - ./dev/mockserverConfig:/config
+  # mock ldap server
+  ldap:
+    image: osixia/openldap:1.5.0
+    environment:
+      LDAP_ORGANISATION: SCCS
+      LDAP_DOMAIN: sccs.swarthmore.edu
+    volumes:
+      - ./dev/ldapDb:/var/lib/ldap
+      - ./dev/ldapConfig:/etc/ldap/slapd.d
+      - ./dev/ldapInitLdif:/container/service/slapd/assets/config/bootstrap/ldif/custom
+    ports:
+      - 389
+    command: --copy-service # don't overwrite startup ldifs
+  mail:
+    image: mailhog/mailhog
+    restart: always
+    ports:
+      - 8025:8025 # web interface
+      - 1025 # smtp
+  
+  
+

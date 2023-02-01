@@ -1,0 +1,21 @@
+version: '3.4'
+
+# a set of overrides for the original docker-compose file
+services:
+  selenium-chrome:
+    image: selenium/standalone-chrome:4.1.2-20220217
+    shm_size: 2g
+    ports:
+      - 4444:4444
+  webdriver-tests:
+    image: sauce-webdriver-tests
+    build:
+      context: browserTests
+      dockerfile: ./Dockerfile
+    environment:
+      SELENIUM_SERVER: "http://selenium-chrome:4444/"
+      SAUCE_APP_URL: "http://sauce:7567/"
+      MAILHOG_API: "http://mail:8025/"
+    depends_on:
+      - selenium-chrome
+      - sauce

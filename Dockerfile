@@ -5,6 +5,8 @@ FROM node:16.5.0
 ENV PORT=3001
 EXPOSE 3001
 
+HEALTHCHECK --interval=5s --timeout=30s --start-period=5s --retries=3 CMD [ "curl http://localhost/" ]
+
 WORKDIR /sauce-app
 
 ENV NODE_ENV=production
@@ -15,20 +17,24 @@ COPY package.json ./
 COPY package-lock.json ./
 COPY tsconfig.json ./
 
-RUN npm install 
+COPY webStatic ./webStatic
 
+# install everything for building
+RUN NODE_ENV=development npm install
 
-COPY build/ .
+RUN npm run build:webStatic
+RUN npm run packageWebStatic
 
+# build this last and separately from the other steps so we don't rebuild JS on SAUCE changes,
+# keep the docker cache good
+COPY src ./src
+RUN npm run build:sauce
 
 # static files
 COPY public/ ./public
-COPY dist/ ./dist
 COPY emailTemplates ./emailTemplates
 COPY views/ ./views
-# _docs and _posts will be docker-compose volumes
+COPY _docs/ ./_docs
+COPY _posts/ ./_posts
 
-COPY *.env ./
-
-CMD node src/index.js
-
+CMD node build/src/index.js

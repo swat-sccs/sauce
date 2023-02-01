@@ -10,8 +10,9 @@ import expressStaticGzip from 'express-static-gzip';
 import helmet from 'helmet';
 import passport from 'passport';
 import LdapStrategy from 'passport-ldapauth';
+import ldap from 'ldapjs';
 
-import { catchErrors } from '../agent/src/util';
+import { catchErrors } from './util/asyncCatch';
 import { errorHandler } from './error/errorHandler';
 import { HttpException } from './error/httpException';
 import { LDAP_CONFIG } from './integration/ldap';
@@ -106,8 +107,13 @@ const initExpress = (): void => {
     try {
       done(null, await getUserInfo(uid));
     } catch (err) {
-      logger.error('Error deserializing user', err);
-      done(err);
+      if (err instanceof ldap.NoSuchObjectError) {
+        logger.warn(`User ${uid} not present in LDAP`);
+        done(null, false);
+      } else {
+        logger.error('Error deserializing user', err);
+        done(err);
+      }
     }
   });
 
@@ -117,7 +123,12 @@ const initExpress = (): void => {
   const csrfHandler = csrf();
 
   app.use((req, res, next) => {
-    if (req.user && req.path !== '/login' && req.path !== '/account/reset') {
+    if (
+      req.user &&
+      req.path !== '/login' &&
+      req.path !== '/account/reset' &&
+      req.path !== '/account/forgot'
+    ) {
       return csrfHandler(req, res, next);
     } else {
       return next();

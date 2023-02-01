@@ -1,0 +1,5 @@
+
+dn: ou=People,dc=sccs,dc=swarthmore,dc=edu
+ou: People
+objectClass: top
+objectClass: organizationalUnit

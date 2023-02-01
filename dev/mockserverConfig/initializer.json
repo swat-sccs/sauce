@@ -1,0 +1,83 @@
+[
+  {
+    "httpRequest": {
+      "path": "/agent/.*"
+    },
+    "httpResponse": {
+      "statusCode": 200
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "GET",
+      "path": "/mailman/lists"
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "body": {
+        "entries": [
+          "not implemented for testing because nothing uses it"
+        ]
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "GET",
+      "path": "/mailman/lists/exists\\.sccs\\.swarthmore\\.edu"
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "body": {
+        "ok": true
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "GET",
+      "path": "/mailman/lists/causes-error\\.sccs\\.swarthmore\\.edu"
+    },
+    "httpResponse": {
+      "statusCode": 400,
+      "body": {
+        "sadness": true
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "GET",
+      "path": "/mailman/lists/.*?\\.sccs\\.swarthmore\\.edu"
+    },
+    "httpResponse": {
+      "statusCode": 404
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "POST",
+      "path": "/mailman/lists",
+      "body": {
+        "fqdn_listname": "${json-unit.any-string}"
+      }
+    },
+    "httpResponse": {
+      "statusCode": 201
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "POST",
+      "path": "/mailman/members",
+      "body": {
+        "list_id": "${json-unit.any-string}",
+        "subscriber": "${json-unit.any-string}",
+        "role": "owner"
+      }
+    },
+    "httpResponse": {
+      "statusCode": 201
+    }
+  }
+]
