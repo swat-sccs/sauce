@@ -35,6 +35,7 @@ accept new members in the first few weeks of each semester.
 - [Zachary Robinson](https://robinsonz.me) '24 (Co-President)
 - [Yatin Lala](https://yatin.cc) '24 (Co-President)
 - Yael Borger '24 (Treasurer)
+- [Alyssa Zhang](https://www.alyssamzhang.com/) '24 (Program Manager)
 - Alex Le '24 (Project Lead)
 - Leo Douhovnikoff '25 (Project Lead)
 - Patrick Wheeler '23 (Project Lead)
@@ -43,7 +44,6 @@ accept new members in the first few weeks of each semester.
 - Abhi Das '26
 - Alex Skeldon '25
 - Alex You '26
-- [Alyssa Zhang](https://www.alyssamzhang.com/)  '24
 - Ark Lu '24
 - Cisco Velasco '23
 - DongGyu Kim '25
