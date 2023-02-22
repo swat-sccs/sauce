@@ -36,35 +36,52 @@ accept new members in the first few weeks of each semester.
 - [Yatin Lala](https://yatin.cc) '24 (Co-President)
 - Yael Borger '24 (Treasurer)
 - [Alyssa Zhang](https://www.alyssamzhang.com/) '24 (Program Manager)
+- Sasha Casada '24 (Project Lead)
 - Alex Le '24 (Project Lead)
 - Leo Douhovnikoff '25 (Project Lead)
 - Patrick Wheeler '23 (Project Lead)
 - [Thomas Makin](https://thomasmak.in/) '25 (Project Lead)
 - Ere Oh '24 (Marketing Lead)
+- Aaron Dubois '26
 - Abhi Das '26
+- Abraham Porschet '25
+- Aidan Corpus '26
 - Alex Skeldon '25
 - Alex You '26
 - Ark Lu '24
 - Cisco Velasco '23
+- Devina Kalwani '24
 - DongGyu Kim '25
 - Elliot Kim '23
+- Eric Chen '26
 - [George Fang](https://spazzinq.org/) '26
+- Helen Yin '25
+- Isshin Yunoki '25
+- Izzy Lopez-Kalapir '24
+- Jeremiah Omolewa '26
 - Jhovani Gallardo Moreno '25
 - Katelynn Swaim '25
 - Kenneth Barkdoll '24
 - Koyo Asakawa '25
+- Levin Ho '25
 - Lisa Messier '26
 - Magnus Miller '25
 - Michael Lu '26
+- Nana Asante '26
 - Nathan Le '25
+- Nick Fettig '26
 - Nikoloz Khmaladze '25
-- Noor Ali '25
 - Omar Khan '25
-- Sasha Casada '24
+- Owen Sears '25
+- Paige Looney '23
+- Philip Dinh '26
+- Tina Chen '25
 - Tony Cao '25
 - Vladmir Soto-Avina '24
-- William Le '23
 - William Huang '23
+- William Le '23
+- Yana Outkin '26
+- Yue Zhang '24
 - Ziming Yuan '24
 
 ### History
@@ -74,7 +91,7 @@ from the Budget Committee for the Spring 1992 semester. We were founded, in part
 activities of students in Dana and Hallowell who had decided to create an Appletalk network by
 stringing phone cable between rooms. Approximately 32 Macintoshes on 4 floors (3 in Hallowell, 1 in
 Dana) were on the network, as was one heavy-duty laser printer&mdash;two years before the College
-network came into being. Gobs of time were spent diagnosing the many network outages that occurred on
-an almost-daily basis (usually due to cables being clamped by window frames). 30 years later, we're
-no longer stringing phone cable through dorms, but we're still having fun and providing useful facilities
-and services for our fellow students.
+network came into being. Gobs of time were spent diagnosing the many network outages that occurred
+on an almost-daily basis (usually due to cables being clamped by window frames). 30 years later,
+we're no longer stringing phone cable through dorms, but we're still having fun and providing useful
+facilities and services for our fellow students.
