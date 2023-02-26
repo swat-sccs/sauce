@@ -54,7 +54,7 @@ accept new members in the first few weeks of each semester.
 - DongGyu Kim '25
 - Elliot Kim '23
 - Eric Chen '26
-- [George Fang](https://spazzinq.org/) '26
+- [George Fang](https://geofang.com/) '26
 - Helen Yin '25
 - Isshin Yunoki '25
 - Izzy Lopez-Kalapir '24
