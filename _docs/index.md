@@ -58,7 +58,7 @@ accept new members in the first few weeks of each semester.
 - Helen Yin '25
 - Isshin Yunoki '25
 - Izzy Lopez-Kalapir '24
-- Jeremiah Omolewa '26
+- [Jeremiah Omolewa](https://jeremiahomolewa.vercel.app/) '26
 - Jhovani Gallardo Moreno '25
 - Katelynn Swaim '25
 - Kenneth Barkdoll '24
