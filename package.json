@@ -40,7 +40,7 @@
     "ldap-escape": "^2.0.5",
     "ldapjs": "^2.3.1",
     "marked": "^4.0.12",
-    "mongoose": "6.4.6",
+    "mongoose": "6.11.3",
     "nanoid": "^3.1.31",
     "nodemailer": "^6.7.2",
     "passport": "^0.6.0",
