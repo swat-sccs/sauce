@@ -64,7 +64,6 @@ accept new members in the first few weeks of each semester.
 - Owen Sears '25
 - Philip Dinh '26
 - Tina Chen '25
-- Vladmir Soto-Avina '24
 - Yana Outkin '26
 - Yue Zhang '24
 - Ziming Yuan '24
@@ -80,3 +79,7 @@ network came into being. Gobs of time were spent diagnosing the many network out
 on an almost-daily basis (usually due to cables being clamped by window frames). 30 years later,
 we're no longer stringing phone cable through dorms, but we're still having fun and providing useful
 facilities and services for our fellow students.
+
+### Footprints
+
+McCabe, Floor 2
