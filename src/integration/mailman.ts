@@ -42,7 +42,7 @@ export const getMailingList = async (name: string): Promise<any> => {
 
 export const addMailingList = async (name: string, ownerEmail: string) => {
   logger.debug(`Creating list ${name} owned by ${ownerEmail}`);
-  const createResponse = await api.post('/lists', { fqdn_listname: `${name}@sccs.swarthmore.edu` });
+  const createResponse = await api.post('/lists', { fqdn_listname: `${name.toLowerCase()}@sccs.swarthmore.edu` });
 
   if (createResponse.status != 201) {
     const errDesc =
@@ -54,7 +54,7 @@ export const addMailingList = async (name: string, ownerEmail: string) => {
   logger.debug(`Adding ${ownerEmail} as owner of mailing list ${name}`);
 
   const addOwnerResponse = await api.post('/members', {
-    list_id: `${name}.sccs.swarthmore.edu`,
+    list_id: `${name.toLowerCase()}.sccs.swarthmore.edu`,
     subscriber: ownerEmail,
     role: 'owner',
   });

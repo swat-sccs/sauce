@@ -32,7 +32,7 @@ export const createMailingList = async (data: any) => {
 
     const [emailText, transporter] = await Promise.all([
       generateEmail('newMailingList.html', {
-        listName: data.listName,
+        listName: data.listName.toLowerCase(),
         user: data.creator,
       }),
       mailTransporter,
