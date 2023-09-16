@@ -38,18 +38,18 @@ accept new members in the first few weeks of each semester.
 - [Alyssa Zhang](https://www.alyssamzhang.com/) '24 (Program Manager)
 - Sasha Casada '24 (Project Lead)
 - Alex Le '24 (Project Lead)
+- Devina Kalwani '24 (Project Lead)
 - Leo Douhovnikoff '25 (Project Lead)
 - [Thomas Makin](https://thomasmak.in/) '25 (Project Lead)
+- [George Fang](https://geofang.com/) '26 (Project Lead)
 - Ere Oh '24 (Marketing Lead)
 - Abhi Das '26
 - Abraham Porschet '25
 - Aidan Corpus '26
 - Alex Skeldon '25
 - Ark Lu '24
-- Devina Kalwani '24
 - DongGyu Kim '25
 - Eric Chen '26
-- [George Fang](https://geofang.com/) '26
 - Helen Yin '25
 - Isshin Yunoki '25
 - Izzy Lopez-Kalapir '24
