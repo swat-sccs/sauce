@@ -3,6 +3,7 @@ version: '3.4'
 services:
   sauce:
     image: sauce-img
+    init: true
     build:
       context: .
       dockerfile: ./Dockerfile
