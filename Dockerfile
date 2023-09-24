@@ -9,15 +9,18 @@ HEALTHCHECK --interval=5s --timeout=30s --start-period=5s --retries=3 CMD [ "cur
 
 WORKDIR /sauce-app
 
-ENV NODE_ENV=production
-ENV LDAP_URL="ldap://host.docker.internal:389"
-ENV LOCAL_AGENT_URL="http://host.docker.internal:8526"
-
 COPY package.json ./
 COPY package-lock.json ./
 COPY tsconfig.json ./
 
 COPY webStatic ./webStatic
+
+RUN chown -R node:node ./
+USER node
+
+ENV NODE_ENV=production
+ENV LDAP_URL="ldap://host.docker.internal:389"
+ENV LOCAL_AGENT_URL="http://host.docker.internal:8526"
 
 # install everything for building
 RUN NODE_ENV=development npm install
