@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM node:16.5.0
+FROM node:18.18.0-bookworm-slim
 
 ENV PORT=3001
 EXPOSE 3001
