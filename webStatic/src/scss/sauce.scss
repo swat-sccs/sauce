@@ -73,3 +73,8 @@ code {
 html {
   scroll-padding-top: 70px;
 }
+
+.shadow-sm {
+    box-shadow: none !important;
+    filter: drop-shadow(4px 6px 10px #00000044);
+}
