@@ -1,15 +1,15 @@
 .row
   h1.display-1.mb-4 SCCS Dashboard
-  .col-12.col-xl-7.mb-2
+  .col-12.col-xl-7.mb-2.px-3
     mixin service(title, desc, linkText, href)
-      .col-12.col-lg-6.mb-2
+      .col-12.col-lg-6.mb-3
         .card.h-100.shadow-sm
           .card-body.d-flex.flex-column
             h5.card-title= title
             p.card-text= desc
             a.btn.btn-primary.mt-auto(href=href)= linkText
     h2.mb-4 Our Services
-    .row.gx-2
+    .row.gx-3
       +service("Mailing Lists", "Distribute emails to clubs or student organizations", 'Manage lists', '/lists')
       +service("The Cygnet", "The Swarthmore College student directory", 'Search the Cygnet', 'https://cygnet.sccs.swarthmore.edu')
       +service("Reserved Students Digest", "A daily email with news, events, jobs, and more", 'View the RSD', 'https://rsd.sccs.swarthmore.edu')
@@ -21,11 +21,11 @@
     p.text-muted 
       | Looking for something a bit more low-level? We can also help with advanced web hosting,
       | databases, or anything else along those lines. Just contact #[a(href='mailto:staff@sccs.swarthmore.edu') staff@sccs.swarthmore.edu].
-  .col-12.col-xl
+  .col-12.col-xl.px-3
     if posts
       h2.mb-4 News and Updates
       each post in posts
-        .card.w-100.mb-2.shadow-sm
+        .card.w-100.mb-3.shadow-sm
           .card-body 
             h5.card-title= post.data.title
             h6.card-subtitle.mb-2.text-muted= post.data.date.toLocaleDateString()

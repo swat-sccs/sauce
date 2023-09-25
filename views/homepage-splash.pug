@@ -1,5 +1,5 @@
 .row
-  .col-12.col-lg-7
+  .col-12.col-lg-7.px-3
     h1.display-3 Swarthmore College Computer Society
     p.text-muted Digital services by and for Swarthmore students
     p 
@@ -20,11 +20,11 @@
       a.btn.btn-outline-primary.me-2.mt-2(href='https://schedule.sccs.swarthmore.edu') Course Planner
       a.btn.btn-outline-primary.me-2.mt-2(href='https://gpacalc.sccs.swarthmore.edu') GPA Calculator
       a.btn.btn-outline-primary.me-2.mt-2(href='https://dining.sccs.sh/') Dining Menu
-  .col-12.col-lg
+  .col-12.col-lg.px-3
     if posts
       h2.mb-4 News and Updates
       each post in posts
-        .card.w-100.mb-2.shadow-sm
+        .card.w-100.mb-3.shadow-sm
           .card-body 
             h5.card-title= post.data.title
             h6.card-subtitle.mb-2.text-muted= post.data.date.toLocaleDateString()
