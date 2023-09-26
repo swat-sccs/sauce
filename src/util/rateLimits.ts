@@ -23,9 +23,16 @@ const requestRateLimiter = new RateLimiterMemory({
   duration: 1, // per 1 second by IP
 });
 
+const postRateLimiter = new RateLimiterMemory({
+  keyPrefix: 'ratelimit_posts_per_ip',
+  points: 10,
+  duration: 3600,
+});
+
 export const limitRequestRate: RequestHandler = catchErrors(async (req, res, next) => {
   try {
-    const limiterRes = await requestRateLimiter.consume(req.ip);
+    const limiter = req.method == 'GET' ? requestRateLimiter : postRateLimiter;
+    const limiterRes = await limiter.consume(req.ip);
     setRateLimitHeaders(limiterRes, res);
     next();
   } catch (e) {
