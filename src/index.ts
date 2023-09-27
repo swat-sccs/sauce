@@ -87,7 +87,7 @@ const initExpress = (): void => {
       cookie: {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        maxAge: 14 * 24 * 3600, // 14 days
+        maxAge: 14 * 24 * 3600 * 1000, // 14 days
         // MongoStore also expires sessions after two weeks of inactivity
       },
       name: 'sauce',
