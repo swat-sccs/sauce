@@ -32,38 +32,69 @@ accept new members in the first few weeks of each semester.
 
 ### Current Members
 
-- [Zachary Robinson](https://robinsonz.me) '24 (Co-President)
-- [Yatin Lala](https://yatin.cc) '24 (Co-President)
+- [Zachary Robinson](https://robinsonz.me) '24 (President)
 - Yael Borger '24 (Treasurer)
 - [Alyssa Zhang](https://www.alyssamzhang.com/) '24 (Program Manager)
-- Sasha Casada '24 (Project Lead)
 - Alex Le '24 (Project Lead)
 - Devina Kalwani '24 (Project Lead)
-- Leo Douhovnikoff '25 (Project Lead)
-- [Thomas Makin](https://thomasmak.in/) '25 (Project Lead)
 - [George Fang](https://geofang.com/) '26 (Project Lead)
+- Leo Douhovnikoff '25 (Project Lead)
+- Sasha Casada '24 (Project Lead)
+- [Thomas Makin](https://thomasmak.in/) '25 (Project Lead)
+- [Yatin Lala](https://yatin.cc) '24 (Project Lead)
 - Ere Oh '24 (Marketing Lead)
 - Abhi Das '26
 - Abraham Porschet '25
+- Adi Chattopadhyay '27
+- Adrian Duran Rey '27
+- Ahmad Fayyaz '27
 - Aidan Corpus '26
+- Akiva Sherin '27
 - Alex Skeldon '25
+- Alina Vykliuk '26
+- Allison Chong '26
+- Andrew Moy '25
+- Arfath Hossain '27
 - Ark Lu '24
-- DongGyu Kim '25
+- Arman Hanifpour '27
+- Arys Aikyn '27
+- Bella Deanhardt '25
+- Ben Gottlieb '26
+- Carson Lin '27
+- Damian Rene '27
 - Eric Chen '26
+- Felicia Yi '26
+- Finn McKibbin '27
 - Helen Yin '25
+- Hojune Kim '25
 - Isshin Yunoki '25
 - Izzy Lopez-Kalapir '24
-- [Jeremiah Omolewa](https://jeremiahomolewa.vercel.app/) '26
+- Jamie Pickar '26
+- Jasmine Fan '25
+- Jeremiah Omolewa '26
 - Jhovani Gallardo Moreno '25
+- Joey Alander '27
+- Jonathon Cubus '26
 - Katelynn Swaim '25
 - Kenneth Barkdoll '24
+- Keyla Peralta-Alberto '27
 - Levin Ho '25
+- Lily Davoren '25
 - Lisa Messier '26
+- Luis Park '25
+- Michael Pham '25
+- Neil Zhu '26
+- Neve Yair '27
 - Nick Fettig '26
 - Nikoloz Khmaladze '25
 - Owen Sears '25
+- Paulina Trifonova '25
 - Philip Dinh '26
+- Summit Pradhan '25
+- Theo Yochum '27
 - Tina Chen '25
+- Tony Cao '25
+- Victor Sumano Arango '25
 - Yana Outkin '26
 - Yue Zhang '24
 - Ziming Yuan '24
@@ -82,4 +113,4 @@ facilities and services for our fellow students.
 
 ### Footprints
 
-McCabe, Floor 2
+McCabe, Floor 3
