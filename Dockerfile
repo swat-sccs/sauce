@@ -2,13 +2,13 @@
 
 FROM node:18.18.0-bookworm-slim
 
-ENV PORT=3001
-EXPOSE 3001
+ENV PORT=7567
+EXPOSE 7567
 
 RUN apt update
 RUN apt install -y curl
 
-HEALTHCHECK --interval=5s --timeout=30s --start-period=5s --retries=3 CMD [ "curl http://localhost/" ]
+HEALTHCHECK --interval=5s --timeout=30s --start-period=30s --retries=3 CMD [ "curl", "http://127.0.0.1:7567" ]
 
 WORKDIR /sauce-app
 
