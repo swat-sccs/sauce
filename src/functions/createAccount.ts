@@ -11,6 +11,7 @@ import { generateEmail } from '../util/emailTemplates';
 import { addLdap, searchAsyncMultiple } from '../util/ldapUtils';
 import { logger } from '../util/logging';
 import { createPasswordResetRequest } from '../util/passwordReset';
+import { verifyAccountRequest } from '../util/accountVerify'
 
 export interface CreateAccountData {
   username: string;
