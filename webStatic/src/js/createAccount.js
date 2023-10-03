@@ -118,7 +118,7 @@ window.bootstrap = bootstrap;
 
   usernameInput.addEventListener('input', function (event) {
     clearTimeout(usernameTypingTimer);
-    usernameTypingTimer = setTimeout(doneTypingEmail, doneTypingInterval);
+    usernameTypingTimer = setTimeout(doneTypingUser, doneTypingInterval);
   });
 
   let emailTypingTimer;
