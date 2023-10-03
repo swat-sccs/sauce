@@ -31,9 +31,12 @@ const postRateLimiter = new RateLimiterMemory({
 
 export const limitRequestRate: RequestHandler = catchErrors(async (req, res, next) => {
   try {
-    const limiter = req.method == 'GET' ? requestRateLimiter : postRateLimiter;
-    const limiterRes = await limiter.consume(req.ip);
-    setRateLimitHeaders(limiterRes, res);
+    // don't ratelimit login because it breaks integration tests and it has its own ratelimiters
+    if (req.path !== '/login') {
+      const limiter = req.method == 'GET' ? requestRateLimiter : postRateLimiter;
+      const limiterRes = await limiter.consume(req.ip);
+      setRateLimitHeaders(limiterRes, res);
+    }
     next();
   } catch (e) {
     if (e instanceof Error) {
