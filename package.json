@@ -97,7 +97,6 @@
       "prettier --write"
     ],
     "*.js": [
-      "eslint --fix",
       "prettier --write"
     ],
     "*.pug": [
