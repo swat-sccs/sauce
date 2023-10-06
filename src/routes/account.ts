@@ -80,7 +80,7 @@ router.post(
 router.get(
   '/reset',
   catchErrors(async (req, res, next) => {
-    const { error, value } = jf.validateAsClass(req.query, controller.PasswordResetCredentials);
+    const { error, value } = jf.validateAsClass(req.query, controller.ResetCredentials);
 
     if (error) {
       throw new HttpException(400, { message: `Invalid request: ${error.message}` });
@@ -88,13 +88,35 @@ router.get(
 
     // I have no idea why joiful throws a fit here but this is the necessary workaround
     const resetRequest = await controller.verifyPasswordReset(
-      value as unknown as controller.PasswordResetCredentials,
+      value as unknown as controller.ResetCredentials,
     );
 
     return res.render('resetPassword', {
       id: value.id,
       key: value.key,
       username: resetRequest.user,
+    });
+  }),
+);
+
+router.get(
+  '/init',
+  catchErrors(async (req, res, next) => {
+    const { error, value } = jf.validateAsClass(req.query, controller.ResetCredentials);
+
+    if (error) {
+      throw new HttpException(400, { message: `Invalid request: ${error.message}` });
+    }
+
+    // I have no idea why joiful throws a fit here but this is the necessary workaround
+    const verifyRequest = await controller.verifyPasswordReset(
+      value as unknown as controller.ResetCredentials,
+    );
+
+    return res.render('verify email', {
+      id: value.id,
+      key: value.key,
+      username: verifyRequest.user,
     });
   }),
 );

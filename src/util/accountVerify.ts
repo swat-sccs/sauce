@@ -6,12 +6,12 @@ import { logger } from './logging';
 
 const USERNAME_REGEX = /^[a-z][-a-z0-9]*$/;
 
-export const verifyAccountRequest = async (
-  uid: string,
+export const createVerifyAccountRequest = async (
+  email: string,
   expireHours = 1,
   suppressEmail = false,
 ): Promise<[string, string]> => {
-  logger.debug(`Creating account verification ID/key pair for ${uid}`);
+  logger.debug(`Creating account verification ID/key pair for ${email}`);
   const verifyId = nanoid();
   const verifyKey = nanoid();
 
@@ -21,7 +21,7 @@ export const verifyAccountRequest = async (
   await new VerifyEmailRequestModel({
     _id: verifyId,
     key: await argon2.hash(verifyKey, { raw: false }),
-    user: uid,
+    email: email,
     timestamp: expireDate,
     suppressEmail: suppressEmail,
   }).save();
