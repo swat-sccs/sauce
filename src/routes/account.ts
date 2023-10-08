@@ -109,14 +109,14 @@ router.get(
     }
 
     // I have no idea why joiful throws a fit here but this is the necessary workaround
-    const verifyRequest = await controller.verifyPasswordReset(
+    const verifyEmail = await controller.verifyPasswordReset(
       value as unknown as controller.ResetCredentials,
     );
 
     return res.render('verify email', {
       id: value.id,
       key: value.key,
-      username: verifyRequest.user,
+      username: verifyEmail.user,
     });
   }),
 );
