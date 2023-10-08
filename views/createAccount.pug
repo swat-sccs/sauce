@@ -8,6 +8,8 @@ include include/sauce-common
     | and staff&mdash;and you'll still be able to access it after
     | graduation.
   form#createForm.form-signin.needs-validation(action='/account/init', method='post', novalidate)
+    input(type='hidden', name='id', value=id)
+    input(type='hidden', name='key', value=key)
     .form-group.mb-3
       .form-floating
         script(type='text/javascript').
