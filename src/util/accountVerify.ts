@@ -8,7 +8,7 @@ const USERNAME_REGEX = /^[a-z][-a-z0-9]*$/;
 
 export const createVerifyAccountRequest = async (
   email: string,
-  expireHours = 1,
+  expireHours = 12 * 7,
   suppressEmail = false,
 ): Promise<[string, string]> => {
   logger.debug(`Creating account verification ID/key pair for ${email}`);
