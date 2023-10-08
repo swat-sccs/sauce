@@ -88,13 +88,12 @@ export const PasswordResetRequestModel = mongoose.model<PasswordResetRequest>(
 export interface VerifyEmailRequest {
   // verification email links generate two keys: the ID, which is stored plain, and the key, which is
   // hashed with argon2 before being stored.
-  // good chance the rest of this shit is wrong in this implementation: 
   // Both are provided to the user and they make a request;
   // then we look up the request for the ID and compare hashed keys, basically exactly like a normal
   // username/password login flow.
   _id: string;
   key: string;
-  user: string;
+  email: string;
   timestamp: Date;
   suppressEmail?: boolean;
 }
@@ -108,10 +107,10 @@ const verifyEmailRequestSchema = new mongoose.Schema<VerifyEmailRequest>({
     type: String,
     required: true,
   },
-  user: {
+  email: {
     type: String,
     required: true,
-    index: true, // we'll search by user to invalidate previous reset requests
+    index: true,
   },
   timestamp: {
     type: Date,

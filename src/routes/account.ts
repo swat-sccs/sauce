@@ -99,7 +99,7 @@ router.get(
   }),
 );
 
-router.get(
+router.post(
   '/init',
   catchErrors(async (req, res, next) => {
     const { error, value } = jf.validateAsClass(req.query, controller.ResetCredentials);
@@ -109,14 +109,14 @@ router.get(
     }
 
     // I have no idea why joiful throws a fit here but this is the necessary workaround
-    const verifyEmail = await controller.verifyPasswordReset(
+    const verifyEmail = await controller.verifyEmail(
       value as unknown as controller.ResetCredentials,
     );
 
-    return res.render('verify email', {
+    return res.render('accountInit', {
       id: value.id,
       key: value.key,
-      username: verifyEmail.user,
+      email: verifyEmail.email,
     });
   }),
 );

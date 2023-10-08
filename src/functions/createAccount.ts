@@ -115,9 +115,4 @@ export const createAccount = async (data: any) => {
     subject: 'Verify your SCCS account',
     html: emailText,
   });
-
-  const msgUrl = nodemailer.getTestMessageUrl(info);
-  if (msgUrl) {
-    logger.debug(`View message at ${msgUrl}`);
-  }
 };
