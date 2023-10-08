@@ -121,6 +121,7 @@ export class ResetCredentials {
   key: string;
 }
 
+
 /**
  */
 export class PasswordResetRequestParams extends ResetCredentials {
@@ -165,21 +166,21 @@ export const verifyEmail = async (creds: ResetCredentials): Promise<VerifyEmailR
       'This email verification link is invalid or expired. <a href="/account/create">Request a new one</a>.',
   };
 
-  const resetRequest = await VerifyEmailRequestModel.findById(creds.id);
-  if (!resetRequest) {
+  const verifyRequest = await VerifyEmailRequestModel.findById(creds.id);
+  if (!verifyRequest) {
     throw new HttpException(400, {
       ...invalidProps,
       message: `Email verification ID ${creds.id} did not match any request`,
     });
   }
 
-  if (!(await argon2.verify(resetRequest.key, creds.key as string))) {
+  if (!(await argon2.verify(verifyRequest.key, creds.key as string))) {
     throw new HttpException(400, {
       ...invalidProps,
       message: 'Email verification key did not match database',
     });
   }
-  return resetRequest;
+  return verifyRequest;
 };
 
 export const doPasswordReset = async (params: PasswordResetRequestParams) => {
@@ -280,6 +281,7 @@ export const isEmailAvailable = async (email: string): Promise<boolean> => {
   const [inDatabase, inPending] = await Promise.all([
     searchAsync(ldapClient, ldapEscape.filter`(swatmail=${email})`),
     TaskModel.exists({ 'data.email': email, status: 'pending' }),
+    VerifyEmailRequestModel.exists({'data.email': email})
   ]);
 
   if (inDatabase || inPending) {

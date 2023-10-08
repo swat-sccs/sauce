@@ -94,9 +94,8 @@ export interface VerifyEmailRequest {
   // username/password login flow.
   _id: string;
   key: string;
-  user: string;
+  email: string;
   timestamp: Date;
-  suppressEmail?: boolean;
 }
 
 const verifyEmailRequestSchema = new mongoose.Schema<VerifyEmailRequest>({
@@ -108,7 +107,7 @@ const verifyEmailRequestSchema = new mongoose.Schema<VerifyEmailRequest>({
     type: String,
     required: true,
   },
-  user: {
+  email: {
     type: String,
     required: true,
     index: true, // we'll search by user to invalidate previous reset requests
@@ -116,10 +115,6 @@ const verifyEmailRequestSchema = new mongoose.Schema<VerifyEmailRequest>({
   timestamp: {
     type: Date,
     expires: 0,
-  },
-  suppressEmail: {
-    type: Boolean,
-    required: false,
   },
 });
 
