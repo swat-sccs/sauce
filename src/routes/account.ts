@@ -10,28 +10,30 @@ import { logger } from '../util/logging';
 
 export const router = Router(); // eslint-disable-line new-cap
 
-router.get(
-  '/create',
-  catchErrors((req, res, next) => {
-    res.render('createAccount', { classes: controller.VALID_CLASSES });
-  }),
-);
+// router.get(
+//   '/create',
+//   catchErrors((req, res, next) => {
+//     res.render('createAccount', { classes: controller.VALID_CLASSES });
+//   }),
+// );
 
-router.post(
-  '/create',
-  catchErrors(async (req: any, res, next) => {
-    const { error, value } = jf.validateAsClass(req.body, controller.CreateAccountReq);
+// router.post(
+//   '/create',
+//   catchErrors(async (req: any, res, next) => {
+//     const { error, value } = jf.validateAsClass(req.body, controller.CreateAccountReq);
 
-    if (error) {
-      logger.warn(`CreateAccountReq validation error: ${error.message}`);
-      throw new HttpException(400, { message: `Invalid request: ${error.message}` });
-    }
+//     if (error) {
+//       logger.warn(`CreateAccountReq validation error: ${error.message}`);
+//       throw new HttpException(400, { message: `Invalid request: ${error.message}` });
+//     }
 
-    await controller.submitCreateAccountRequest(value);
+//     await controller.submitCreateAccountRequest(value);
 
-    res.render('createAccountSuccess', { email: value.email });
-  }),
-);
+//     res.render('createAccountSuccess', { email: value.email });
+//   }),
+// );
+
+
 
 router.get(
   '/username-ok/:username',
@@ -99,6 +101,13 @@ router.get(
   }),
 );
 
+router.get(
+  '/init',
+  catchErrors(async (req, res, next) => {
+    return res.render('initAccount',);
+  }),
+);
+
 router.post(
   '/init',
   catchErrors(async (req, res, next) => {
@@ -120,6 +129,8 @@ router.post(
     });
   }),
 );
+
+
 
 /**
  *
