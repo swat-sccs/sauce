@@ -106,6 +106,3 @@ on an almost-daily basis (usually due to cables being clamped by window frames).
 we're no longer stringing phone cable through dorms, but we're still having fun and providing useful
 facilities and services for our fellow students.
 
-### Footprints
-
-McCabe, Floor 3
