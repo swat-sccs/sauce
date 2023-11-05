@@ -24,10 +24,8 @@ router.post(
 
     if (error) {
       logger.warn(`CreateAccountReq validation error: ${error.message}`);
-      throw new HttpException(400, { message: `Invalid request: ${error.message}` });
+      throw new HttpException(400, { message: `Invalid requestdddd: ${error.message}` });
     }
-
-    
 
     await controller.submitCreateAccountRequest(value);
 
@@ -35,7 +33,35 @@ router.post(
   }),
 );
 
+router.get(
+  '/init',
+  catchErrors(async (req, res, next) => {
+    const { error, value } = jf.validateAsClass(req.query, controller.InitCredentials);
 
+    if (error) {
+      throw new HttpException(400, { message: `Invalid request: ${error.message}` });
+    }
+
+    // Verify the init link sent to user
+    const initRequest = await controller.verifyEmail(
+      value as unknown as controller.InitCredentials,
+    );
+
+    // Fetch info from cygnet send it to the template
+
+    return res.render('initAccount', {
+      id: value.id,
+      key: value.key,
+      email: initRequest.email,
+      classes: controller.VALID_CLASSES,
+    });
+  }),
+);
+
+router.post(
+  '/init',
+  catchErrors(async (req, res, next) => {}),
+);
 
 router.get(
   '/username-ok/:username',
@@ -81,6 +107,10 @@ router.post(
   }),
 );
 
+router.get('/test', (req, res) => {
+  return res.render('initAccount', { classes: controller.VALID_CLASSES });
+});
+
 router.get(
   '/reset',
   catchErrors(async (req, res, next) => {
@@ -102,41 +132,6 @@ router.get(
     });
   }),
 );
-
-// router.get(
-//   '/init',
-//   catchErrors(async (req, res, next) => {
-//     return res.render('initAccount',);
-//   }),
-// );
-
-// router.post(
-//   '/init',
-//   catchErrors(async (req, res, next) => {
-//     const { error, value } = jf.validateAsClass(req.query, controller.ResetCredentials);
-
-//     if (error) {
-//       throw new HttpException(400, { message: `Invalid request: ${error.message}` });
-//     }
-
-//     // I have no idea why joiful throws a fit here but this is the necessary workaround
-//     const verifyEmail = await controller.verifyEmail(
-//       value as unknown as controller.ResetCredentials,
-//     );
-
-//     return res.render('initAccountSuccess', {
-//       id: value.id,
-//       key: value.key,
-//       email: verifyEmail.email,
-//     });
-//   }),
-// );
-
-
-
-/**
- *
- */
 
 router.post(
   '/reset',

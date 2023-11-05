@@ -14,6 +14,7 @@ export const createVerifyAccountRequest = async (
   logger.debug(`Creating account verification ID/key pair for ${email}`);
   const verifyId = nanoid();
   const verifyKey = nanoid();
+  logger.debug(`verifyId: ${verifyId}, verifyKey: ${verifyKey}`);
 
   const expireDate = new Date();
   expireDate.setHours(expireDate.getHours() + expireHours);

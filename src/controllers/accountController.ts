@@ -23,6 +23,8 @@ import { modifyLdap, searchAsync, searchAsyncUid } from '../util/ldapUtils';
 import { logger } from '../util/logging';
 import { createPasswordResetRequest } from '../util/passwordReset';
 import { testPassword } from '../util/passwordStrength';
+import { createVerifyAccountRequest } from '../util/accountVerify';
+import { verify } from 'crypto';
 
 export const VALID_CLASSES = ['24', '25', '26', '27', 'faculty', 'staff'];
 // TODO: do we have accounts in the system that don't match this username pattern?
@@ -37,7 +39,7 @@ export class CreateAccountReq {
   @jf
     .string()
     .email()
-    .regex(/.+@swarthmore\.edu/, 'Swarthmore email address')
+    // .regex(/.+@swarthmore\.edu/, 'Swarthmore email address')
     .required()
   email: string;
 }
@@ -52,18 +54,50 @@ export const submitCreateAccountRequest = async (req: CreateAccountReq) => {
     });
   }
 
-  logger.info(`Submitting CreateAccountReq ${JSON.stringify(req)}`);
-  const operation = new TaskModel({
-    _id: uuidv4(),
-    operation: 'createAccount',
-    createdTimestamp: Date.now(),
-    data: req,
+  const email = req.email;
+
+  const [verifyId, verifyKey] = await createVerifyAccountRequest(email);
+
+  logger.info(`Creating email verification ${JSON.stringify(req)}`);
+
+  const [emailText, transporter] = await Promise.all([
+    generateEmail('verifyEmail.html', {
+      email: email,
+      domain: process.env.EXTERNAL_ADDRESS,
+      verifyKey: verifyKey,
+      verifyId: verifyId,
+    }),
+    mailTransporter,
+  ]);
+
+  const info = await transporter.sendMail({
+    from: process.env.EMAIL_FROM,
+    to: email,
+    subject: 'Your SCCS Account',
+    html: emailText,
   });
 
-  await operation.save();
+  const msgUrl = nodemailer.getTestMessageUrl(info);
+  if (msgUrl) {
+    logger.debug(`View message at ${msgUrl}`);
+  }
 
-  sendTaskNotification(operation);
+  // logger.info(`Submitting CreateAccountReq ${JSON.stringify(req)}`);
+
+  // const operation = new TaskModel({
+  //   _id: uuidv4(),
+  //   operation: 'createAccount',
+  //   createdTimestamp: Date.now(),
+  //   data: req,
+  // });
 };
+
+export class InitCredentials {
+  @jf.string().required()
+  id: string;
+  @jf.string().required()
+  key: string;
+}
 
 export const doPasswordResetRequest = async (identifier: string) => {
   try {

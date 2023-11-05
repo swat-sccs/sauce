@@ -7,9 +7,7 @@ include include/sauce-common
     | SCCS accounts are available to all Swarthmore students, faculty,
     | and staff&mdash;and you'll still be able to access it after
     | graduation.
-  form#createForm.form-signin.needs-validation(action='/account/init', method='post', novalidate)
-    input(type='hidden', name='id', value=id)
-    input(type='hidden', name='key', value=key)
+  form#createForm.form-signin.needs-validation(action='/account/create', method='post', novalidate)
     .form-group.mb-3
       .form-floating
         script(type='text/javascript').
@@ -20,7 +18,7 @@ include include/sauce-common
       .form-floating
         input#emailInput.form-control(
           type='email',
-          pattern='.+@swarthmore\.edu',
+          pattern='',
           name='email',
           placeholder='Email',
           required
@@ -28,7 +26,8 @@ include include/sauce-common
         label(for='emailInput') Swarthmore email
         #emailFeedback.invalid-feedback Please provide a valid @swarthmore.edu email
           label.form-check-label(for='classYear1' + val, style='text-transform: capitalize')= /^\d+$/.test(val) ? '\u2019' + val : val
+
     button#submitButton.btn.btn-large.btn-primary.mb-3(type='submit') Get Your Account
     p.text-muted.mb-0 Already have an account? #[a(href='/login') Sign in].
-  script(type='text/javascript', src='/dist/js/createAccount.js')
+  //- script(type='text/javascript', src='/dist/js/createAccount.js')
   //- .col
