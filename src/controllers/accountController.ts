@@ -10,13 +10,21 @@ import { HttpException } from '../error/httpException';
 import { mailTransporter } from '../integration/email';
 import { ldapClient } from '../integration/ldap';
 import { modifyForwardFile } from '../integration/localAgent';
-import { PasswordResetRequest, PasswordResetRequestModel, TaskModel } from '../integration/models';
+import {
+  PasswordResetRequest,
+  PasswordResetRequestModel,
+  TaskModel,
+  VerifyEmailRequest,
+  VerifyEmailRequestModel,
+} from '../integration/models';
 import { generateEmail } from '../util/emailTemplates';
 import { sendTaskNotification } from '../util/emailUtils';
 import { modifyLdap, searchAsync, searchAsyncUid } from '../util/ldapUtils';
 import { logger } from '../util/logging';
 import { createPasswordResetRequest } from '../util/passwordReset';
 import { testPassword } from '../util/passwordStrength';
+import { createVerifyAccountRequest } from '../util/accountVerify';
+import { verify } from 'crypto';
 
 export const VALID_CLASSES = ['24', '25', '26', '27', 'faculty', 'staff'];
 // TODO: do we have accounts in the system that don't match this username pattern?
@@ -27,35 +35,18 @@ const USERNAME_REGEX = /^[a-z][-a-z0-9]*$/;
 export class CreateAccountReq {
   // usernames must comply with debian/ubuntu standards so we can give them
   // Heron accounts
-  @jf
-    .string()
-    .regex(/^[a-z][-a-z0-9]*$/, 'POSIX username')
-    .required()
-  username: string;
 
   @jf
     .string()
     .email()
-    .regex(/.+@swarthmore\.edu/, 'Swarthmore email address')
+    // .regex(/.+@swarthmore\.edu/, 'Swarthmore email address')
     .required()
   email: string;
-
-  @jf.string().required()
-  name: string;
-
-  // FIXME would be nice to not manually update this every year
-  // TODO for that matter, can't we pull this from Cygnet?
-  @jf.string().valid(VALID_CLASSES).required()
-  classYear: string;
 }
 
 export const submitCreateAccountRequest = async (req: CreateAccountReq) => {
   // TODO how do we handle someone going to create an account if they're
   // already logged in?
-
-  if (!(await isUsernameAvailable(req.username))) {
-    throw new HttpException(400, { message: `Username ${req.username} already exists` });
-  }
 
   if (!(await isEmailAvailable(req.email))) {
     throw new HttpException(400, {
@@ -63,18 +54,50 @@ export const submitCreateAccountRequest = async (req: CreateAccountReq) => {
     });
   }
 
-  logger.info(`Submitting CreateAccountReq ${JSON.stringify(req)}`);
-  const operation = new TaskModel({
-    _id: uuidv4(),
-    operation: 'createAccount',
-    createdTimestamp: Date.now(),
-    data: req,
+  const email = req.email;
+
+  const [verifyId, verifyKey] = await createVerifyAccountRequest(email);
+
+  logger.info(`Creating email verification ${JSON.stringify(req)}`);
+
+  const [emailText, transporter] = await Promise.all([
+    generateEmail('verifyEmail.html', {
+      email: email,
+      domain: process.env.EXTERNAL_ADDRESS,
+      verifyKey: verifyKey,
+      verifyId: verifyId,
+    }),
+    mailTransporter,
+  ]);
+
+  const info = await transporter.sendMail({
+    from: process.env.EMAIL_FROM,
+    to: email,
+    subject: 'Your SCCS Account',
+    html: emailText,
   });
 
-  await operation.save();
+  const msgUrl = nodemailer.getTestMessageUrl(info);
+  if (msgUrl) {
+    logger.debug(`View message at ${msgUrl}`);
+  }
 
-  sendTaskNotification(operation);
+  // logger.info(`Submitting CreateAccountReq ${JSON.stringify(req)}`);
+
+  // const operation = new TaskModel({
+  //   _id: uuidv4(),
+  //   operation: 'createAccount',
+  //   createdTimestamp: Date.now(),
+  //   data: req,
+  // });
 };
+
+export class InitCredentials {
+  @jf.string().required()
+  id: string;
+  @jf.string().required()
+  key: string;
+}
 
 export const doPasswordResetRequest = async (identifier: string) => {
   try {
@@ -125,7 +148,7 @@ export const doPasswordResetRequest = async (identifier: string) => {
 
 /**
  */
-export class PasswordResetCredentials {
+export class ResetCredentials {
   @jf.string().required()
   id: string;
   @jf.string().required()
@@ -134,7 +157,7 @@ export class PasswordResetCredentials {
 
 /**
  */
-export class PasswordResetRequestParams extends PasswordResetCredentials {
+export class PasswordResetRequestParams extends ResetCredentials {
   // we'll properly validate it later
   @jf.string().required()
   password: string;
@@ -146,7 +169,7 @@ export class PasswordResetRequestParams extends PasswordResetCredentials {
  * @param {PasswordResetCredentials} creds The credentials to check
  */
 export const verifyPasswordReset = async (
-  creds: PasswordResetCredentials,
+  creds: ResetCredentials,
 ): Promise<PasswordResetRequest> => {
   const invalidProps = {
     friendlyMessage:
@@ -168,6 +191,29 @@ export const verifyPasswordReset = async (
     });
   }
   return resetRequest;
+};
+
+export const verifyEmail = async (creds: ResetCredentials): Promise<VerifyEmailRequest> => {
+  const invalidProps = {
+    friendlyMessage:
+      'This email verification link is invalid or expired. <a href="/account/create">Request a new one</a>.',
+  };
+
+  const verifyRequest = await VerifyEmailRequestModel.findById(creds.id);
+  if (!verifyRequest) {
+    throw new HttpException(400, {
+      ...invalidProps,
+      message: `Email verification ID ${creds.id} did not match any request`,
+    });
+  }
+
+  if (!(await argon2.verify(verifyRequest.key, creds.key as string))) {
+    throw new HttpException(400, {
+      ...invalidProps,
+      message: 'Email verification key did not match database',
+    });
+  }
+  return verifyRequest;
 };
 
 export const doPasswordReset = async (params: PasswordResetRequestParams) => {
@@ -268,6 +314,7 @@ export const isEmailAvailable = async (email: string): Promise<boolean> => {
   const [inDatabase, inPending] = await Promise.all([
     searchAsync(ldapClient, ldapEscape.filter`(swatmail=${email})`),
     TaskModel.exists({ 'data.email': email, status: 'pending' }),
+    VerifyEmailRequestModel.exists({ 'data.email': email }),
   ]);
 
   if (inDatabase || inPending) {

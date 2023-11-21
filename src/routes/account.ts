@@ -24,13 +24,44 @@ router.post(
 
     if (error) {
       logger.warn(`CreateAccountReq validation error: ${error.message}`);
-      throw new HttpException(400, { message: `Invalid request: ${error.message}` });
+      throw new HttpException(400, { message: `Invalid requestdddd: ${error.message}` });
     }
 
     await controller.submitCreateAccountRequest(value);
 
     res.render('createAccountSuccess', { email: value.email });
   }),
+);
+
+router.get(
+  '/init',
+  catchErrors(async (req, res, next) => {
+    const { error, value } = jf.validateAsClass(req.query, controller.InitCredentials);
+
+    if (error) {
+      throw new HttpException(400, { message: `Invalid request: ${error.message}` });
+    }
+
+    // Verify the init link sent to user
+    const initRequest = await controller.verifyEmail(
+      value as unknown as controller.InitCredentials,
+    );
+
+    // Fetch info from cygnet send it to the template
+
+    return res.render('initAccount', {
+      id: value.id,
+      key: value.key,
+      email: initRequest.email,
+      classes: controller.VALID_CLASSES,
+    });
+  }),
+);
+
+
+router.post(
+  '/init',
+  catchErrors(async (req, res, next) => {}),
 );
 
 router.get(
@@ -77,10 +108,14 @@ router.post(
   }),
 );
 
+router.get('/test', (req, res) => {
+  return res.render('initAccount', { classes: controller.VALID_CLASSES });
+});
+
 router.get(
   '/reset',
   catchErrors(async (req, res, next) => {
-    const { error, value } = jf.validateAsClass(req.query, controller.PasswordResetCredentials);
+    const { error, value } = jf.validateAsClass(req.query, controller.ResetCredentials);
 
     if (error) {
       throw new HttpException(400, { message: `Invalid request: ${error.message}` });
@@ -88,7 +123,7 @@ router.get(
 
     // I have no idea why joiful throws a fit here but this is the necessary workaround
     const resetRequest = await controller.verifyPasswordReset(
-      value as unknown as controller.PasswordResetCredentials,
+      value as unknown as controller.ResetCredentials,
     );
 
     return res.render('resetPassword', {
@@ -98,10 +133,6 @@ router.get(
     });
   }),
 );
-
-/**
- *
- */
 
 router.post(
   '/reset',

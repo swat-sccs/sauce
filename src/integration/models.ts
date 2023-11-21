@@ -84,6 +84,49 @@ export const PasswordResetRequestModel = mongoose.model<PasswordResetRequest>(
   passwordResetRequestSchema,
 );
 
+// new interface for email verification
+export interface VerifyEmailRequest {
+  // verification email links generate two keys: the ID, which is stored plain, and the key, which is
+  // hashed with argon2 before being stored.
+  // Both are provided to the user and they make a request;
+  // then we look up the request for the ID and compare hashed keys, basically exactly like a normal
+  // username/password login flow.
+  _id: string;
+  key: string;
+  email: string;
+  timestamp: Date;
+  suppressEmail?: boolean;
+}
+
+const verifyEmailRequestSchema = new mongoose.Schema<VerifyEmailRequest>({
+  _id: {
+    type: String,
+    required: true,
+  },
+  key: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    index: true,
+  },
+  timestamp: {
+    type: Date,
+    expires: 0,
+  },
+  suppressEmail: {
+    type: Boolean,
+    required: false,
+  },
+});
+
+export const VerifyEmailRequestModel = mongoose.model<VerifyEmailRequest>(
+  'VerifyEmail',
+  verifyEmailRequestSchema,
+);
+
 export interface MinecraftWhitelist {
   _id: string;
   mcUuid: string;

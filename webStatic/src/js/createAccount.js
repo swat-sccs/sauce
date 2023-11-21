@@ -7,44 +7,14 @@ window.bootstrap = bootstrap;
 (function () {
   'use strict';
 
-  async function fetchUsernameResult(username) {
-    return await fetch('/account/username-ok/' + username).then(async function (res) {
-      return (await res.text()) == 'true';
-    });
-  }
-
   async function fetchEmailResult(email) {
     return await fetch('/account/email-ok/' + email).then(async function (res) {
       return (await res.text()) == 'true';
     });
   }
-  const usernameInput = document.getElementById('usernameInput');
-  const usernameFeedback = document.getElementById('usernameFeedback');
+
   const emailInput = document.getElementById('emailInput');
   const emailFeedback = document.getElementById('emailFeedback');
-
-  async function checkUsername() {
-    if (usernameInput.checkValidity()) {
-      if (await fetchUsernameResult(usernameInput.value)) {
-        usernameInput.classList.add('is-valid');
-        usernameInput.classList.remove('is-invalid');
-        usernameInput.setCustomValidity('');
-        return true;
-      } else {
-        usernameFeedback.innerHTML = 'Username is already taken';
-      }
-    } else {
-      if (usernameInput.value) {
-        usernameFeedback.innerHTML = 'Username contains an invalid character';
-      } else {
-        usernameFeedback.innerHTML = '';
-      }
-    }
-    usernameInput.classList.add('is-invalid');
-    usernameInput.classList.remove('is-valid');
-    usernameInput.setCustomValidity('invalid');
-    return false;
-  }
 
   async function checkEmail() {
     if (emailInput.checkValidity()) {
@@ -76,22 +46,13 @@ window.bootstrap = bootstrap;
     async function (event) {
       event.preventDefault();
 
-      if (!form.checkValidity() || ((await checkUsername()) && (await checkEmail())) === false) {
+      if (!form.checkValidity() || (await checkEmail()) === false) {
         event.stopPropagation();
       } else {
         form.submit();
       }
 
       form.classList.add('was-validated');
-    },
-    false,
-  );
-
-  usernameInput.addEventListener(
-    'change',
-    function (event) {
-      usernameInput.setCustomValidity('');
-      checkUsername();
     },
     false,
   );
@@ -109,17 +70,6 @@ window.bootstrap = bootstrap;
   // FIXME probably would be good to check invalid characters on
   // every keypress, though
   const doneTypingInterval = 500;
-
-  let usernameTypingTimer;
-  function doneTypingUser() {
-    usernameInput.setCustomValidity('');
-    checkUsername();
-  }
-
-  usernameInput.addEventListener('input', function (event) {
-    clearTimeout(usernameTypingTimer);
-    usernameTypingTimer = setTimeout(doneTypingUser, doneTypingInterval);
-  });
 
   let emailTypingTimer;
   function doneTypingEmail() {

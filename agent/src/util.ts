@@ -47,8 +47,8 @@ const setRateLimitHeaders = (limiterRes: RateLimiterRes | null, res: Response) =
 // key configured statically - we aren't locking out people for typos
 const requestRateLimiter = new RateLimiterMemory({
   keyPrefix: 'ratelimit_auth_failures',
-  points: 1, // 1 requests
-  duration: 5, // per 5 seconds
+  points: 10, // 1 requests
+  duration: 1, // per 5 seconds
 });
 
 export const denyRateLimited: RequestHandler = catchErrors(async (req, res, next) => {

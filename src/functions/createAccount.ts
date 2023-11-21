@@ -11,6 +11,7 @@ import { generateEmail } from '../util/emailTemplates';
 import { addLdap, searchAsyncMultiple } from '../util/ldapUtils';
 import { logger } from '../util/logging';
 import { createPasswordResetRequest } from '../util/passwordReset';
+import { createVerifyAccountRequest } from '../util/accountVerify';
 
 export interface CreateAccountData {
   username: string;
@@ -96,4 +97,22 @@ export const createAccount = async (data: any) => {
   } else {
     throw new Error('CreateAccount data not properly formatted');
   }
+
+  const [verifyId, verifyKey] = await createVerifyAccountRequest(data.email, 24 * 7, true);
+  const [emailText, transporter] = await Promise.all([
+    generateEmail('verification.html', {
+      email: data.email,
+      domain: process.env.EXTERNAL_ADDRESS,
+      verifyKey: verifyKey,
+      verifyId: verifyId,
+    }),
+    mailTransporter,
+  ]);
+
+  const info = await transporter.sendMail({
+    from: process.env.EMAIL_FROM,
+    to: data.email,
+    subject: 'Verify your SCCS account',
+    html: emailText,
+  });
 };

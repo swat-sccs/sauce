@@ -14,50 +14,20 @@ include include/sauce-common
           function validateUsername() {
             console.log(this);
           }
-        input#usernameInput.form-control(
-          type='text',
-          pattern='^[a-z][-a-z0-9]*$',
-          name='username',
-          placeholder='Username',
-          aria-describedby='usernameHelp',
-          onchange='validateUsername',
-          required
-        )
-        label(for='usernameInput') Username
-        .valid-feedback Username is available
-        #usernameFeedback.invalid-feedback 
-        small#usernameHelp.form-text 
-          | This should be at least vaguely
-          | related to your real name, and contain only lowercase
-          | letters, numbers, and hyphens.
     .form-group.mb-3
       .form-floating
         input#emailInput.form-control(
           type='email',
-          pattern='.+@swarthmore\.edu',
+          pattern='',
           name='email',
           placeholder='Email',
           required
         )
         label(for='emailInput') Swarthmore email
         #emailFeedback.invalid-feedback Please provide a valid @swarthmore.edu email
-    .form-group.mb-3
-      .form-floating
-        input#nameInput.form-control(type='text', name='name', placeholder='Name', required)
-        label(for='nameInput') Full name
-        .invalid-feedback Please provide a valid name
-    .form-group.mb-3 
-      each val in classes
-        .form-check.form-check-inline
-          input.form-check-input(
-            type='radio',
-            name='classYear',
-            id='classYear1' + val,
-            value=val,
-            required
-          )
           label.form-check-label(for='classYear1' + val, style='text-transform: capitalize')= /^\d+$/.test(val) ? '\u2019' + val : val
-    button#submitButton.btn.btn-large.btn-primary.mb-3(type='submit') Request Your Account
+
+    button#submitButton.btn.btn-large.btn-primary.mb-3(type='submit') Get Your Account
     p.text-muted.mb-0 Already have an account? #[a(href='/login') Sign in].
-  script(type='text/javascript', src='/dist/js/createAccount.js')
+  //- script(type='text/javascript', src='/dist/js/createAccount.js')
   //- .col

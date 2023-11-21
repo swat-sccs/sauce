@@ -1,0 +1,109 @@
+include include/sauce-common
++sauce-layout('Get your SCCS account')(user='user', hideNavbar)
+  h1.mb-4 Get your SCCS account
+  div
+    h4 We found this info
+    small If you prefer to use another name or any of the info is incorrect
+      |
+      | edit the info below
+
+    h5.mt-3 Name
+    p Blah Blah Blah
+
+    h5 Class year:
+    p 2027
+
+    button#submitButton.btn.btn-large.btn-primary.mb-3(type='submit') Edit info
+
+  div(style='margin-top: 2rem') 
+    h4 We couldn'f find
+    p Name, Class Year
+    button#submitButton.btn.btn-large.btn-primary.mb-3(type='submit') Add info
+
+  //- form#createForm.form-signin.needs-validation(action='/account/init', method='post', novalidate)
+  //-   input(type='hidden', name='id', value=id)
+  //-   input(type='hidden', name='key', value=key)
+  //-   .form-group.mb-3
+  //-     .form-floating
+  //-       script(type='text/javascript').
+  //-         function validateUsername() {
+  //-           console.log(this);
+  //-         }
+  //-       input#usernameInput.form-control(
+  //-         type='text',
+  //-         pattern='^[a-z][-a-z0-9]*$',
+  //-         name='username',
+  //-         placeholder='Username',
+  //-         aria-describedby='usernameHelp',
+  //-         onchange='validateUsername',
+  //-         required
+  //-       )
+  //-       label(for='usernameInput') Username
+  //-       .valid-feedback Username is available
+  //-       #usernameFeedback.invalid-feedback 
+  //-       small#usernameHelp.form-text 
+  //-         | This should be at least vaguely
+  //-         | related to your real name, and contain only lowercase
+  //-         | letters, numbers, and hyphens.
+
+  //-   .form-group.mb-3
+  //-     .form-floating
+  //-       input#nameInput.form-control(
+  //-         type='text',
+  //-         name='name',
+  //-         placeholder='Name',
+  //-         required,
+  //-         value='Helllo'
+  //-       )
+  //-       label(for='nameInput') Full name
+  //-       .invalid-feedback Please provide a valid name
+  //-       small#fullnameHelp.form-text 
+  //-         | We prepoulated your full name that we fetch from cygnet
+  //-         | if you have a preferred name to use, please enter it here.
+  //-   form-group.mb-3
+  //-     .form-floating
+  //-       input#passwordInput.form-control(
+  //-         type='password',
+  //-         name='password',
+  //-         placeholder='Password',
+  //-         required
+  //-       )
+  //-       label(for='passwordInput') Password
+  //-       #passwordInvalidMessage.invalid-feedback
+
+  //-   #strengthCard.card.mb-3
+  //-     .card-body
+  //-       .progress.mb-1
+  //-         #strengthBar.progress-bar(
+  //-           role='progressbar',
+  //-           style='width: 0%',
+  //-           aria-valuenow='0',
+  //-           aria-valuemin='0',
+  //-           aria-valuemax='100'
+  //-         )
+  //-       p#strengthText.card-text.d-none.mb-0
+  //-       p#helperText.text-muted.small.card-text.d-none.mt-1
+  //-   .form-group.mb-3
+  //-     .form-floating
+  //-       input#passwordConfirmInput.form-control(type='password', placeholder='Password', required)
+  //-       label(for='passwordConfirmInput') Confirm password
+  //-       .invalid-feedback
+  //-         p Passwords must match.
+
+  //-   .form-group.mb-3 
+  //-     each val in classes
+  //-       .form-check.form-check-inline
+  //-         input.form-check-input(
+  //-           type='radio',
+  //-           name='classYear',
+  //-           id='classYear1' + val,
+  //-           value=val,
+  //-           required
+  //-         )
+  //-         label.form-check-label(for='classYear1' + val, style='text-transform: capitalize')= /^\d+$/.test(val) ? '\u2019' + val : val
+  //-   button#submitButton.btn.btn-large.btn-primary.mb-3(type='submit') Request Your Account
+  //-   p.text-muted.mb-0 Already have an account? #[a(href='/login') Sign in].
+  script(type='text/javascript', src='/dist/js/createAccount.js')
+  script(type='text/javascript', src='/dist/js/resetPassword.js')
+
+  //- .col
