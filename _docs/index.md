@@ -30,26 +30,36 @@ The SCCS is run entirely by student volunteers. We're not affiliated with Swarth
 Computer Science department (although our staff are sometimes CS majors, for obvious reasons). We
 accept new members in the first few weeks of each semester.
 
-### Current Members
+#### Executive Board
 
-- [Zachary Robinson](https://robinsonz.me) '24 (President)
-- Yael Borger '24 (Treasurer)
-- [Alyssa Zhang](https://www.alyssamzhang.com/) '24 (Program Manager)
-- Alex Le '24 (Project Lead)
-- Devina Kalwani '24 (Project Lead)
-- [George Fang](https://geofang.com/) '26 (Project Lead)
-- Leo Douhovnikoff '25 (Project Lead)
-- Sasha Casada '24 (Project Lead)
-- [Thomas Makin](https://thomasmak.in/) '25 (Project Lead)
-- [Yatin Lala](https://yatin.cc) '24 (Project Lead)
-- Ere Oh '24 (Marketing Lead)
+- *President:* [Thomas Makin](https://thomasmak.in/) '25
+- *VP, Finance (Treasurer):* Yael Borger '24
+- *VP, Human Capital:* [George Fang](https://geofang.com/) '26
+- *VP, Infrastructure:* Leo Douhovnikoff '25
+- *VP, Program Management:* [Alyssa Zhang](https://www.alyssamzhang.com/) '24 
+- *VP, Public Relations:* Lily Davoren '25
+- *VP, Software Engineering:* Devina Kalwani '24
+- *VP, Software Engineering:* [Nick Fettig](https://fettig.dev) '26 
+- *VP, System Architecture:* Jhovani Gallardo Moreno '25
+
+#### Project Leads
+
 - Abhi Das '26
+- Akiva Sherin '27
+- Alex Le '24
+- Damian Rene '27
+- Finn McKibbin '27
+- Izzy Lopez-Kalapir '24
+- Victor Sumano Arango '25
+- [Yatin Lala](https://yatin.cc) '24
+
+#### Staff
+
 - Abraham Porschet '25
 - Adi Chattopadhyay '27
 - Adrian Duran Rey '27
 - Ahmad Fayyaz '27
 - Aidan Corpus '26
-- Akiva Sherin '27
 - Alex Skeldon '25
 - Alina Vykliuk '26
 - Allison Chong '26
@@ -61,35 +71,30 @@ accept new members in the first few weeks of each semester.
 - Bella Deanhardt '25
 - Ben Gottlieb '26
 - Carson Lin '27
-- Damian Rene '27
+- Ere Oh '24
 - Felicia Yi '26
-- Finn McKibbin '27
 - Helen Yin '25
 - Hojune Kim '25
-- Izzy Lopez-Kalapir '24
 - Jamie Pickar '26
 - Jasmine Fan '25
-- Jhovani Gallardo Moreno '25
 - Joey Alander '27
 - Jonathon Cubus '26
 - Katelynn Swaim '25
 - Kenneth Barkdoll '24
 - Keyla Peralta-Alberto '27
-- Lily Davoren '25
 - Lisa Farley '26
 - Lisa Messier '26
 - Luis Park '25
 - Michael Pham '25
 - Neil Zhu '26
 - Neve Yair '27
-- [Nick Fettig](https://fettig.dev) '26
 - Paulina Trifonova '25
 - Philip Dinh '26
+- Sasha Casada '24
 - Summit Pradhan '25
 - Theo Yochum '27
 - Tina Chen '25
 - Tony Cao '25
-- Victor Sumano Arango '25
 - Yana Outkin '26
 - Yue Zhang '24
 - Ziming Yuan '24
