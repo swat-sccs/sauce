@@ -26,7 +26,7 @@ export class LocalUser {
   classYear: string;
 }
 
-export const logger: Logger = new Logger();
+export const logger = new Logger();
 
 const setRateLimitHeaders = (limiterRes: RateLimiterRes | null, res: Response) => {
   if (limiterRes) {
