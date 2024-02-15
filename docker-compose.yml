@@ -10,7 +10,7 @@ services:
     environment:
       NODE_ENV: production
       MONGO_URI: "mongodb://mongodb:27017/sauce?retryWrites=true&w=majority"
-      MAILMAN_URL: "http://host.docker.internal:8277/3.1"
+      MAILMAN_URL: "http://lists.sccs.swarthmore.edu:8001/3.1"
       PORT: 7567
     restart: always
     ports:
