@@ -2,10 +2,10 @@
 title: 'About SCCS'
 ---
 
-We're the Swarthmore College Computer Society, or SCCS for short: a student-run group offering
+We're the Swarthmore College Computer Society, or **SCCS** for short: a student-run group offering
 computing services, tools, toys, and information to the Swarthmore College community. Our goal is
 not to mirror ITS, but to complement and supplement widely available services by providing resources
-that would otherwise be out of the reach of individuals. For our part, SCCS staff learn extremely
+that would otherwise be out of the reach of individuals. For our part, **SCCS Staff** learn extremely
 practical system administration and software development skills&mdash;the stuff you can't learn in a
 CS lecture.
 
@@ -26,7 +26,7 @@ CS lecture.
 
 ## Who We Are
 
-The SCCS is run entirely by student volunteers. We're not affiliated with Swarthmore ITS nor the
+**SCCS** is run entirely by student volunteers. We're not affiliated with Swarthmore ITS nor the
 Computer Science department (although our staff are sometimes CS majors, for obvious reasons). We
 accept new members in the first few weeks of each semester.
 
