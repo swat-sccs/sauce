@@ -8,6 +8,7 @@ echoerr() { echo "$@" 1>&2; }
 user=$1
 class=$2
 
+skeldir="/srv/sauce/agent/skel"
 homedir="/home/$class/$user/"
 webdir="/srv/users/$class/$user/"
 dyndir="/srv/users-dyn/$class/$user/"
@@ -38,6 +39,10 @@ ln -s $spool "$homedir/.mail"
 ln -s "$homedir/.mail" "$homedir/.mailbox"
 ln -s $webdir "$homedir/web-docs"
 ln -s $dyndir "$homedir/web-dynamic"
+
+echo "Copying in skel"
+
+cp -r "$skeldir/* $homedir/"
 
 echo "Setting permissions"
 chown -R "$user:users" $homedir
