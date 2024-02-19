@@ -67,6 +67,7 @@ const initExpress = (): void => {
   // stupid canonical redirects
   app.use('/favicon.ico', express.static('public/favicon.ico'));
   app.use('/index.html', (req, res) => res.redirect(301, '/'));
+  app.use('/projects*', (req, res) => res.redirect(301, '/'));
 
   // DB CONFIG
   const mongoPromise = initMongo(process.env.MONGO_URI);
