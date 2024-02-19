@@ -10,6 +10,7 @@ class=$2
 
 homedir="/home/$class/$user/"
 webdir="/srv/users/$class/$user/"
+dyndir="/srv/users-dyn/$class/$user/"
 spool="/home/var/spool/mail/$user"
 
 ensurenew() {
@@ -21,12 +22,14 @@ ensurenew() {
 
 ensurenew $homedir
 ensurenew $webdir
+ensurenew $dyndir
 ensurenew $spool
 
 echo "Creating user directories"
 
 mkdir -p $homedir
 mkdir -p $webdir
+mkdir -p $dyndir
 touch $spool
 
 echo "Creating mail symlinks"
@@ -34,10 +37,12 @@ echo "Creating mail symlinks"
 ln -s $spool "$homedir/.mail"
 ln -s "$homedir/.mail" "$homedir/.mailbox"
 ln -s $webdir "$homedir/web-docs"
+ln -s $dyndir "$homedir/web-dynamic"
 
 echo "Setting permissions"
 chown -R "$user:users" $homedir
 chown "$user:users" $webdir
+chown"$user:users" $dyndir
 
 chmod -R 0700 $homedir
 
