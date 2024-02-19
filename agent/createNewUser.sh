@@ -42,12 +42,12 @@ ln -s $dyndir "$homedir/web-dynamic"
 
 echo "Copying in skel"
 
-cp -r "$skeldir/* $homedir/"
+cp -r $skeldir/* $homedir
 
 echo "Setting permissions"
 chown -R "$user:users" $homedir
 chown "$user:users" $webdir
-chown"$user:users" $dyndir
+chown "$user:users" $dyndir
 
 chmod -R 0700 $homedir
 
