@@ -21,6 +21,7 @@ import { initMongo } from './integration/mongo';
 import { accountRouter } from './routes/account';
 import { adminRouter } from './routes/admin';
 import { docRouter } from './routes/docs';
+import { feedRouter } from './routes/feed';
 import { loginRouter } from './routes/login';
 import { mailingRouter } from './routes/mailingList';
 import { minecraftRouter } from './routes/minecraft';
@@ -194,6 +195,7 @@ const initExpress = (): void => {
   app.use('/lists', mailingRouter);
   app.use('/minecraft', minecraftRouter);
   app.use('/docs', docRouter);
+  app.use('/feed', feedRouter);
 
   app.use((req: any, res, next) => {
     next(new HttpException(404, { message: req.path }));

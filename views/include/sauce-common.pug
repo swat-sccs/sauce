@@ -1,3 +1,4 @@
+
 mixin sauce-container
   .d-flex.flex-column.min-vh-100
     if staffMessage
@@ -13,6 +14,13 @@ mixin sauce-container
                 id: 'docs',
                 title: 'Documentation',
                 href: '/docs',
+                needsAdmin: false,
+                needsUser: false,
+              },
+              {
+                id: 'feed',
+                title: 'News',
+                href: '/feed',
                 needsAdmin: false,
                 needsUser: false,
               },
@@ -151,7 +159,7 @@ mixin sauce-layout(title)
     body
       +sauce-container&attributes(attributes)
         .row(style='max-width: 768px')
-          .col-md-8
+          .col-md-12
             block
       if attributes.includeBootstrapScripts
         script(type='text/javascript', src='/dist/js/bootstrapScripts.js')

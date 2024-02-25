@@ -26,10 +26,15 @@
   .col-12.col-xl.px-3
     if posts
       h2.mb-4 News and Updates
-      each post in posts
-        .card.w-100.mb-3.shadow-sm
-          .card-body 
-            h5.card-title= post.data.title
-            h6.card-subtitle.mb-2.text-muted= post.data.date.toLocaleDateString()
-            //- counteract the margin-bottom applied to <p> elements so the card bottom isn't weirdly long
-            div(style='margin-bottom: -1rem')!= post.content
+      - var i = 0
+        each post in posts
+          if i<4
+            .card.w-100.mb-3.shadow-sm
+              .card-body
+                h5.card-title= post.data.title
+                h6.card-subtitle.mb-2.text-muted= post.data.date.toLocaleDateString()
+                //- counteract the margin-bottom applied to <p> elements so the card bottom isn't weirdly long
+                div(style='margin-bottom: -1rem')!= post.content
+          - i++
+      p.text-muted
+      | #[a(href='https://www.sccs.swarthmore.edu/feed') View more]

@@ -1,0 +1,15 @@
+include include/sauce-common
+
++sauce-layout('News and Updates')(pageId='feed', user=user, includeBootstrapScripts)
+  .row
+    h1.display-1.mb-4 News and Updates
+    if posts
+      each post in posts
+        .col-6.px-3
+          .row-12.h-100.py-3
+            .card.h-100.w-100.shadow-sm
+              .card-body 
+                h5.card-title= post.data.title
+                h6.card-subtitle.mb-2.text-muted= post.data.date.toLocaleDateString()
+                //- counteract the margin-bottom applied to <p> elements so the card bottom isn't weirdly long
+                div(style='margin-bottom: -1rem')!= post.content
