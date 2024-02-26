@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { EmailForwardingConfig } from '../controllers/accountController';
+import { EmailForwardingConfig, SSHConfig } from '../controllers/accountController';
 import { CreateAccountData } from '../functions/createAccount';
 
 const localAgent = axios.create({
@@ -37,6 +37,20 @@ export const modifyForwardFile = async (user: any, forward: EmailForwardingConfi
 
 export const getForwardFile = async (user: any): Promise<string> => {
   return (await localAgent.get(`/forwardFile/${user.classYear}/${user.uid}`)).data;
+};
+
+export const modifySSHFile = async (user: any, config: SSHConfig) => {
+  let SSHString = `${config.keys}\n`;
+
+  await localAgent.post(`/SSHFile/${user.classYear}/${user.uid}`, SSHString, {
+    headers: {
+      'Content-Type': 'text/plain',
+    },
+  });
+};
+
+export const getSSHFile = async (user: any): Promise<string> => {
+  return (await localAgent.get(`/sshFile/${user.classYear}/${user.uid}`)).data;
 };
 
 export const whitelistMinecraftUser = async (uuid: string): Promise<void> => {

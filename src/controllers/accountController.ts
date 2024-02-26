@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { HttpException } from '../error/httpException';
 import { mailTransporter } from '../integration/email';
 import { ldapClient } from '../integration/ldap';
-import { modifyForwardFile } from '../integration/localAgent';
+import { modifyForwardFile, modifySSHFile } from '../integration/localAgent';
 import { PasswordResetRequest, PasswordResetRequestModel, TaskModel } from '../integration/models';
 import { generateEmail } from '../util/emailTemplates';
 import { sendTaskNotification } from '../util/emailUtils';
@@ -307,4 +307,28 @@ export const configureEmailForwarding = async (
   await modifyForwardFile(user, config);
 
   logger.info(`Updated email forwarding for ${user.uid} to ${JSON.stringify(config)}`);
+};
+
+const sshKey = () =>
+  jf
+    .string()
+    .pattern(/^(ssh-rsa AAAAB3NzaC1yc2|ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNT|ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzOD|ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1Mj|ssh-ed25519 AAAAC3NzaC1lZDI1NTE5|ssh-dss AAAAB3NzaC1kc3)[0-9A-Za-z+/]+[=]{0,3}(\s.*)?(\n|$)/)
+    .required();
+
+/**
+ */
+export class SSHConfig {
+  @sshKey()
+  keys: string;
+}
+
+export const configureSSH = async (
+  user: any,
+  config: SSHConfig,
+): Promise<void> => {
+  logger.debug(`Updating SSH keys for ${user.uid} to ${JSON.stringify(config)}`);
+
+  await modifySSHFile(user, config);
+
+  logger.info(`Updated SSH keys for ${user.uid} to ${JSON.stringify(config)}`);
 };

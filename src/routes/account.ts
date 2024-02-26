@@ -3,7 +3,7 @@ import * as jf from 'joiful';
 
 import * as controller from '../controllers/accountController';
 import { HttpException } from '../error/httpException';
-import { getForwardFile } from '../integration/localAgent';
+import { getForwardFile, getSSHFile } from '../integration/localAgent';
 import { catchErrors } from '../util/asyncCatch';
 import { isLoggedIn } from '../util/authUtils';
 import { logger } from '../util/logging';
@@ -123,6 +123,7 @@ router.get(
   catchErrors(async (req: any, res, next) => {
     return res.render('account', {
       forwardFileText: await getForwardFile(req.user),
+      sshFileText: await getSSHFile(req.user)
     });
   }),
 );
@@ -137,6 +138,21 @@ router.post(
     }
 
     controller.configureEmailForwarding(req.user, value);
+
+    res.redirect('/account');
+  }),
+);
+
+router.post(
+  '/configSSH',
+  isLoggedIn,
+  catchErrors(async (req: any, res, next) => {
+    const { error, value } = jf.validateAsClass(req.body, controller.SSHConfig);
+    if (error) {
+      throw new HttpException(400, { message: `Invalid request: ${error.message}` });
+    }
+
+    controller.configureSSH(req.user, value);
 
     res.redirect('/account');
   }),
