@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { existsSync, readFileSync, appendFileSync, chownSync, mkdirSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync, appendFileSync, chownSync, mkdirSync } from 'fs';
 import { execFileSync } from 'child_process';
 import * as jf from 'joiful';
 import path from 'path';
@@ -48,19 +48,30 @@ sshRouter.post(
     const file = `${userDir}/.ssh/authorized_keys`;
 
     if (existsSync(userDir)) {
+      let exists = true;
       if(!existsSync(`${userDir}/.ssh`)) {
-        const entry = execFileSync('/usr/bin/ldapsearch', ['-x', `\'(uid=${value.username})\'`]).toString();
-        const uid = parseInt(entry.match(/uidNumber: \d\d\d\d/gi)[0]);
-        const gid = parseInt(entry.match(/gidNumber: \d\d\d/gi)[0]);
+        mkdirSync(`${userDir}/.ssh`, {mode: 0o700});
+        exists = false;
+      }
+      if (!existsSync(file)) {
+        writeFileSync(file, '', {mode: 0o644});
+        const entry = execFileSync('/usr/bin/ldapsearch', ['-x', `(uid=${value.username})`]).toString();
+        const uid = parseInt(entry.match(/uidNumber: \d+$/gim)[0].split(' ')[1]);
+        const gid = parseInt(entry.match(/gidNumber: \d+$/gim)[0].split(' ')[1]);
         if (!(uid && gid)) {
           logger.warn(`Id of user ${value.username} (class: ${value.classYear}) could not be determined`);
           return res
             .status(400)
             .send(`Id of user ${value.username} (class: ${value.classYear}) could not be determined`);
         }
-        mkdirSync(`${userDir}/.ssh`, {mode: 0o700});
-        chownSync(`${userDir}/.ssh`, uid, gid);
+
+        // chown file and only chown dir if created
+        chownSync(`${userDir}/.ssh/authorized_keys`, uid, gid);
+        if (!exists)
+          chownSync(`${userDir}/.ssh`, uid, gid);
+
       }
+
       logger.info(`Replacing contents of authorized_keys file at ${file}`);
       appendFileSync(file, req.body.toString());
       res.sendStatus(200);
