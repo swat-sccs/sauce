@@ -165,14 +165,14 @@ include include/sauce-common
           )
             input(type='hidden', name='_csrf', value=csrfToken())
             .row
-              .col-auto.pe-0
-                input#sshKeys.form-control.form-control-sm(
+              .col-12
+                input#sshKeys.form-control.form-control-md(
                   type='text',
                   aria-label='input for another ssh key',
                   name='keys'
                 )
             .row
-              .col-auto.mt-1
+              .col-auto.mt-3
                 //- TODO add a confirmation
                 button.btn.btn-sm.btn-primary(type='submit') Apply
 
