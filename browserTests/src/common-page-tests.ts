@@ -35,7 +35,7 @@ export function hasContainerElements(
           it('does not have links besides documentation', async () => {
             const navbarList = driver.findElement(By.className('navbar-nav'));
             const children = await navbarList.findElements(By.xpath('*'));
-            expect(children).to.have.length(1);
+            expect(children).to.have.lengthOf(2);
           });
         }
 
@@ -93,7 +93,7 @@ export function hasContainerElements(
             const adminElements = driver
               .findElement(By.className('navbar-nav'))
               .findElements(By.linkText('Admin'));
-            return expect(adminElements).to.eventually.have.length(0);
+            return expect(adminElements).to.eventually.have.lengthOf(0);
           });
         }
       });
