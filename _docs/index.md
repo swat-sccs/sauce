@@ -15,13 +15,14 @@ CS lecture.
 
 ## Our Services
 
-- [The Cygnet](https://cygnet.sccs.swarthmore.edu): the Swarthmore College student directory
+- [The Cygnet](https://cygnet.sccs.swarthmore.edu): The Swarthmore College student directory
 - [The RSD](https://rsd.sccs.swarthmore.edu): A daily email with news, events, jobs, and more
 - [Course Scheduler](https://schedule.sccs.swarthmore.edu): Plan your schedule for next semester
 - [Mailing Lists](https://lists.sccs.swarthmore.edu): Distribute emails to clubs and student groups
 - [GPA Calculator](https://gpacalc.sccs.swarthmore.edu): Quickly calculate your Swarthmore GPA
 - [SCCS Sites](https://sites.sccs.swarthmore.edu): Create sites with Wordpress
 - [Minecraft](https://www.sccs.swarthmore.edu/minecraft): The Swarthmore College Minecraft server
+- [LanCache](/docs/lancache): Speedy game cache on the Swat network
 - [Advanced](/docs/advanced-services): Some more goodies for the tech-savvy
 
 ## Who We Are
