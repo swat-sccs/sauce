@@ -1,8 +1,11 @@
 include include/sauce-common
 
 +sauce-layout('Account info')(pageId='account', user=user)
-  h1.mb-4 Your SCCS Account
-  p Welcome, #{ user.uid }.
+  h1.mb-2 Your SCCS Account
+  h6.mb-4 Welcome, #{ user.uid }.
+
+  p.mb-0 Your Swarthmore email is #[code= user.swatmail].
+  p.small.text-muted If you need to change this, #[a(href='mailto:staff@sccs.swarthmore.edu') contact SCCS staff.]
 
   .mb-4
     h2 Password Settings
@@ -26,12 +29,75 @@ include include/sauce-common
     p SCCS staff members will never ask for your password.
     button#changePasswordButton.btn.btn-primary(type='button') Change password
 
-  h2 Email Settings
-
-  p.mb-0 Your Swarthmore email is #[code= user.swatmail].
-  p.small.text-muted If you need to change this, #[a(href='mailto:staff@sccs.swarthmore.edu') contact SCCS staff.]
+  h2 Advanced Settings
 
   #advancedAccordion.accordion
+    .accordion-item
+      h2#headingSSH.accordion-header
+        button.accordion-button.collapsed(
+          type='button',
+          data-bs-toggle='collapse',
+          data-bs-target='#collapseSSH',
+          aria-expanded='false',
+          aria-controls='collapseSSH'
+        )
+          | SSH access configuration
+      #collapseSSH.accordion-collapse.collapse(aria-labelledby='headingSSH')
+        .accordion-body
+          h3 Authorized Keys
+          button.btn.btn-link.btn-sm.p-0.mb-2(
+            data-bs-toggle='modal',
+            data-bs-target='#sshHelpModal'
+          ) What's this?
+
+          if sshFileText
+            p Your authorized_keys file (at #[code #{ user.homeDirectory }/.ssh/authorized_keys]) contains the following:
+            .card.mb-3(style='width: 100%')
+              .card-body
+                pre.mb-0= sshFileText
+          else
+            p You currently don't have an authorized_keys file.
+
+          hr
+
+          h4 Add keys
+
+          form#sshForm.container.mb-3.gx-0(
+            action='/account/configSSH',
+            method='post',
+            novalidate
+          )
+            input(type='hidden', name='_csrf', value=csrfToken())
+            .row
+              .col-12
+                input#sshKeys.form-control.form-control-md(
+                  type='text',
+                  aria-label='input for another ssh key',
+                  name='keys'
+                )
+            .row
+              .col-auto.mt-3
+                //- TODO add a confirmation
+                button.btn.btn-sm.btn-primary(type='submit') Apply
+
+          //- this is separate from the main script because it has to activate after all the form stuff is there
+          script(type='text/javascript').
+            (function () {
+              'use strict';
+              const form = document.getElementById('sshForm');
+
+              form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                  event.preventDefault();
+                  event.stopPropagation();
+
+                  Array.prototype.slice.call(document.querySelectorAll('#sshForm .validate-me')).forEach(function (item) {
+                    item.classList.add('was-validated');
+                  });
+                }
+              });
+            })();
+
     .accordion-item
       h2#headingAdvanced.accordion-header
         button.accordion-button.collapsed(
@@ -41,10 +107,10 @@ include include/sauce-common
           aria-expanded='false',
           aria-controls='collapseAdvanced'
         )
-          | Advanced email settings
+          | Email forwarding configuration
       #collapseAdvanced.accordion-collapse.collapse(aria-labelledby='headingAdvanced')
         .accordion-body
-          h3 Email forwarding
+          h3 .forward file
           button.btn.btn-link.btn-sm.p-0.mb-2(
             data-bs-toggle='modal',
             data-bs-target='#forwardingHelpModal'
@@ -128,72 +194,6 @@ include include/sauce-common
               });
             })();
 
-    .accordion-item
-      h2#headingSSH.accordion-header
-        button.accordion-button.collapsed(
-          type='button',
-          data-bs-toggle='collapse',
-          data-bs-target='#collapseSSH',
-          aria-expanded='false',
-          aria-controls='collapseSSH'
-        )
-          | Advanced SSH settings
-      #collapseSSH.accordion-collapse.collapse(aria-labelledby='headingSSH')
-        .accordion-body
-          h3 SSH Authorized Keys
-          button.btn.btn-link.btn-sm.p-0.mb-2(
-            data-bs-toggle='modal',
-            data-bs-target='#sshHelpModal'
-          ) What's this?
-
-          if sshFileText
-            p Your authorized_keys file (at #[code #{ user.homeDirectory }/.ssh/authorized_keys]) contains the following:
-            .card.mb-3(style='width: 100%')
-              .card-body
-                pre.mb-0= sshFileText
-          else
-            p You currently don't have an authorized_keys file.
-
-          hr
-
-          h4 Add keys
-
-          form#sshForm.container.mb-3.gx-0(
-            action='/account/configSSH',
-            method='post',
-            novalidate
-          )
-            input(type='hidden', name='_csrf', value=csrfToken())
-            .row
-              .col-12
-                input#sshKeys.form-control.form-control-md(
-                  type='text',
-                  aria-label='input for another ssh key',
-                  name='keys'
-                )
-            .row
-              .col-auto.mt-3
-                //- TODO add a confirmation
-                button.btn.btn-sm.btn-primary(type='submit') Apply
-
-          //- this is separate from the main script because it has to activate after all the form stuff is there
-          script(type='text/javascript').
-            (function () {
-              'use strict';
-              const form = document.getElementById('sshForm');
-
-              form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                  event.preventDefault();
-                  event.stopPropagation();
-
-                  Array.prototype.slice.call(document.querySelectorAll('#sshForm .validate-me')).forEach(function (item) {
-                    item.classList.add('was-validated');
-                  });
-                }
-              });
-            })();
-
   #forwardingHelpModal.modal.fade(
     tabindex='-1',
     aria-labelledby='forwardingHelpModalTitle',
@@ -235,10 +235,22 @@ include include/sauce-common
           button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
         .modal-body
           p.
-            Your SCCS account also gives you access to our SSH servers at 
-            #[code robin.sccs.swarthmore.edu]. This service is offered to give students accesss to
-            more powerful hardware that SCCS can administrate. This page allows you to drop an SSH
-            key so you don't have to continuously type your passsword in when SSH'ing in.
+            Your SCCS account also gives you access to our public SSH server, #[code robin], at 
+            #[code ssh.sccs.swarthmore.edu]. SSH is a protocol for remotely accessing a server
+            via a terminal, presenting a terminal on the remote machine via your local machine.
+            This service is offered to give students accesss to more powerful hardware that SCCS
+            can administrate. SSH can use password authentication, but you end up typing it in
+            a million times, especially if using the VS Code SSH extension.
+          p.
+            An alternative is key-based authentication, using a private key that you keep secret
+            and a public key you pass out that matches it. A calculation is performed when logging
+            in to check if they key matches. This page allows you to drop a public key so you don't
+            need to use tools like #[code ssh-copy-id], which does not work on Windows.
+          p.
+            Generate a
+            key with #[code ssh-keygen -t ecdsa]. This utility is included by default on all modern
+            operating systems. Copy the contents of the file #[code ~/.ssh/id_ecdsa.pub] and paste
+            in the "Add Keys" box.
 
   script(type='text/javascript').
     const UID = '#{user.uid}';
