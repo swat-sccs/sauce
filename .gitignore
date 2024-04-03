@@ -29,3 +29,9 @@ yarn-error.log*
 dev/ldapDb
 dev/ldapConfig
 /mongodata
+
+# more bs
+webStatic.tar.gz
+registry.key
+registry.crt
+
