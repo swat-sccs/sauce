@@ -16,8 +16,8 @@ spool="/home/var/spool/mail/$user"
 
 ensurenew() {
   if [ -d $1 ]; then
-    echoerr "$1 already exists"
-    exit 1
+    echoerr "WARNING: $1 already exists"
+    #exit 1
   fi
 }
 
