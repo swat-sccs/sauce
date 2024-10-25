@@ -21,7 +21,7 @@ services:
       - "mongodb"
 
   mongodb:
-    image: mongo:5.0.5
+    image: mongo:5.0.29
     restart: always
     hostname: sauce-mongodb
     volumes:
