@@ -11,7 +11,7 @@ const userAgent = axios.create({
 });
 
 const mcAgent = axios.create({
-  baseURL: process.env.USER_AGENT_URL,
+  baseURL: process.env.MC_AGENT_URL,
   headers: {
     Authorization: `Bearer ${process.env.LOCAL_AGENT_TOKEN}`,
   },
