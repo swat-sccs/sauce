@@ -23,7 +23,8 @@ USER node
 
 ENV NODE_ENV=production
 ENV LDAP_URL="ldap://host.docker.internal:389"
-ENV LOCAL_AGENT_URL="http://pigeon.sccs.swarthmore.edu:3001"
+ENV USER_AGENT_URL="http://pigeon.sccs.swarthmore.edu:3001"
+ENV MC_AGENT_URL="http://chicken.sccs.swarthmore.edu:3001"
 
 # install everything for building
 RUN NODE_ENV=development npm install

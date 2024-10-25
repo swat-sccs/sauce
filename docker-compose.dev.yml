@@ -15,7 +15,8 @@ services:
       MAILMAN_URL: "http://mockserver:1080/mailman"
       MAILMAN_USER: "dev"
       MAILMAN_PW: "test"
-      LOCAL_AGENT_URL: "http://mockserver:1080/agent"
+      USER_AGENT_URL: "http://mockserver:1080/user-agent"
+      MC_AGENT_URL: "http://mockserver:1080/mc-agent"
       LOCAL_AGENT_TOKEN: "test-token"
       ADMIN_EMAIL: "staff@sccs.swarthmore.edu"
       EXTERNAL_ADDRESS: "http://localhost:7567"
@@ -62,6 +63,6 @@ services:
     ports:
       - 8025:8025 # web interface
       - 1025 # smtp
-  
-  
+
+
 

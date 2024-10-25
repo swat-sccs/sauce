@@ -23,7 +23,8 @@ services:
       MAILMAN_USER: "admin"
       MAILMAN_PW: "spooky secret"
 
-      LOCAL_AGENT_URL: "http://localhost:8526"
+      USER_AGENT_URL: "http://localhost:8526"
+      CHICKEN_AGENT_URL: "http://localhost:8527"
       LOCAL_AGENT_TOKEN: "d56667ac-b7d4-4901-bd7d-2f7dd14e40e9"
 
       # Analytics with Plausible. if either of these options is not set, no analytics script will be added

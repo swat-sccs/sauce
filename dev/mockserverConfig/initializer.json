@@ -1,7 +1,15 @@
 [
   {
     "httpRequest": {
-      "path": "/agent/.*"
+      "path": "/user-agent/.*"
+    },
+    "httpResponse": {
+      "statusCode": 200
+    }
+  },
+  {
+    "httpRequest": {
+      "path": "/mc-agent/.*"
     },
     "httpResponse": {
       "statusCode": 200
