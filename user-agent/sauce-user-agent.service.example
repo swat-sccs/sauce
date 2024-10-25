@@ -1,0 +1,16 @@
+[Unit]
+Description=SAUCE User Account Management Agent
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/srv/sauce/user-agent
+# We will keep system node on this VM relatively constant
+ExecStart=/usr/bin/node /srv/sauce/user-agent/build/src/index.js
+Restart=on-failure
+RestartSec=5s
+
+
+[Install]
+WantedBy=multi-user.target

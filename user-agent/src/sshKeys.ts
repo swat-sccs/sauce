@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { existsSync, readFileSync, writeFileSync, appendFileSync, chownSync, mkdirSync } from 'fs';
 import { execFileSync } from 'child_process';
 import * as jf from 'joiful';
-import path from 'path';
 
 import { catchErrors, LocalUser, logger } from './util';
 

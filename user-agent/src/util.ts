@@ -19,10 +19,10 @@ const CLASSYEAR_REGEX = /^(\d\d|faculty|staff)$/;
 /**
  */
 export class LocalUser {
-  @jf.string().regex(USERNAME_REGEX, 'POSIX username').required()
+  @(jf.string().regex(USERNAME_REGEX, 'POSIX username').required())
   username: string;
 
-  @jf.string().regex(CLASSYEAR_REGEX, 'classYear').required()
+  @(jf.string().regex(CLASSYEAR_REGEX, 'classYear').required())
   classYear: string;
 }
 

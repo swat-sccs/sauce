@@ -6,10 +6,7 @@ import express from 'express';
 import passport from 'passport';
 import { Strategy as BearerStrategy } from 'passport-http-bearer';
 
-import { forwardingRouter } from './forwardFile';
-import { sshRouter } from './sshKeys';
 import { minecraftRouter } from './minecraft';
-import { userRouter } from './user';
 import { denyRateLimited, logger, penalizeLimiter } from './util';
 
 const app = express();
@@ -39,9 +36,6 @@ app.use(
     res.sendStatus(401);
   },
 );
-app.use('/newUser', userRouter);
-app.use('/forwardFile', forwardingRouter);
-app.use('/sshFile', sshRouter);
 app.use('/mcWhitelist', minecraftRouter);
 
 app.use((err, req, res, next) => {
