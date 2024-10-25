@@ -34,75 +34,61 @@ accept new members in the first few weeks of each semester.
 #### Executive Board
 
 - *President:* [Thomas Makin](https://thomasmak.in/) '25
-- *VP, Finance (Treasurer):* Yael Borger '24
+- *VP, Finance (Treasurer):* Theo Yochum '27
 - *VP, Human Capital:* [George Fang](https://geofang.com/) '26
 - *VP, Infrastructure:* Leo Douhovnikoff '25
-- *VP, Program Management:* [Alyssa Zhang](https://www.alyssamzhang.com/) '24 
+- *VP, Program Management:*  Victor Sumano Arango '25
 - *VP, Public Relations:* Lily Davoren '25
-- *VP, Software Engineering:* Devina Kalwani '24
-- *VP, Software Engineering:* [Nick Fettig](https://fettig.dev) '26 
+- *VP, Software Engineering:*  Damian Rene '27
 - *VP, System Architecture:* Jhovani Gallardo Moreno '25
 
 #### Project Leads
 
-- Abhi Das '26
-- Akiva Sherin '27
-- Alex Le '24
-- Damian Rene '27
+*3D Campus Map*
+
+- Aidan Corpus '26
+- Ava Babcock '27
+
+*AirPool*
+
 - Finn McKibbin '27
-- Izzy Lopez-Kalapir '24
+
+*Reserved Students Digest*
+
+- Jhovani Gallardo Moreno '25
+
+*Course Planner*
+
 - Victor Sumano Arango '25
-- [Yatin Lala](https://yatin.cc) '24
+
+*SwatSwap*
+
+- Eli Young '26
 
 #### Staff
 
-- Abraham Porschet '25
 - Adi Chattopadhyay '27
 - Adrian Duran Rey '27
 - Ahmad Fayyaz '27
-- Aidan Corpus '26
-- Alex Skeldon '25
 - Alina Vykliuk '26
 - Allison Chong '26
-- Andrew Moy '25
-- Annie Liu '27
-- Ark Lu '24
-- Arys Aikyn '27
-- Ben Gottlieb '26
 - Carson Lin '27
-- Ere Oh '24
-- Eli Young '25
-- Ethan Pang '27
-- Denyse Nishimwe '27
 - Dylan Jacobs '27
+- Eli Young '26
+- Ethan Pang '27
+- George Fang '26
 - Gia Kwon '27
-- Giancarlo Mansilla '25
-- Jake Bohman '25
 - Jamie Pickar '26
 - Jasmine Fan '25
 - Jefrey Torres '26
 - Joey Alander '27
 - Jonathon Cubus '26
 - Katelynn Swaim '25
-- Kenneth Barkdoll '24
 - Lisa Farley '26
-- Luis Park '25
-- Mason Adams '26
-- Matthew Agani '27
-- Michael Pham '25
-- Neil Zhu '26
-- Neve Yair '27
-- Numer Ahmed '27
-- Paulina Trifonova '25
+- Nick Fettig '26
 - Philip Dinh '26
-- Sasha Casada '24
-- Sammi Chai '26
-- Theo Yochum '27
-- Theron Mansilla '24
-- Tony Cao '25
 - Vahan Tadevosyan '27
 - Yana Outkin '26
-- Ziming Yuan '24
 
 ### History
 
