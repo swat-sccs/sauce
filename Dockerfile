@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM node:18.18.0-bookworm-slim
+FROM node:22.10-bookworm-slim
 
 ENV PORT=7567
 EXPOSE 7567
