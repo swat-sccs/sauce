@@ -8,7 +8,7 @@ echoerr() { echo "$@" 1>&2; }
 user=$1
 class=$2
 
-skeldir="/srv/sauce/agent/skel"
+skeldir="/srv/sauce/user-agent/skel"
 homedir="/home/$class/$user/"
 webdir="/srv/users/$class/$user/"
 dyndir="/srv/users-dyn/$class/$user/"

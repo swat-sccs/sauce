@@ -15,7 +15,7 @@ project replaces GUTS (the Grand Unified Task System) and SCCS's previous static
   - Minecraft server
 - Secure password hashing with Argon2
 - Admin dashboard with request management and user database search
-- Seperate agent process to perform some tasks requiring root access
+- Seperate agent processes to perform some tasks requiring root access
 - Notification emails for users and admins
 
 ## Development
@@ -47,8 +47,8 @@ bin/test.sh
 ```
 
 For production, certain secrets and config should be specified in a `docker-compose.override.yml`
-file. An example file is provided in `docker-compose.override.yml.example`. Also, the agent needs to
-be running somewhere on the system (see its README in `agent/`). Then, launch the backend:
+file. An example file is provided in `docker-compose.override.yml.example`. Also, the agents need to
+be running somewhere on the system (see READMEs in `user-agent/` and `mc-agent/`). Then, launch the backend:
 
 ```
 docker-compose up
@@ -56,7 +56,7 @@ docker-compose up
 
 ### Local Development
 
-This is _not recommended_ as it requires spinning up your own instance of Mongo, LDAP, the agent,
+This is _not recommended_ as it requires spinning up your own instance of Mongo, LDAP, the agents,
 etc. However, it's provided here for completeness.
 
 Installation:
@@ -64,7 +64,8 @@ Installation:
 ```bash
 npm install
 # only necessary if you are using the local agent
-npm run install:agent
+npm run install:user-agent
+npm run install:mc-agent
 ```
 
 Build static web files and compile TypeScript:
@@ -92,8 +93,10 @@ When running Dockerized, the environment variables are provided through the
 
 ### Folder Structure
 
-- `/agent`: A seperate, self-contained service to run certain management tasks that require root
+- `/user-agent`: A seperate, self-contained service to run user management tasks that require root
   access to the server.
+- `/mc-agent`: A seperate, self-contained service to run minecraft server management tasks that
+  require root access to the server.
 - `/browserTests`: Selenium WebDriver tests that are run through Docker.
 - `/emailTemplates`: Basic plaintext templates for emails. Email templating uses
   [this one-liner](https://stackoverflow.com/a/41077811), so variable incorporation is just

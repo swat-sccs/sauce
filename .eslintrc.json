@@ -1,7 +1,7 @@
 {
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": ["./tsconfig.json", "./browserTests/tsconfig.json", "./agent/tsconfig.json"],
+    "project": ["./tsconfig.json", "./browserTests/tsconfig.json", "./user-agent/tsconfig.json", "./mc-agent/tsconfig.json"],
     "sourceType": "module",
     "ecmaVersion": 8
   },
