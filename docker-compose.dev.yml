@@ -3,6 +3,8 @@ version: '3.4'
 # a set of overrides for the original docker-compose file
 services:
   sauce:
+    ports:
+      - 7567:7567
     environment:
       NODE_ENV: development
       LDAP_URL: "ldap://ldap:389"
