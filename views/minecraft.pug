@@ -2,13 +2,34 @@ include include/sauce-common
 
 +sauce-layout('Minecraft server info')(pageId='minecraft', user=user, includeBootstrapScripts)
   h1.mb-4 Minecraft Server Whitelist
-  p 
+  p
     | SCCS hosts a public Minecraft server open to the Swarthmore community. Before playing, you'll
     | need to connect your SCCS account to your Minecraft account below.
-  p 
-    | For more information about the server, check out
-    |        #[a(href='https://www.instagram.com/swarthmore.mc/') @swarthmore.mc] on Instagram.
+
   a.btn.btn-secondary.mb-3(href='https://mc.sccs.swarthmore.edu') Live Server Map
+
+  #advancedAccordion.accordion
+    .accordion-item
+      h2#headingConnection.accordion-header
+        button.accordion-button.collapsed(
+          type='button',
+          data-bs-toggle='collapse',
+          data-bs-target='#collapseConnection',
+          aria-expanded='false',
+          aria-controls='collapseConnection'
+        )
+          | Connection Details
+      #collapseConnection.accordion-collapse.collapse(aria-labelledby='headingConnection')
+        .accordion-body
+          h3 Server URL
+          .card.mb-3(style='width: 100%')
+            .card-body
+              pre.mb-0 mc.sccs.swarthmore.edu
+          h3 Off-Campus Connections
+          p Alumni and off-campus students will need to forward Minecraft traffic via SSH
+          .card.mb-3(style='width: 100%')
+            .card-body
+              pre.mb-0 ssh -R localhost:25565:mc.sccs.swarthmore.edu:25565 ssh.sccs.swarthmore.edu
 
   hr
 
