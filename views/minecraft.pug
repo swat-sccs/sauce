@@ -22,14 +22,18 @@ include include/sauce-common
       #collapseConnection.accordion-collapse.collapse(aria-labelledby='headingConnection')
         .accordion-body
           h3 Server URL
+          p
+            | If auto discovery isn't working, add the server manually with the following URL
           .card.mb-3(style='width: 100%')
             .card-body
               pre.mb-0 mc.sccs.swarthmore.edu
           h3 Off-Campus Connections
-          p Alumni and off-campus students will need to forward Minecraft traffic via SSH
+          p
+            | Alumni and off-campus students will need to forward Minecraft traffic via SSH<br>
+            | Run the following #[code ssh] command and manually add the server as #[code localhost]
           .card.mb-3(style='width: 100%')
             .card-body
-              pre.mb-0 ssh -R localhost:25565:mc.sccs.swarthmore.edu:25565 ssh.sccs.swarthmore.edu
+              pre.mb-0 ssh -L localhost:25565:mc.sccs.swarthmore.edu:25565 ssh.sccs.swarthmore.edu
 
   hr
 
