@@ -3,6 +3,9 @@ title: "LanCache"
 date: 2024-02-29
 ---
 
+NOTE: as of Fall 2024, this service is deactivated. We plan to reintroduct it at some point, but for now the maintenance issues 
+upstream prevent us from having a reliable and secure system.
+
 [LanCache](https://lancache.net/) is a service that caches copies of games on a fast local server and redirects traffic to/from popular game sites to provide a faster download experience for cached games. We've set up an instance in a dedicated VM so Swarthmore students and community members can take better advantage of our fancy new hardware. It's pretty easy to set this up--just requires swapping your DNS servers to `130.58.218.30`, the IP address of our VM. We'll go a bit into how it works and how to set it up in case you're curious.
 
 ## How it Works

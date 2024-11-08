@@ -24,9 +24,10 @@ set.
 The key fingerprints of our server are:
 
 ```
-ssh.sccs.swarthmore.edu ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCx9vzUUyHrAsqo2PtmtCYIQUQxnVoXRWLfiePrWwy7Oc/hSri1RneqwN5qBguJo7FFWEUNq1n6zpxCgLfaxODX/c5RBRIzmHkKFzWs67Y0ABtsB0349gYoQPl0/sa1O+Fpmtkn96M9EXdW2OFceeyhL/bsuvnZoHdkiE+wlfIySeJuDfd2k7eIOUu2k2yM5WsxOiveOcF47Nc+4mwFQlHfo3fA8XoqEkzEyZX50imsDRWuNmlbVGrP3OfUlYY4NKaRTJ/j1Ou/QHprAUqJnQiAoUVj65BAEVmO6n37GYjkO3Zw2rQqYjN4dNrMOeh/sb1A0VUOlcxKUctCRkSgksMh
-ssh.sccs.swarthmore.edu ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBA4fCJqvTX3ilmWc7gMVRDSh5ETjr+2CkKd5RmGN2BJcxmDDDJtrC9I2LM47lD+Dd4v7ehPlZ+LBCTnV8Gdn8WM=
-ssh.sccs.swarthmore.edu ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL1DTcuz+cBEQ5/8BmPa8BXkdjxwL1aWq2ihoi21agqR
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCx9vzUUyHrAsqo2PtmtCYIQUQxnVoXRWLfiePrWwy7Oc/hSri1RneqwN5qBguJo7FFWEUNq1n6zpxCgLfaxODX/c5RBRIzmHkKFzWs67Y0ABtsB0349gYoQPl0/sa1O+Fpmtkn96M9EXdW2OFceeyhL/bsuvnZoHdkiE+wlfIySeJuDfd2k7eIOUu2k2yM5WsxOiveOcF47Nc+4mwFQlHfo3fA8XoqEkzEyZX50imsDRWuNmlbVGrP3OfUlYY4NKaRTJ/j1Ou/QHprAUqJnQiAoUVj65BAEVmO6n37GYjkO3Zw2rQqYjN4dNrMOeh/sb1A0VUOlcxKUctCRkSgksMh root@Heron
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL1DTcuz+cBEQ5/8BmPa8BXkdjxwL1aWq2ihoi21agqR root@Heron
+ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBA4fCJqvTX3ilmWc7gMVRDSh5ETjr+2CkKd5RmGN2BJcxmDDDJtrC9I2LM47lD+Dd4v7ehPlZ+LBCTnV8Gdn8WM= root@Heron
+ssh-dss AAAAB3NzaC1kc3MAAACBAKrx5MUAH1M9i+FSl4eOnSlBcIPjjG+woRTHw/+EPZE0MKu+8H+zFgZ0E7EfngPqy9v4xfJfqgGX59BuckGApvLWQ+5q502LG7FY2pie4i1h5a7+BCw8xdTM/bxauuRnj0qxhZd3ATYDtR7RGtAFpFCUVKs7iE7ZHt/WvUeY1wEZAAAAFQDzzxEyYGoP8uOj/dQShrqKkA4rlQAAAIEAhVHloUqgE25iFJIHhUz0jyYqBMGsQOAgj8q7Gt5QgfvSi8FviDaXhzhz7LdsQGqKb9A3GNhcqJmETRb7Kkut8edat0JgTYryxsmfCevcwfrKkqRAMR8c51Gmt8y8WbrHNWCaBpAbDn5y4OR1cPxCVrREtyX1rOwoaO5FKsy5Q3IAAACAS2AiXmmVl4YC+ZbJH6Elpc5hZC+M0iO08cRIVek5tJBoslWbkI/1BBoXcIoCu6+rG/kSBBwJFFRDrkr1JA8rXWy4ESQKHaSYKzFR5uYB4vNZaHDhVpy9dobNSmnvy43flNRDl5uqUaJpuCr4fKjJExlHG96SUhE2GuLCk+sUN0I= root@Heron
 ```
 
 ## Web Hosting
@@ -42,10 +43,10 @@ tilde: `sccs.swarthmore.edu/~phineas/` will redirect to the same place.
 
 Your SCCS account also gives you access to an email account hosted on our servers at
 `[username]@sccs.swarthmore.edu`. This service is mostly offered for historical reasons, dating back
-to an era where email accounts were associated with a specific machine and free email providers such
-as Gmail didn't exist. You can technically use us as your only email provider (set up email
-forwarding to forward to your SCCS mailbox and read mail via command line on our SSH server), but
-this is an _extremely_ bad idea these days for a variety of reasons. If you need to receive mail to
+to an era where free email providers such as Gmail didn't exist, and the school had strict quotas.
+You can technically use us as your only email provider (set up email forwarding to forward to your
+SCCS mailbox and read mail via command line on our SSH server), but note that we are student-run
+and do NOT have Google-level reliability, spam control, speed, etc. If you need to receive mail to
 your SCCS account (most often for cronjob results) it's a better idea to forward it to an existing
 email account. You can do that [here](/account).
 
