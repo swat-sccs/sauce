@@ -11,6 +11,8 @@ CS lecture.
 
 [Frequently Asked Questions](/docs/faq)
 
+[Club and School History](/docs/history)
+
 [Usage & Data Policy](/docs/policy)
 
 ## Our Services
@@ -89,17 +91,22 @@ accept new members in the first few weeks of each semester.
 - Vahan Tadevosyan '27
 - Yana Outkin '26
 
-### History
+### Statement on Application Strategy
+SCCS has a semesterly application cycle. We interview, select, and purge staff members based
+purely on experience, interest, activity, and occasionally interpersonal relationships. We
+include the following statement on our application form describing this policy:
 
-**SCCS** was founded in Fall 1991 by a group of Swarthmore students, who obtained an official
-charter from the Student Budget Committee for the Spring 1992 semester. We were founded, in part, to
-support the activities of students in Dana and Hallowell who had decided to create an AppleTalk
-network by stringing phone cable between rooms. Approximately 32 Macintoshes on 4 floors (3 in
-Hallowell, 1 in Dana) were on the network, as was one heavy-duty laser printer&mdash;two years before
-the College network came into being. Gobs of time were spent diagnosing the many network outages that
-occurred on an almost-daily basis (usually due to cables being clamped by window frames).
+SCCS does not discriminate based on any attributes, protected or otherwise, with the only
+exceptions being CS skill/knowledge and interpersonal conflicts. However, we recognize that
+studies show some protected groups are disproportionately unlikely to complete applications if
+they feel they may not be qualified. We would like to emphasize: **You lose nothing by applying**.
+Worst-case scenario, you can reapply next semester, and we give application priority to
+reapplicants. We've admitted people who got every coding question wrong and people who had to
+reapply multiple times, and often these are some of our most active members. We want you to
+apply, even if you are afraid you don't have the experience. 
 
-In the more than 30 years since, we've swapped buildings, upgraded our hardware, and expanded our
-Staff. We're no longer stringing phone cable through dorms, but we're still having fun and providing
-useful facilities and services for our fellow students. Check us out in Clothier basement!
-
+Our one hard requirement is you must **have taken**, **be enrolled in**, or **have equivalent**
+**experience** to a 30-level CS course. This is purely to ensure you've worked with **at least**
+**one "curly brace" language** (i.e. C, Java, JS, etc., NOT Python) so we don't have to start
+from scratch teaching for our work in JavaScript. We do "hiring" cycles semesterly so if you got
+lotteried out or otherwise need more experience, it won't be long before you can apply again.
