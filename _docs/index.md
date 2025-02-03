@@ -68,28 +68,44 @@ accept new members in the first few weeks of each semester.
 
 #### Staff
 
+- Abhi Das '26
 - Adi Chattopadhyay '27
 - Adrian Duran Rey '27
 - Ahmad Fayyaz '27
+- Aidan Corpus '26
+- Aiperi Bush '28
 - Alina Vykliuk '26
-- Allison Chong '26
+- Ary Iyer '28
+- Beck Nigussie '25
 - Carson Lin '27
-- Dylan Jacobs '27
-- Eli Young '26
+- Chait Motwane '25
+- Duc Dam '25
+- Emma Garrett '25
 - Ethan Pang '27
-- George Fang '26
+- Eve Elrod '28
+- Fola Kehinde '28
+- Francisco Lopez '25
 - Gia Kwon '27
+- Ingrid Hsu '28
+- Jaehoon Son '27
 - Jamie Pickar '26
 - Jasmine Fan '25
+- Jay Iyer '28
 - Jefrey Torres '26
 - Joey Alander '27
+- Jonathan Guzman '27
 - Jonathon Cubus '26
+- Jules Cruz '27
 - Katelynn Swaim '25
 - Lisa Farley '26
 - Nick Fettig '26
-- Philip Dinh '26
+- Omar Khan '25
+- Pedro Cruz '25
+- Queenie Lin '28
+- Samchan Lee '28
+- Tunmise Kehinde '27
 - Vahan Tadevosyan '27
-- Yana Outkin '26
+- Violet Garibaldi '28
 
 ### Statement on Application Strategy
 SCCS has a semesterly application cycle. We interview, select, and purge staff members based
