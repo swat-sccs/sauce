@@ -36,3 +36,11 @@ highlights:
 - [Book and Key History](https://www.sccs.swarthmore.edu/users/98/elizw/Swat.history/Book.and.Key.html)
   Did you know Swarthmore had a secret society? Not so secret anymore, however, and this Class of '98
   student expands upon the history of the now-defunct (or are they?) Society of the Book and Key.
+- [Swarthmore History](https://www.sccs.swarthmore.edu/users/98/elizw/Swat.history/index.html)
+  Another conglomerate history page from the same author of the Book and Key article, this page
+  includes a pile of articles written mostly for *The Phoenix* and other publications about
+  miscellaneous Swat traditions etc.
+- [The History of the SCCS](https://www.sccs.swarthmore.edu/org/sccs/history.html)
+  This 90s-era preserved copy of the SCCS site has a pile of info on both the structure of the club and
+  its various functions, especially in a pre-ITS world. Did you know SCCS used to be on Parrish 5th?
+  Did you even know there *was* a Parrish 5th? 
