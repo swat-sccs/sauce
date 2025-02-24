@@ -5,7 +5,7 @@
   .col-12.col-xl-7.mb-2.px-3
     mixin service(title, desc, linkText, href)
       .col-12.col-lg-6.mb-3
-        .card.h-100.shadow-sm
+        .card.dashcard.h-100.shadow-sm
           .card-body.d-flex.flex-column
             h5.card-title= title
             p.card-text= desc
@@ -18,7 +18,9 @@
       +service("Course Planner", "Plan your schedule for next semester", 'View the planner', 'https://plan.sccs.swarthmore.edu')
       +service("SCCS Sites", "Create your own websites using Wordpress", 'Create your site', 'https://sites.sccs.swarthmore.edu')
       +service("Server Access", "Utilize our server resources from the Cockpit dashboard", 'Log into Robin', 'https://robin.sccs.swarthmore.edu/')
+      +service("Dining Extension", "See the Narples menus in a customizable pop-up", 'Get the extension', 'https://chromewebstore.google.com/detail/swat-dining/hljemhgbbhjcmclhbdlalcoljlmjidll?hl=en&pli=1')
       +service("GPA Calculator", "Get your GPA by copy-pasting from MySwarthmore", 'Calculate your GPA', 'https://gpacalc.sccs.swarthmore.edu')
+      +service("Cronitor Status", "Check out our uptime and plan ahead for outages", 'See server status', 'https://swatsccs.cronitorstatus.com/')
       +service("Documentation", "Read our help pages and FAQs", 'Read our docs', '/docs')
     p.text-muted 
       | Looking for something specific? We can provide advanced web hosting, private VMs, databases, equipment loans, 
@@ -29,7 +31,7 @@
       - var i = 0
         each post in posts
           if i<3
-            .card.w-100.mb-3.shadow-sm
+            .card.newscard.w-100.mb-3.shadow-sm
               .card-body
                 h5.card-title= post.data.title
                 h6.card-subtitle.mb-2.text-muted= post.data.date.toLocaleDateString()

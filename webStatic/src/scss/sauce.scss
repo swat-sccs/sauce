@@ -76,5 +76,27 @@ html {
 
 .shadow-sm {
     box-shadow: none !important;
-    filter: drop-shadow(4px 6px 10px #00000044);
+    filter: drop-shadow(0px 1px 13px #0000001b) drop-shadow(0px 5px 8px #0000001b) drop-shadow(0px 3px 5px #00000033);
+}
+
+.dashcard {
+    transition: all .2s ease-in-out;
+}
+
+.newscard {
+    transition: all .2s ease-in-out;
+}
+
+.dashcard:hover {
+    transform: scale(1.1);
+    z-index: 100;
+    filter: drop-shadow(0px 1px 13px #00000033) drop-shadow(0px 5px 8px #00000033) drop-shadow(0px 3px 5px #00000044) !important;
+}
+
+.newscard:hover {
+    transform: scale(1.3);
+    translate: -10%;
+    z-index: 100;
+    margin-x: auto;
+    filter: drop-shadow(1px 3px 13px #0000001b) drop-shadow(1px 8px 8px #0000001b) drop-shadow(1px 8px 5px #00000033) !important;
 }
