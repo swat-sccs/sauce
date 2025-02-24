@@ -60,6 +60,12 @@ accept new members in the first few weeks of each semester.
 
 *Course Planner*
 
+- Damian Rene '27
+- Victor Sumano Arango '25
+
+*Project Dormhunter*
+
+- Jhovani Gallardo Moreno '25
 - Victor Sumano Arango '25
 
 *SwatSwap*
