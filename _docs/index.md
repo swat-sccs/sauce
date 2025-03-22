@@ -74,8 +74,6 @@ accept new members in the first few weeks of each semester.
 
 #### Staff
 
-- Abhi Das '26
-- Adi Chattopadhyay '27
 - Adrian Duran Rey '27
 - Ahmad Fayyaz '27
 - Aidan Corpus '26
@@ -85,7 +83,6 @@ accept new members in the first few weeks of each semester.
 - Beck Nigussie '25
 - Carson Lin '27
 - Chait Motwane '25
-- Duc Dam '25
 - Emma Garrett '25
 - Ethan Pang '27
 - Eve Elrod '28
@@ -97,20 +94,15 @@ accept new members in the first few weeks of each semester.
 - Jamie Pickar '26
 - Jasmine Fan '25
 - Jay Iyer '28
-- Jefrey Torres '26
-- Joey Alander '27
 - Jonathan Guzman '27
-- Jonathon Cubus '26
 - Jules Cruz '27
 - Katelynn Swaim '25
-- Lisa Farley '26
 - Nick Fettig '26
 - Omar Khan '25
 - Pedro Cruz '25
 - Queenie Lin '28
 - Samchan Lee '28
 - Tunmise Kehinde '27
-- Vahan Tadevosyan '27
 - Violet Garibaldi '28
 
 ### Statement on Application Strategy
