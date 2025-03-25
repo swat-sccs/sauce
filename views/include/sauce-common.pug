@@ -7,7 +7,7 @@ mixin sauce-container
           span!= staffMessage
     header.sticky-top.mb-4
       if !attributes.hideNavbar
-        nav.navbar.navbar-expand-sm.navbar-dark.bg-primary(style='background-color: #31425f')
+        nav.navbar.navbar-expand-sm.navbar-dark.bg-navbar
           -
             const PAGES = [
               {
@@ -68,9 +68,9 @@ mixin sauce-container
                 needsUser: true,
               }
             ]
-          .container-fluid 
+          .container-fluid
             a.navbar-brand.mb-0.p-0(href='/')
-              img(src='/static/apple-touch-icon.png', height='40px', width='40px')
+              img(src='/static/sccs-nobg.png', height='40px', width='40px')
             button.navbar-toggler(
               type='button',
               data-bs-toggle='collapse',
@@ -89,14 +89,14 @@ mixin sauce-container
                 each page in PAGES
                   +showPageIfAllowed(page, attributes.user, attributes.user)
                     if page.children
-                      li.nav-item.dropdown 
+                      li.nav-item.dropdown
                         a.nav-link.dropdown-toggle(
                           id=page.id + 'Dropdown',
                           role='button',
                           data-bs-toggle='dropdown',
                           aria-expanded='false'
                         )= page.title
-                        ul.dropdown-menu.dropdown-menu-dark.bg-primary(
+                        ul.dropdown-menu.dropdown-menu-dark.bg-navbar(
                           aria-labelledby=page.id + 'Dropdown'
                         )
                           each child in page.children
@@ -124,7 +124,7 @@ mixin sauce-container
         else
           p No content
 
-    footer.footer.mt-auto.py-3(class={ 'bg-primary': !attributes.hideFooter })
+    footer.footer.mt-auto.py-3(class={ 'bg-navbar': !attributes.hideFooter })
       if !attributes.hideFooter
         .container
           span.small.text-white

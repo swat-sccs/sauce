@@ -31,6 +31,7 @@ services:
       - ./src:/sauce-app/src
       - ./views:/sauce-app/views
       - ./webStatic:/sauce-app/webStatic
+      - ./public:/sauce-app/public
     depends_on:
       - "mockserver"
       - "ldap"

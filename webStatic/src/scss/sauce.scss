@@ -1,10 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400;0,500;0,600;1,400;1,600&display=swap');
 
+$enable-dark-mode: true;
+$color-mode-type: media-query;
+
 $primary: #31425f;
+$primary-dark: #141C2A;
+$light-primary-dark: #9EACBB;
+
 $danger: #86001A;
 $sccs-accent: #f46523;
 
-$body-bg: #f1f1f1;
+$body-bg: #E5E7EB;
+$body-bg-dark: #0B0F18;
 
 $navbar-dark-color: #fff;
 $navbar-dark-hover-color: $sccs-accent;
@@ -15,9 +22,12 @@ $dropdown-dark-link-hover-color: $sccs-accent;
 $dropdown-dark-link-hover-bg: $primary;
 $dropdown-dark-link-active-color: $sccs-accent;
 
+$card-bg-dark: #171B24;
+
 $form-text-color: #495057;
 
 $input-bg: white;
+$input-bg-dark: #2B3241;
 
 $font-family-base: 'Raleway', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
   'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
@@ -29,14 +39,6 @@ $border-radius: 4px;
 $border-radius-sm: 4px;
 $border-radius-lg: 4px;
 
-h1 {
-  color: $primary;
-}
-
-td.dtr-control:before {
-  background-color: $primary !important; // override responsive-datatables
-}
-
 $display-font-sizes: (
   1: 4.5rem,
   2: 4.5rem,
@@ -46,18 +48,106 @@ $display-font-sizes: (
   6: 2.5rem,
 ) !default;
 
-// needed for some button spacings on the homepage 
+// needed for some button spacings on the homepage
 // see https://getbootstrap.com/docs/5.1/utilities/spacing/#negative-margin
 $enable-negative-margins: true;
 
-@import '~bootstrap/scss/bootstrap';
+@import "../../node_modules/bootstrap/scss/bootstrap";
 
-.btn.btn-primary {
-  color: #fff;
+.bg-navbar {
+  background-color: $primary;
+}
+
+@include color-mode(dark) {
+  .bg-navbar {
+    background-color: #{$primary-dark};
+  }
+}
+
+@include color-mode(dark) {
+  .form-control {
+    background-color: #{$body-bg-dark};
+  }
+
+  .form-control:focus {
+    background-color: #{$primary-dark};
+  }
+
+  label::after {
+    background-color: transparent !important;
+  }
+}
+
+h1 {
+  color: #{$primary};
+}
+
+@include color-mode(dark) {
+  h1 {
+    color: #fff;
+  }
+}
+
+@include color-mode(dark) {
+  .btn-outline-primary {
+    --bs-btn-color: #{$light-primary-dark};
+    --bs-btn-border-color: #{$light-primary-dark};
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #{$light-primary-dark};
+    --bs-btn-hover-border-color: #{$light-primary-dark};
+    --bs-btn-active-color: #{$light-primary-dark};
+    --bs-btn-active-bg: #{$light-primary-dark};
+    --bs-btn-active-border-color: #{$light-primary-dark};
+    --bs-btn-disabled-color: #{$light-primary-dark};
+    --bs-btn-disabled-border-color: #{$light-primary-dark};
+  }
+
+  .btn-primary {
+    --bs-btn-color: #{$primary-dark};
+    --bs-btn-bg: #{$light-primary-dark};
+    --bs-btn-border-color: #{$light-primary-dark};
+    --bs-btn-hover-color: #{$sccs-accent};
+    --bs-btn-hover-bg: #{$light-primary-dark};
+    --bs-btn-hover-border-color: #{$light-primary-dark};
+    --bs-btn-active-color: #{$primary-dark};
+    --bs-btn-active-bg: #{$light-primary-dark};
+    --bs-btn-active-border-color: #{$light-primary-dark};
+    --bs-btn-disabled-color: #{$primary-dark};
+    --bs-btn-disabled-bg: #{$primary-dark};
+    --bs-btn-disabled-border-color: #{$primary-dark};
+  }
+}
+
+td.dtr-control:before {
+  background-color: #{$primary} !important; // override responsive-datatables
+}
+
+@include color-mode(dark) {
+  td.dtr-control:before {
+    background-color: #{$primary-dark} !important;
+  }
+}
+
+@include color-mode(dark) {
+  .btn.btn-primary {
+    color: #fff;
+  }
 }
 
 code {
-  color: $primary;
+  color: #{$primary};
+}
+
+@include color-mode(dark) {
+  code {
+    color: #fff;
+  }
+}
+
+@include color-mode(dark) {
+  a {
+    color: #{$sccs-accent};
+  }
 }
 
 // links in staff message and footer
@@ -66,7 +156,7 @@ code {
 }
 
 .bg-primary a:hover {
-  color: $sccs-accent;
+  color: #{$sccs-accent};
 }
 
 // fix scrolling with navbar
