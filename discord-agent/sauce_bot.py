@@ -98,7 +98,7 @@ async def discord_rabbit_listener():
     global message_queue
     global id
 
-    channel = client.get_channel(1312578572719886459)
+    channel = client.get_channel(channel_id)
     if channel is None:
         print("[Error] Discord channel not found.")
         return
@@ -147,5 +147,6 @@ if __name__ == '__main__':
     user = os.getenv("RABBITMQ_DEFAULT_USER")
     passwd = os.getenv("RABBITMQ_DEFAULT_PASS")
     host = os.getenv("RABBITMQ_HOST")
+    channel_id = os.getenv("CHANNEL_ID")
 
     client.run(token)
