@@ -13,6 +13,7 @@ module.exports = {
     style: './src/js/style.js',
     bootstrapScripts: './src/js/bootstrapScripts.js',
   },
+  devtool: 'source-map',
   resolve: {
     modules: [path.resolve('./node_modules')],
   },
@@ -23,6 +24,7 @@ module.exports = {
   },
   module: {
     rules: [
+      
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
@@ -67,10 +69,12 @@ module.exports = {
       },
     ],
   },
+
   plugins: [
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
     }),
   ],
+
 };

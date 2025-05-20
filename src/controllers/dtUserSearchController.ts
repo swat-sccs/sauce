@@ -34,6 +34,10 @@ export class DtOrder {
   @jf.number().integer().min(0).required()
   column: number;
 
+  //Fix bug where it got mad that this wasnt here
+  @jf.string().allow('').optional()
+  name: string;
+
   /**
    * Ordering direction for this column. It will be `asc` or `desc` to indicate ascending ordering
    * or descending ordering, respectively.

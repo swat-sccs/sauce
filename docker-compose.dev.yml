@@ -26,7 +26,12 @@ services:
       SESSION_SECRET: "spooky secret"
       PORT: 7567
       SMTP_CONN: "smtp://mail:1025/"
+      RABBITMQ_HOST: "rabbitmq"
+      RABBITMQ_DEFAULT_USER: "root"
+      RABBITMQ_DEFAULT_PASS: "td5TxC8S8^!Z"
     restart: "no"
+    networks: 
+      - internal
     volumes:
       - ./src:/sauce-app/src
       - ./views:/sauce-app/views
@@ -37,6 +42,7 @@ services:
       - "ldap"
       - "mail"
     command: npm run startWithWatch
+    
   # fake version of the Mailman and local-agent APIs
   mockserver:
     image: mockserver/mockserver:latest
@@ -47,6 +53,8 @@ services:
       - 1080:1080
     volumes:
       - ./dev/mockserverConfig:/config
+    networks:
+      - internal
   # mock ldap server
   ldap:
     image: osixia/openldap:1.5.0
@@ -60,12 +68,19 @@ services:
     ports:
       - 389
     command: --copy-service # don't overwrite startup ldifs
+    networks:
+      - internal
   mail:
     image: mailhog/mailhog
     restart: always
     ports:
       - 8025:8025 # web interface
       - 1025 # smtp
+    networks:
+      - internal
+
+  
 
 
-
+networks: 
+  internal:

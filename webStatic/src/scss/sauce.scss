@@ -68,6 +68,9 @@ $enable-negative-margins: true;
   .form-control {
     background-color: #{$body-bg-dark};
   }
+  .form-select-sm{
+    background-color: #{$primary};
+  }
 
   .form-control:focus {
     background-color: #{$primary-dark};
@@ -124,7 +127,8 @@ td.dtr-control:before {
 
 @include color-mode(dark) {
   td.dtr-control:before {
-    background-color: #{$primary-dark} !important;
+    filter: invert(1);
+    background-color: white !important;
   }
 }
 

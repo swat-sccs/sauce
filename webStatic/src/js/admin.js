@@ -11,12 +11,15 @@ import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap; // makes responsive-bs5 not throw errors in the console
 import { Tooltip, Tab, Modal } from 'bootstrap';
 import { DateTime as _DateTime } from 'luxon';
-import 'jquery';
-import 'datatables.net';
+//import 'jquery';
+//import 'datatables.net';
 import dt from 'datatables.net-bs5';
-dt(window, $);
+import 'datatables.net-responsive-bs5'
+//require('datatables.net')(window, $);
+//require('datatables.net-responsive')(window, $);  // if you added this plugin
+//dt(window, $);
 import responsive from 'datatables.net-responsive-bs5';
-responsive(window, $);
+//responsive(window, $);
 
 const DateTime = _DateTime;
 
@@ -342,6 +345,7 @@ $(document).ready(function () {
   });
 
   // eslint-disable-next-line new-cap
+
   const userTable = $('#userTable').DataTable({
     processing: true,
     serverSide: true,
@@ -362,6 +366,7 @@ $(document).ready(function () {
       },
     ],
   });
+
 
   // eslint-disable-next-line new-cap
   const staffMessageTable = $('#messageTable').DataTable({

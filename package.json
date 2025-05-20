@@ -23,6 +23,7 @@
     "@zxcvbn-ts/language-common": "^1.0.0",
     "@zxcvbn-ts/language-en": "^1.0.0",
     "argon2": "^0.28.3",
+    "amqplib": "^0.10.8",
     "axios": "^1.6.0",
     "connect-mongo": "^4.6.0",
     "cookie-parser": "^1.4.6",

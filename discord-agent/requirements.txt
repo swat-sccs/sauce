@@ -1,0 +1,6 @@
+discord.py
+dotenv
+pika
+asyncio
+requests
+aiohttp

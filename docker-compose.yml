@@ -19,6 +19,8 @@ services:
       - "host.docker.internal:host-gateway"
     depends_on:
       - "mongodb"
+    networks:
+      - internal
 
   mongodb:
     image: mongo:5.0.29
@@ -26,3 +28,36 @@ services:
     hostname: sauce-mongodb
     volumes:
       - './mongodata:/data/db'
+    networks:
+      - internal
+
+  rabbitmq:
+    image: rabbitmq:4-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    env_file:
+      - discord-agent/.env
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - internal
+
+  sauce_bot:
+    #image: registry.sccs.swarthmore.edu/sccs/saunce_bot/sauce_bot:latest
+    image: sauce_bot
+    build:
+      context: discord-agent
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - discord-agent/.env
+    networks:
+      - internal
+
+
+volumes:
+  rabbitmq_data:
+
+networks:
+  internal:

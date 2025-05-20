@@ -11,6 +11,7 @@ import { isAdmin } from '../util/authUtils';
 import { logger } from '../util/logging';
 import { groupParamsByKey } from '../util/paramUtils';
 
+
 const router = Router(); // eslint-disable-line new-cap
 
 router.get(
@@ -61,6 +62,36 @@ router.get(
       messageDataUrl: `${process.env.EXTERNAL_ADDRESS}/admin/getMessages`,
       tab: 'messages',
     });
+  }),
+);
+
+
+router.post(
+  '/discord',
+  catchErrors(async (req: any, res, next) => {
+    const { error, value } = jf.validateAsClass(req.body, controller.AdminModifyTaskReq);
+
+    if (error) {
+      throw new HttpException(400, { message: `Invalid request: ${error.message}` });
+    }
+  
+    const params = groupParamsByKey(new URLSearchParams(value.query));
+    const { error: pageErr, value: pageReq } = jf.validateAsClass(
+      params,
+      controller.AdminSearchReq,
+    );
+
+    if (pageErr) {
+      throw new HttpException(400, { message: `Invalid value for query: ${pageErr.message}` });
+    }
+
+    const status = await controller.modifyTask(value);
+    if( status =="executed" || status =="rejected"){
+      return res.sendStatus(200);
+    }if( status =="failed"){
+      return res.sendStatus(400);
+    }
+    
   }),
 );
 

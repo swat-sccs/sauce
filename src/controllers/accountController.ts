@@ -17,6 +17,7 @@ import { modifyLdap, searchAsync, searchAsyncUid } from '../util/ldapUtils';
 import { logger } from '../util/logging';
 import { createPasswordResetRequest } from '../util/passwordReset';
 import { testPassword } from '../util/passwordStrength';
+import amqp from 'amqplib';
 
 export const VALID_CLASSES = ['25', '26', '27', '28', 'faculty', 'staff'];
 // TODO: do we have accounts in the system that don't match this username pattern?
@@ -49,6 +50,48 @@ export class CreateAccountReq {
   classYear: string;
 }
 
+
+
+const sendDiscordMessage = async (data, id) => {
+  const user = process.env.RABBITMQ_DEFAULT_USER;
+  const passwd = process.env.RABBITMQ_DEFAULT_PASS;
+  const host = process.env.RABBITMQ_HOST;
+  const externalURL = process.env.EXTERNAL_ADDRESS;
+  if (!user || !passwd || !host) {
+    throw new Error('Missing RabbitMQ environment variables');
+  }
+
+  const url = `amqp://${user}:${passwd}@${host}`;
+  try {
+    const connection = await amqp.connect(url);
+    const channel = await connection.createChannel();
+
+    const queue = 'discord';
+    await channel.assertQueue(queue, { durable: true });
+
+    const message = JSON.stringify({
+      id: id,
+      username: data.username,
+      email: data.email,
+      classYear: data.classYear,
+      name: data.name,
+      url: externalURL + '/admin/tasks/' + id.toString(),
+    });
+
+    channel.sendToQueue(queue, Buffer.from(message), {
+      persistent: true,
+    });
+
+    //console.log(`[x] Sent ${message}`);
+
+    await channel.close();
+    await connection.close();
+  } catch (error) {
+    console.error('Error sending message:', error);
+  }
+};
+
+
 export const submitCreateAccountRequest = async (req: CreateAccountReq) => {
   // TODO how do we handle someone going to create an account if they're
   // already logged in?
@@ -74,6 +117,9 @@ export const submitCreateAccountRequest = async (req: CreateAccountReq) => {
   await operation.save();
 
   sendTaskNotification(operation);
+
+  //Discord Delivery
+  sendDiscordMessage(req, operation._id);
 };
 
 export const doPasswordResetRequest = async (identifier: string) => {
