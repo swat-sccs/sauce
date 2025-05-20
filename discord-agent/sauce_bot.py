@@ -46,10 +46,17 @@ async def post_data(status, interaction, view):
                 if resp.status // 100 == 2:  # Any 2xx success code
                     for child in view.children:
                         child.disabled = True
-                    await interaction.edit_original_response(
-                        content="✅ Task complete. Buttons are now disabled.",
-                        view=view
-                    )
+                    
+                    if status == "true":
+                        await interaction.edit_original_response(
+                            content="❌ Account Rejected.",
+                            view=view
+                        )
+                    else:
+                        await interaction.edit_original_response(
+                            content="✅ Account Accepted!",
+                            view=view
+                        )
                 else:
                     await interaction.edit_original_response(content="❌ Something went wrong.", view=view)
         except Exception as e:
