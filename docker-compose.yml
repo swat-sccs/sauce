@@ -8,19 +8,26 @@ services:
       dockerfile: ./Dockerfile
     environment:
       NODE_ENV: production
-      MONGO_URI: "mongodb://sauce-mongodb:27017/sauce?retryWrites=true&w=majority"
-      MAILMAN_URL: "http://lists.sccs.swarthmore.edu:8001/3.1"
+      MONGO_URI: 'mongodb://sauce-mongodb:27017/sauce?retryWrites=true&w=majority'
+      MAILMAN_URL: 'http://lists.sccs.swarthmore.edu:8001/3.1'
       PORT: 7567
+    ports:
+      - 7567:7567
     restart: always
     volumes:
       - ./_posts:/sauce-app/_posts
       - ./_docs:/sauce-app/_docs
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - 'host.docker.internal:host-gateway'
     depends_on:
-      - "mongodb"
+      - 'mongodb'
     networks:
       - internal
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:7567']
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   mongodb:
     image: mongo:5.0.29
@@ -54,7 +61,6 @@ services:
       - discord-agent/.env
     networks:
       - internal
-
 
 volumes:
   rabbitmq_data:

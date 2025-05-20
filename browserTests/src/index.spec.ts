@@ -8,6 +8,7 @@ import { hasContainerElements } from './common-page-tests';
 import { fail } from 'assert';
 
 const baseUrl = process.env.SAUCE_APP_URL.replace(/\/$/, '');
+console.log('THEBASE:' + baseUrl);
 
 const capabilities = Capabilities.chrome();
 

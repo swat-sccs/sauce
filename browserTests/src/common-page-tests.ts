@@ -5,6 +5,7 @@ import { By, ThenableWebDriver } from 'selenium-webdriver';
 /**
  *
  */
+
 export function hasContainerElements(
   mode: 'anon' | 'user' | 'admin',
   noNavbar?: boolean,
@@ -14,6 +15,7 @@ export function hasContainerElements(
   describe('container elements', function () {
     let expect: Chai.ExpectStatic;
     let driver: ThenableWebDriver;
+    this.timeout(30000); // 30 seconds
 
     beforeEach(function () {
       expect = this.expect;
