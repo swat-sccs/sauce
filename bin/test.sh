@@ -3,4 +3,4 @@
 set -e
 
 echo "Running tests in containers"
-docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.test.yml up -d --build 
+docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.test.yml up --build --exit-code-from=webdriver-tests sauce selenium-chrome webdriver-tests
