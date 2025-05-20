@@ -4,14 +4,14 @@ $enable-dark-mode: true;
 $color-mode-type: media-query;
 
 $primary: #31425f;
-$primary-dark: #141C2A;
-$light-primary-dark: #9EACBB;
+$primary-dark: #141c2a;
+$light-primary-dark: #9eacbb;
 
-$danger: #86001A;
+$danger: #86001a;
 $sccs-accent: #f46523;
 
-$body-bg: #E5E7EB;
-$body-bg-dark: #0B0F18;
+$body-bg: #e5e7eb;
+$body-bg-dark: #0b0f18;
 
 $navbar-dark-color: #fff;
 $navbar-dark-hover-color: $sccs-accent;
@@ -22,12 +22,12 @@ $dropdown-dark-link-hover-color: $sccs-accent;
 $dropdown-dark-link-hover-bg: $primary;
 $dropdown-dark-link-active-color: $sccs-accent;
 
-$card-bg-dark: #171B24;
+$card-bg-dark: #171b24;
 
 $form-text-color: #495057;
 
 $input-bg: white;
-$input-bg-dark: #2B3241;
+$input-bg-dark: #2b3241;
 
 $font-family-base: 'Raleway', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
   'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
@@ -52,7 +52,7 @@ $display-font-sizes: (
 // see https://getbootstrap.com/docs/5.1/utilities/spacing/#negative-margin
 $enable-negative-margins: true;
 
-@import "../../node_modules/bootstrap/scss/bootstrap";
+@import '../../node_modules/bootstrap/scss/bootstrap';
 
 .bg-navbar {
   background-color: $primary;
@@ -68,7 +68,7 @@ $enable-negative-margins: true;
   .form-control {
     background-color: #{$body-bg-dark};
   }
-  .form-select-sm{
+  .form-select-sm {
     background-color: #{$primary};
   }
 
@@ -135,6 +135,10 @@ td.dtr-control:before {
 @include color-mode(dark) {
   .btn.btn-primary {
     color: #fff;
+    background-color: #141c2a;
+    outline: none !important;
+    border-color: #141c2a !important;
+    filter: brightness(1.7);
   }
 }
 
@@ -169,28 +173,31 @@ html {
 }
 
 .shadow-sm {
-    box-shadow: none !important;
-    filter: drop-shadow(0px 1px 13px #0000001b) drop-shadow(0px 5px 8px #0000001b) drop-shadow(0px 3px 5px #00000033);
+  box-shadow: none !important;
+  filter: drop-shadow(0px 1px 13px #0000001b) drop-shadow(0px 5px 8px #0000001b)
+    drop-shadow(0px 3px 5px #00000033);
 }
 
 .dashcard {
-    transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .newscard {
-    transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .dashcard:hover {
-    transform: scale(1.1);
-    z-index: 100;
-    filter: drop-shadow(0px 1px 13px #00000033) drop-shadow(0px 5px 8px #00000033) drop-shadow(0px 3px 5px #00000044) !important;
+  transform: scale(1.1);
+  z-index: 100;
+  filter: drop-shadow(0px 1px 13px #00000033) drop-shadow(0px 5px 8px #00000033)
+    drop-shadow(0px 3px 5px #00000044) !important;
 }
 
 .newscard:hover {
-    transform: scale(1.3);
-    translate: -10%;
-    z-index: 100;
-    margin-x: auto;
-    filter: drop-shadow(1px 3px 13px #0000001b) drop-shadow(1px 8px 8px #0000001b) drop-shadow(1px 8px 5px #00000033) !important;
+  transform: scale(1.3);
+  translate: -10%;
+  z-index: 100;
+  margin-x: auto;
+  filter: drop-shadow(1px 3px 13px #0000001b) drop-shadow(1px 8px 8px #0000001b)
+    drop-shadow(1px 8px 5px #00000033) !important;
 }

@@ -12,6 +12,10 @@ import requests
 import aiohttp
 import logging
 
+load_dotenv()
+
+
+
 
 logger = logging.getLogger(__name__)
 
@@ -97,8 +101,8 @@ def rabbitmq_consumer(loop):
 async def discord_rabbit_listener():
     global message_queue
     global id
-
-    channel = client.get_channel(channel_id)
+    channel_id = os.getenv("CHANNEL_ID")
+    channel = client.get_channel(int(channel_id))
     if channel is None:
         print("[Error] Discord channel not found.")
         return
