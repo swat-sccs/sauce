@@ -3,7 +3,7 @@ version: '3.4'
 # a set of overrides for the original docker-compose file
 services:
   selenium-chrome:
-    image: selenium/standalone-chrome:4.1.2-20220217
+    image: selenium/standalone-chrome:134.0-20250525
     shm_size: 2g
     ports:
       - 4444:4444
