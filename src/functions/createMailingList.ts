@@ -21,7 +21,7 @@ export const createMailingList = async (data: any) => {
   if (isCreateMailingListData(data)) {
     const user = await searchAsyncUid(ldapClient, data.creator);
 
-    const email = user.email || user.swatmail;
+    const email = user.email;
     if (!email) {
       throw new Error(`${data.creator} has no email address listed`);
     }

@@ -129,12 +129,12 @@ export const doPasswordResetRequest = async (identifier: string) => {
     logger.debug(`Searching for account associated with ${identifier}`);
     account = await searchAsync(
       ldapClient,
-      ldapEscape.filter`(|(uid=${identifier})(email=${identifier})(swatmail=${identifier}))`,
+      ldapEscape.filter`(|(uid=${identifier})(email=${identifier})(email=${identifier}))`,
     );
 
     if (account) {
       const uid = account.uid;
-      const email = account.email || account.swatmail;
+      const email = account.email;
 
       logger.debug(`Found account ${uid}`);
 
@@ -258,8 +258,8 @@ export const doPasswordReset = async (params: PasswordResetRequestParams) => {
         BCC that one too. This is to guard against a potential attack where an attacker could 
         register a new email and change the password without the user knowing.
         */
-        const emailTo = ldapEntry.email || ldapEntry.swatmail;
-        const emailBcc = ldapEntry.email ? ldapEntry.swatmail : undefined;
+        const emailTo = ldapEntry.email;
+        const emailBcc = ldapEntry.email == ldapEntry.swatmail ? undefined : ldapEntry.swatmail;
 
         logger.debug(
           `Sending notification email to ${emailTo}${emailBcc ? `(bcc: ${emailBcc})` : ''}`,
@@ -312,7 +312,7 @@ export const isUsernameAvailable = async (username: string): Promise<boolean> =>
 
 export const isEmailAvailable = async (email: string): Promise<boolean> => {
   const [inDatabase, inPending] = await Promise.all([
-    searchAsync(ldapClient, ldapEscape.filter`(swatmail=${email})`),
+    searchAsync(ldapClient, ldapEscape.filter`(email=${email})`),
     TaskModel.exists({ 'data.email': email, status: 'pending' }),
   ]);
 

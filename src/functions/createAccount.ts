@@ -60,6 +60,7 @@ export const createAccount = async (data: any) => {
       gecos: unidecode(data.name),
       userPassword: `{ARGON2}${pw}`,
       swatmail: data.email,
+      email: data.email,
     };
 
     await addLdap(
