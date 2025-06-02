@@ -33,47 +33,44 @@ include include/sauce-common
 
   #advancedAccordion.accordion
     .accordion-item
-      h2#headingSSH.accordion-header
+      h2#headingEmail.accordion-header
         button.accordion-button.collapsed(
           type='button',
           data-bs-toggle='collapse',
-          data-bs-target='#collapseSSH',
+          data-bs-target='#collapseEmail',
           aria-expanded='false',
-          aria-controls='collapseSSH'
+          aria-controls='collapseEmail'
         )
-          | SSH access configuration
-      #collapseSSH.accordion-collapse.collapse(aria-labelledby='headingSSH')
+          | SCCS account configuration
+      #collapseEmail.accordion-collapse.collapse(aria-labelledby='headingEmail')
         .accordion-body
-          h3 Authorized Keys
+          h3 Account Email
           button.btn.btn-link.btn-sm.p-0.mb-2(
             data-bs-toggle='modal',
-            data-bs-target='#sshHelpModal'
+            data-bs-target='#emailHelpModal'
           ) What's this?
 
-          if sshFileText
-            p Your authorized_keys file (at #[code #{ user.homeDirectory }/.ssh/authorized_keys]) contains the following:
-            .card.mb-3(style='width: 100%')
-              .card-body
-                pre.mb-0= sshFileText
-          else
-            p You currently don't have an authorized_keys file.
+          p Your current default account email is:
+          .card.mb-3(style='width: 100%')
+            .card-body
+              pre.mb-0= emailAttr
 
           hr
 
-          h4 Add keys
+          h4 Change email
 
-          form#sshForm.container.mb-3.gx-0(
-            action='/account/configSSH',
+          form#emailForm.container.mb-3.gx-0(
+            action='/account/configEmail',
             method='post',
             novalidate
           )
             input(type='hidden', name='_csrf', value=csrfToken())
             .row
               .col-12
-                input#sshKeys.form-control.form-control-md(
+                input#email.form-control.form-control-md(
                   type='text',
-                  aria-label='input for another ssh key',
-                  name='keys'
+                  aria-label='input for a new email',
+                  name='email'
                 )
             .row
               .col-auto.mt-3
@@ -84,14 +81,14 @@ include include/sauce-common
           script(type='text/javascript').
             (function () {
               'use strict';
-              const form = document.getElementById('sshForm');
+              const form = document.getElementById('emailForm');
 
               form.addEventListener('submit', function (event) {
                 if (!form.checkValidity()) {
                   event.preventDefault();
                   event.stopPropagation();
 
-                  Array.prototype.slice.call(document.querySelectorAll('#sshForm .validate-me')).forEach(function (item) {
+                  Array.prototype.slice.call(document.querySelectorAll('#emailForm .validate-me')).forEach(function (item) {
                     item.classList.add('was-validated');
                   });
                 }
@@ -194,6 +191,73 @@ include include/sauce-common
               });
             })();
 
+    .accordion-item
+      h2#headingSSH.accordion-header
+        button.accordion-button.collapsed(
+          type='button',
+          data-bs-toggle='collapse',
+          data-bs-target='#collapseSSH',
+          aria-expanded='false',
+          aria-controls='collapseSSH'
+        )
+          | SSH access configuration
+      #collapseSSH.accordion-collapse.collapse(aria-labelledby='headingSSH')
+        .accordion-body
+          h3 Authorized Keys
+          button.btn.btn-link.btn-sm.p-0.mb-2(
+            data-bs-toggle='modal',
+            data-bs-target='#sshHelpModal'
+          ) What's this?
+
+          if sshFileText
+            p Your authorized_keys file (at #[code #{ user.homeDirectory }/.ssh/authorized_keys]) contains the following:
+            .card.mb-3(style='width: 100%')
+              .card-body
+                pre.mb-0= sshFileText
+          else
+            p You currently don't have an authorized_keys file.
+
+          hr
+
+          h4 Add keys
+
+          form#sshForm.container.mb-3.gx-0(
+            action='/account/configSSH',
+            method='post',
+            novalidate
+          )
+            input(type='hidden', name='_csrf', value=csrfToken())
+            .row
+              .col-12
+                input#sshKeys.form-control.form-control-md(
+                  type='text',
+                  aria-label='input for another ssh key',
+                  name='keys'
+                )
+            .row
+              .col-auto.mt-3
+                //- TODO add a confirmation
+                button.btn.btn-sm.btn-primary(type='submit') Apply
+
+          //- this is separate from the main script because it has to activate after all the form stuff is there
+          script(type='text/javascript').
+            (function () {
+              'use strict';
+              const form = document.getElementById('sshForm');
+
+              form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                  event.preventDefault();
+                  event.stopPropagation();
+
+                  Array.prototype.slice.call(document.querySelectorAll('#sshForm .validate-me')).forEach(function (item) {
+                    item.classList.add('was-validated');
+                  });
+                }
+              });
+            })();
+
+
   #forwardingHelpModal.modal.fade(
     tabindex='-1',
     aria-labelledby='forwardingHelpModalTitle',
@@ -251,6 +315,28 @@ include include/sauce-common
             key with #[code ssh-keygen -t ecdsa]. This utility is included by default on all modern
             operating systems. Copy the contents of the file #[code ~/.ssh/id_ecdsa.pub] and paste
             in the "Add Keys" box.
+
+  #emailHelpModal.modal.fade(
+    tabindex='-1',
+    aria-labelledby='emailHelpModalTitle',
+    aria-hidden='true'
+  )
+    .modal-dialog
+      .modal-content 
+        .modal-header
+          h5#emailHelpModalTitle.modal-title About your account email
+          button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+        .modal-body
+          p.
+            SCCS only asks you for your Swarthmore email on account sign-up. We used to have an
+            #[code email] attribute, separate from the #[code swatmail] attribute, for alums with
+            personal emails only. However, this caused issues with our new single-sign-on (SSO)
+            system, as most standard authentication frameworks want just one email and not two.
+          p.
+            As of June 2025, we now create both #[code swatmail], your required, unique, immutable
+            Swarthmore email address, and #[code email], your account email for password reset and
+            service communication emails. Here, you can modify your #[code email] so you don't have
+            issues down the line as an alumnus.
 
   script(type='text/javascript').
     const UID = '#{user.uid}';

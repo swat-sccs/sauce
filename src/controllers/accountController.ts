@@ -355,6 +355,74 @@ export const configureEmailForwarding = async (
   logger.info(`Updated email forwarding for ${user.uid} to ${JSON.stringify(config)}`);
 };
 
+/**
+ */
+export class EmailChangeConfig {
+  @jf.string().email().required()
+  email: string;
+}
+
+export const configureEmailChange = async (
+  user: any, 
+  config: EmailChangeConfig,
+): Promise<void> => {
+  logger.debug(`Updating email attribute for ${user.uid} to ${JSON.stringify(config)}`);
+
+  const ldapEntry = await searchAsyncUid(ldapClient, user.uid);
+
+  await modifyLdap(
+    ldapClient,
+    ldapEntry.dn,
+    new Change({
+      operation: 'replace',
+      modification: {
+        email: `${config.email}`,
+      },
+    }),
+  );
+
+  // spin off an async function here to do the slow stuff
+  (async () => {
+    try {
+        /* 
+        We send this to the swatmail so an inadvertent change can be detected and fixed
+        We BCC the new email attribute.
+        */
+        const emailTo = ldapEntry.swatmail;
+        const emailBcc = ldapEntry.email;
+
+        logger.debug(
+          `Sending notification email to ${emailTo} bcc: ${emailBcc}`,
+        );
+        const [emailText, transporter] = await Promise.all([
+          generateEmail('emailChangeNotification.html', {
+            username: user.uid,
+            domain: process.env.EXTERNAL_ADDRESS,
+          }),
+          mailTransporter,
+        ]);
+
+        const info = await transporter.sendMail({
+          from: process.env.EMAIL_FROM,
+          to: emailTo,
+          bcc: emailBcc,
+          subject: 'Your SCCS email has been changed',
+          html: emailText,
+        });
+
+        const msgUrl = nodemailer.getTestMessageUrl(info);
+        if (msgUrl) {
+          logger.debug(`View message at ${msgUrl}`);
+        }
+    } catch (err) {
+      logger.error('Error performing post-change tasks: ', err);
+    }
+  })();
+
+  logger.info(`Updated email attribute for ${user.uid} to ${JSON.stringify(config)}`);
+};
+
+
 const sshKey = () =>
   jf
     .string()

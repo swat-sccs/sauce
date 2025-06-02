@@ -123,7 +123,8 @@ router.get(
   catchErrors(async (req: any, res, next) => {
     return res.render('account', {
       forwardFileText: await getForwardFile(req.user),
-      sshFileText: await getSSHFile(req.user)
+      sshFileText: await getSSHFile(req.user),
+      emailAttr: req.user.email
     });
   }),
 );
@@ -142,6 +143,22 @@ router.post(
     res.redirect('/account');
   }),
 );
+
+router.post(
+  '/configEmail',
+  isLoggedIn,
+  catchErrors(async (req: any, res, next) => {
+    const { error, value } = jf.validateAsClass(req.body, controller.EmailChangeConfig);
+    if (error) {
+      throw new HttpException(400, { message: `Invalid request: ${error.message}` });
+    }
+
+    controller.configureEmailChange(req.user, value);
+
+    res.redirect('/account');
+  }),
+);  
+
 
 router.post(
   '/configSSH',
