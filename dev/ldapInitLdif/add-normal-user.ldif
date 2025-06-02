@@ -9,5 +9,6 @@ homeDirectory: /home/24/testuser
 loginShell: /bin/bash
 gecos: Test User
 swatmail: test@swarthmore.edu
+email: test@swarthmore.edu
 cn: Test User
 userPassword: test

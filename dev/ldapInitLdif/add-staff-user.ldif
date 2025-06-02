@@ -9,5 +9,6 @@ homeDirectory: /home/24/testadmin
 loginShell: /bin/bash
 gecos: Test Admin
 swatmail: testadmin@swarthmore.edu
+email: testadmin@swarthmore.edu
 cn: Test Admin
 userPassword: test
