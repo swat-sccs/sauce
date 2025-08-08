@@ -3,7 +3,7 @@ import * as bootstrap from 'bootstrap';
 
 window.bootstrap = bootstrap;
 
-import { zxcvbn, ZxcvbnOptions } from '@zxcvbn-ts/core';
+import { zxcvbn, zxcvbnOptions } from '@zxcvbn-ts/core';
 
 // As soon as the script runs, we start lazy-loading the zxcvbn dictionaries (which are about a
 // megabyte and a half, and still 750kB when gzipped). Then once the listener hits
@@ -19,15 +19,17 @@ const loadOptions = async () => {
   const zxcvbnCommon = await zxcvbnCommonPackage;
   const zxcvbnEn = await zxcvbnEnPackage;
 
-  ZxcvbnOptions.setOptions({
+  const options = {
     dictionary: {
-      ...zxcvbnCommon.default.dictionary,
-      ...zxcvbnEn.default.dictionary,
+      ...zxcvbnCommon.dictionary,
+      ...zxcvbnEn.dictionary,
     },
     graphs: zxcvbnCommon.adjacencyGraphs,
-    translations: zxcvbnEn.default.translations,
+    translations: zxcvbnEn.translations,
     userInputs: [window.username, 'sccs', 'swarthmore', 'correcthorsebatterystaple'],
-  });
+  };
+
+  zxcvbnOptions.setOptions(options);
 
   zxcvbnOptionsInitialized = true;
 };
@@ -49,7 +51,7 @@ async function checkPassword() {
   }
 
   const results = zxcvbn(passwordInput.value);
-  console.log(results);
+
   const progress = results.score * 25;
   const crackTime = results.crackTimesDisplay.onlineNoThrottling10PerSecond;
 
