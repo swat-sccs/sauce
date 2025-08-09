@@ -7,7 +7,7 @@
   "scripts": {
     "start": "npx nodemon --exec npx ts-node --files src/index.ts",
     "build": "cd src && npx tsc",
-    "test": "npx mocha --require ts-node/register src/**/*.spec.ts --timeout 5000"
+    "test": "mocha --timeout 5000"
   },
   "dependencies": {
     "axios": "^1.9.0",
@@ -24,7 +24,7 @@
     "@types/node": "^22.15.29",
     "@types/selenium-webdriver": "^4.1.28",
     "nodemon": "^3.1.10",
-    "ts-node": "^10.9.2",
+    "ts-node": "^9.1.1",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.8.3"
   },
