@@ -11,7 +11,7 @@
     "install:mc-agent": "cd mc-agent && npm install",
     "build": "npm run build:webStatic && npm run packageWebStatic && npm run build:sauce",
     "build:sauce": "cd src && npx tsc",
-    "build:webStatic": "cd webStatic && npm run build",
+    "build:webStatic": "cd webStatic && npm install && npm run build",
     "packageWebStatic": "npx copyfiles -E -u 1 \"webStatic/dist/**\" . && npx gzipper compress dist",
     "pre-commit": "lint-staged",
     "installHooks": "npx husky install",
