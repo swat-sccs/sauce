@@ -19,7 +19,7 @@ import { createPasswordResetRequest } from '../util/passwordReset';
 import { testPassword } from '../util/passwordStrength';
 import amqp from 'amqplib';
 
-export const VALID_CLASSES = ['25', '26', '27', '28', 'faculty', 'staff'];
+export const VALID_CLASSES = ['26', '27', '28', '29', 'faculty', 'staff'];
 // TODO: do we have accounts in the system that don't match this username pattern?
 const USERNAME_REGEX = /^[a-z][-a-z0-9]*$/;
 
@@ -49,8 +49,6 @@ export class CreateAccountReq {
   @jf.string().valid(VALID_CLASSES).required()
   classYear: string;
 }
-
-
 
 const sendDiscordMessage = async (data, id) => {
   const user = process.env.RABBITMQ_DEFAULT_USER;
@@ -90,7 +88,6 @@ const sendDiscordMessage = async (data, id) => {
     console.error('Error sending message:', error);
   }
 };
-
 
 export const submitCreateAccountRequest = async (req: CreateAccountReq) => {
   // TODO how do we handle someone going to create an account if they're
@@ -362,10 +359,7 @@ export class EmailChangeConfig {
   email: string;
 }
 
-export const configureEmailChange = async (
-  user: any, 
-  config: EmailChangeConfig,
-): Promise<void> => {
+export const configureEmailChange = async (user: any, config: EmailChangeConfig): Promise<void> => {
   logger.debug(`Updating email attribute for ${user.uid} to ${JSON.stringify(config)}`);
 
   const ldapEntry = await searchAsyncUid(ldapClient, user.uid);
@@ -384,36 +378,34 @@ export const configureEmailChange = async (
   // spin off an async function here to do the slow stuff
   (async () => {
     try {
-        /* 
+      /* 
         We send this to the swatmail so an inadvertent change can be detected and fixed
         We BCC the new email attribute.
         */
-        const emailTo = ldapEntry.swatmail;
-        const emailBcc = ldapEntry.email;
+      const emailTo = ldapEntry.swatmail;
+      const emailBcc = ldapEntry.email;
 
-        logger.debug(
-          `Sending notification email to ${emailTo} bcc: ${emailBcc}`,
-        );
-        const [emailText, transporter] = await Promise.all([
-          generateEmail('emailChangeNotification.html', {
-            username: user.uid,
-            domain: process.env.EXTERNAL_ADDRESS,
-          }),
-          mailTransporter,
-        ]);
+      logger.debug(`Sending notification email to ${emailTo} bcc: ${emailBcc}`);
+      const [emailText, transporter] = await Promise.all([
+        generateEmail('emailChangeNotification.html', {
+          username: user.uid,
+          domain: process.env.EXTERNAL_ADDRESS,
+        }),
+        mailTransporter,
+      ]);
 
-        const info = await transporter.sendMail({
-          from: process.env.EMAIL_FROM,
-          to: emailTo,
-          bcc: emailBcc,
-          subject: 'Your SCCS email has been changed',
-          html: emailText,
-        });
+      const info = await transporter.sendMail({
+        from: process.env.EMAIL_FROM,
+        to: emailTo,
+        bcc: emailBcc,
+        subject: 'Your SCCS email has been changed',
+        html: emailText,
+      });
 
-        const msgUrl = nodemailer.getTestMessageUrl(info);
-        if (msgUrl) {
-          logger.debug(`View message at ${msgUrl}`);
-        }
+      const msgUrl = nodemailer.getTestMessageUrl(info);
+      if (msgUrl) {
+        logger.debug(`View message at ${msgUrl}`);
+      }
     } catch (err) {
       logger.error('Error performing post-change tasks: ', err);
     }
@@ -422,11 +414,12 @@ export const configureEmailChange = async (
   logger.info(`Updated email attribute for ${user.uid} to ${JSON.stringify(config)}`);
 };
 
-
 const sshKey = () =>
   jf
     .string()
-    .pattern(/^(ssh-rsa AAAAB3NzaC1yc2|ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNT|ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzOD|ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1Mj|ssh-ed25519 AAAAC3NzaC1lZDI1NTE5|ssh-dss AAAAB3NzaC1kc3)[0-9A-Za-z+/]+[=]{0,3}(\s.*)?(\n|$)/)
+    .pattern(
+      /^(ssh-rsa AAAAB3NzaC1yc2|ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNT|ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzOD|ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1Mj|ssh-ed25519 AAAAC3NzaC1lZDI1NTE5|ssh-dss AAAAB3NzaC1kc3)[0-9A-Za-z+/]+[=]{0,3}(\s.*)?(\n|$)/,
+    )
     .required();
 
 /**
@@ -436,10 +429,7 @@ export class SSHConfig {
   keys: string;
 }
 
-export const configureSSH = async (
-  user: any,
-  config: SSHConfig,
-): Promise<void> => {
+export const configureSSH = async (user: any, config: SSHConfig): Promise<void> => {
   logger.debug(`Updating SSH keys for ${user.uid} to ${JSON.stringify(config)}`);
 
   await modifySSHFile(user, config);
