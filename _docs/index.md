@@ -34,76 +34,57 @@ accept new members in the first few weeks of each semester.
 
 #### Executive Board
 
-- *President:* [Thomas Makin](https://thomasmak.in/) '25
-- *VP, Finance (Treasurer):* Theo Yochum '27
-- *VP, Human Capital:* [George Fang](https://geofang.com/) '26
+- *President:* [Damian René](https://damianrene.dev) '27
+- *VP, Software Engineering:* Nick Fettig '26
 - *VP, Infrastructure:* Leo Douhovnikoff '25
-- *VP, Program Management:*  Victor Sumano Arango '25
-- *VP, Public Relations:* Lily Davoren '25
-- *VP, Software Engineering:*  Damian Rene '27
-- *VP, System Architecture:* Jhovani Gallardo Moreno '25
+- *VP, Public Relations:* Ava Babcock '27
+
 
 #### Project Leads
 
-*3D Campus Map*
-
-- Aidan Corpus '26
-- Ava Babcock '27
-
 *AirPool*
 
-- Finn McKibbin '27
-
-*Reserved Students Digest*
-
-- Jhovani Gallardo Moreno '25
+- Leo Douhovnikoff '25
 
 *Course Planner*
 
 - Damian Rene '27
-- Victor Sumano Arango '25
 
-*Project Dormhunter*
+*SwatGPT*
 
-- Jhovani Gallardo Moreno '25
-- Victor Sumano Arango '25
+- Amirkhan Aidarkhan '29
 
-*SwatSwap*
+*Club Dashboard*
 
-- Eli Young '26
+- Ava Babcock '27
+
+*Mailing List V2.0*
+
+- Nick Fettig '26
 
 #### Staff
 
-- Adrian Duran Rey '27
 - Ahmad Fayyaz '27
-- Aidan Corpus '26
-- Aiperi Bush '28
-- Alina Vykliuk '26
-- Ary Iyer '28
-- Beck Nigussie '25
-- Carson Lin '27
-- Chait Motwane '25
-- Emma Garrett '25
+- Aryaman Iyer '28
+- Uneeb Hyder '28
+- Logan Lim '28
+- Huy Nguyen '28
+- Wendy Abstone '29
+- Phillip Dinh '26
+- Esmaeil Alhaj Mostafa Abdan '28
+- Luna Workman '29
 - Ethan Pang '27
-- Eve Elrod '28
-- Fola Kehinde '28
-- Francisco Lopez '25
-- Gia Kwon '27
-- Ingrid Hsu '28
-- Jaehoon Son '27
-- Jamie Pickar '26
-- Jasmine Fan '25
-- Jay Iyer '28
-- Jonathan Guzman '27
-- Jules Cruz '27
-- Katelynn Swaim '25
-- Nick Fettig '26
-- Omar Khan '25
-- Pedro Cruz '25
-- Queenie Lin '28
+- Oscar Dalton '29
+- Tianzuo Li '27
+- Nathan Brewer '28
+- Carly Murphy '27
+- Marlea Martens '26
+- Aidan Corpus '26
+- Finn McKibbin '27
+- Derrick Nyaga '27
 - Samchan Lee '28
-- Tunmise Kehinde '27
 - Violet Garibaldi '28
+- Amirkhan Aidarkhan '29
 
 ### Statement on Application Strategy
 SCCS has a semesterly application cycle. We interview, select, and purge staff members based
