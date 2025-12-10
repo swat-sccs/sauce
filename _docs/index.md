@@ -35,7 +35,7 @@ accept new members in the first few weeks of each semester.
 #### Executive Board
 
 - *President:* [Damian René](https://damianrene.dev) '27
-- *VP, Software Engineering:* Nick Fettig '26
+- *VP, Software Engineering:* [Nick Fettig](https://fettig.dev) '26
 - *VP, Infrastructure:* Leo Douhovnikoff '25
 - *VP, Public Relations:* Ava Babcock '27
 
