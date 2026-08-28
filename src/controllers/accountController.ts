@@ -19,7 +19,7 @@ import { createPasswordResetRequest } from '../util/passwordReset';
 import { testPassword } from '../util/passwordStrength';
 import amqp from 'amqplib';
 
-export const VALID_CLASSES = ['26', '27', '28', '29', 'faculty', 'staff'];
+export const VALID_CLASSES = ['27', '28', '29', '30','faculty', 'staff'];
 // TODO: do we have accounts in the system that don't match this username pattern?
 const USERNAME_REGEX = /^[a-z][-a-z0-9]*$/;
 
